@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
@@ -12,24 +14,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.pnuema.simplebible.ui.elements.CircleImageView
+        android:id="@+id/header_user_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        android:visibility="visible"
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
+        android:id="@+id/header_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="Android Studio"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/header_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android.studio@android.com" />
+        android:visibility="gone"
+        tools:text="android.studio@android.com" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/header_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:colorScheme="light"
+        app:buttonSize="wide"
+        android:visibility="visible" />
 
 </LinearLayout>

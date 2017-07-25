@@ -1,5 +1,7 @@
 package com.pnuema.simplebible.ui.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_generic);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,7 +59,23 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<Versions>() {
             @Override
             public void onResponse(@NonNull Call<Versions> call, @NonNull Response<Versions> response) {
-                Toast.makeText(MainActivity.this, "SUCCESS", Toast.LENGTH_SHORT).show();
+                if (response.body() == null) {
+                    return;
+                }
+
+                String message = "";
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                for (Versions.Version version : response.body().response.versions) {
+                    message += version.id + ": " + version.name + "\n";
+                }
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                builder.show();
             }
 
             @Override

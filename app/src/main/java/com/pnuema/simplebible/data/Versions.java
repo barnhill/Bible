@@ -6,8 +6,8 @@ public final class Versions {
     public VersionsResponse response;
 
     public class VersionsResponse {
-        List<Version> versions;
-        Meta meta;
+        public List<Version> versions;
+        public Meta meta;
     }
 
     public class Version {
