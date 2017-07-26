@@ -15,12 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Versions;
 import com.pnuema.simplebible.retrofit.API;
 import com.pnuema.simplebible.retrofit.IAPI;
+import com.pnuema.simplebible.ui.utils.DialogUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,6 +65,12 @@ public class MainActivity extends AppCompatActivity
                     return;
                 }
 
+                DialogUtils.showNumberPickerDialog(MainActivity.this, R.string.app_name, 120, new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Toast.makeText(MainActivity.this, String.valueOf(i+1), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 String message = "";
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 for (Versions.Version version : response.body().response.versions) {
