@@ -34,21 +34,16 @@ public final class API {
     }
 
     private static class AuthenticationInterceptor implements Interceptor {
-
         private String authToken;
 
-        public AuthenticationInterceptor(String token) {
+        AuthenticationInterceptor(String token) {
             this.authToken = token;
         }
 
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request original = chain.request();
-
-            Request.Builder builder = original.newBuilder()
-                    .header("Authorization", authToken);
-
-            Request request = builder.build();
+            Request request = original.newBuilder().header("Authorization", authToken).build();
             return chain.proceed(request);
         }
     }
