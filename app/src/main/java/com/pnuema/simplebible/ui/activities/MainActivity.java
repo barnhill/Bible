@@ -1,13 +1,11 @@
 package com.pnuema.simplebible.ui.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,21 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Versions;
-import com.pnuema.simplebible.retrofit.API;
-import com.pnuema.simplebible.retrofit.IAPI;
-import com.pnuema.simplebible.ui.utils.DialogUtils;
+import com.pnuema.simplebible.ui.fragments.ReadFragment;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private FrameLayout mFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +27,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_generic);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,41 +37,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        IAPI api = API.getInstance().create(IAPI.class);
-        Call<Versions> call = api.getVersions();
-        call.enqueue(new Callback<Versions>() {
-            @Override
-            public void onResponse(@NonNull Call<Versions> call, @NonNull Response<Versions> response) {
-                if (response.body() == null) {
-                    return;
-                }
-
-                DialogUtils.showNumberPickerDialog(MainActivity.this, R.string.app_name, 120, new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(MainActivity.this, String.valueOf(i+1), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                String message = "";
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                for (Versions.Version version : response.body().response.versions) {
-                    message += version.id + ": " + version.name + "\n";
-                }
-                builder.setMessage(message);
-                builder.setCancelable(true);
-                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Versions> call, @NonNull Throwable t) {
-                Toast.makeText(MainActivity.this, "FAIL", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //find views
+        mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragment = ReadFragment.newInstance("eng-KJVA", "Matt", "24", null); //TODO read preferences to get last used verse on shutdown
+        ft.replace(R.id.fragment_container, fragment);
+        ft.commit();
     }
 
     @Override
