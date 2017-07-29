@@ -1,5 +1,11 @@
 language: android
+sudo: required
+jdk: oraclejdk8
 android:
+  licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
   components:
     # Uncomment the lines below if you want to
     # use the latest revision of Android SDK Tools
@@ -20,8 +26,3 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-26
-
-licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
