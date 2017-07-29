@@ -1,5 +1,6 @@
 package com.pnuema.simplebible.retrievers;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.pnuema.simplebible.data.Verses;
@@ -13,8 +14,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VersesRetriever extends Observable {
-    public void loadData(String version, String book, String chapter) {
-        IAPI api = API.getInstance().create(IAPI.class);
+    public void loadData(Context context, String version, String book, String chapter) {
+        IAPI api = API.getInstance(context).create(IAPI.class);
         Call<Verses> call = api.getVerses(version, book, chapter);
         call.enqueue(new Callback<Verses>() {
             @Override
