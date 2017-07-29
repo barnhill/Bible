@@ -27,7 +27,7 @@ public final class API {
     @SuppressLint("AuthLeak")
     public static Retrofit getInstance(Context context) {
         if (httpClient == null) {
-            int cacheSize = 10 * 1024 * 1024; // 20 MB
+            int cacheSize = 20 * 1024 * 1024; // 20 MB
             Cache cache = new Cache(context.getCacheDir(), cacheSize);
             httpClient = new OkHttpClient.Builder().cache(cache);
         }
