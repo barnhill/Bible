@@ -12,10 +12,14 @@
 bin/
 gen/
 out/
+build/
+reports/
+
+#monitor files
+captures/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -32,13 +36,14 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# Intellij
+# IDEA/Android Studio project files, because
+# the project can be imported from settings.gradle
+.idea
+/.idea/
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/dictionaries
-.idea/libraries
+.idea/libraries/gson_2_2_4.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
 
 # Keystore files
 *.jks
