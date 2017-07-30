@@ -22,4 +22,5 @@ android:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 
-  script: ./gradlew clean build
+  script:
+  - "./gradlew clean build"
