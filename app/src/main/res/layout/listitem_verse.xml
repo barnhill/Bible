@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/verseText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    android:paddingEnd="14dp"
+    android:paddingStart="14dp"
+    android:textColor="@color/primary_text"
+    android:textIsSelectable="true"
+    android:fontFamily="sans-serif"
+    android:textSize="18sp"
+    android:lineSpacingExtra="10dp"
     android:background="@color/background_light"
-    android:id="@+id/linearLayout">
-
-    <TextView
-        android:id="@+id/verseText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingEnd="14dp"
-        android:paddingStart="14dp"
-        android:textColor="@color/primary_text"
-        android:textIsSelectable="true"
-        android:fontFamily="sans-serif"
-        android:textSize="18sp"
-        android:lineSpacingExtra="10dp"
-        android:text=""/>
-
-</LinearLayout>
+    android:text=""
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:text="Verse text as would be seen in the application when text appears"/>

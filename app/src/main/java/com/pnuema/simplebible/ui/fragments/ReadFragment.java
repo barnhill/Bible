@@ -1,29 +1,25 @@
 package com.pnuema.simplebible.ui.fragments;
 
-
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
-import com.pnuema.simplebible.retrofit.API;
-import com.pnuema.simplebible.retrofit.IAPI;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
 
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +39,10 @@ public class ReadFragment extends Fragment implements Observer {
     private String mChapter;
     private String mVerse;
 
+    private TextView mBookView;
+    private TextView mChapterView;
+    private TextView mVerseView;
+
     private VersesAdapter mAdapter;
     private VersesRetriever dataRetriever;
 
@@ -59,7 +59,6 @@ public class ReadFragment extends Fragment implements Observer {
      * @param verse Verse to display
      * @return A new instance of fragment ReadFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ReadFragment newInstance(String version, String book, String chapter, String verse) {
         ReadFragment fragment = new ReadFragment();
         Bundle args = new Bundle();
@@ -77,8 +76,28 @@ public class ReadFragment extends Fragment implements Observer {
         if (getArguments() != null) {
             mVersion = getArguments().getString(ARG_VERSION);
             mBook = getArguments().getString(ARG_BOOK);
-            mChapter = getArguments().getString(ARG_CHAPTER);
-            mVerse = getArguments().getString(ARG_VERSE);
+            mChapter = getArguments().getString(ARG_CHAPTER, "1");
+            mVerse = getArguments().getString(ARG_VERSE, "1");
+        }
+
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+
+        mBookView = activity.findViewById(R.id.selected_book);
+        if (mBookView != null) {
+            mBookView.setText(mBook);
+        }
+
+        mChapterView = activity.findViewById(R.id.selected_chapter);
+        if (mChapterView != null) {
+            mChapterView.setText(mChapter);
+        }
+
+        mVerseView = activity.findViewById(R.id.selected_verse);
+        if (mVerseView != null) {
+            mVerseView.setText(mVerse);
         }
 
         dataRetriever = new VersesRetriever();
@@ -110,6 +129,13 @@ public class ReadFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
+        Activity activity = getActivity();
+        if (activity instanceof AppCompatActivity) {
+            ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(mVersion); //TODO read translation and put here
+            }
+        }
         //TODO handle data being updated, use DiffUtil
 
         //noinspection unchecked
