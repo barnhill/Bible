@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1052769235470",
+    "firebase_url": "https://simple-bible-67ae1.firebaseio.com",
+    "project_id": "simple-bible-67ae1",
+    "storage_bucket": "simple-bible-67ae1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052769235470:android:d8eb67eb8c11f8d6",
+        "android_client_info": {
+          "package_name": "com.pnuema.simplebible"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052769235470-q30q6r5a2ptp05g52urgmpbpct9a5pho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLvHMv2HKvKHOib71-iDk_kBuh5x8PCjg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
