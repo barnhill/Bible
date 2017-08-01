@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.ui.fragments.BCVDialog;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
+import com.pnuema.simplebible.ui.utils.DialogUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FrameLayout mFragmentContainer;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = ReadFragment.newInstance("eng-KJVA", "Matt", "24", null); //TODO read preferences to get last used verse on shutdown
         ft.replace(R.id.fragment_container, fragment);
         ft.commit();
+
+        new BCVDialog().show(getSupportFragmentManager(),"ok");
     }
 
     @Override

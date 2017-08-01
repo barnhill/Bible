@@ -42,4 +42,11 @@ public final class DialogUtils {
         builder.setCancelable(true);
         return builder.show();
     }
+
+    public static AlertDialog showBookChapterVersePicker(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(R.layout.dialog_bookchapterverse_picker);
+        builder.setCancelable(true);
+        return builder.show();
+    }
 }
