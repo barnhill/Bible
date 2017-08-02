@@ -1,5 +1,6 @@
 package com.pnuema.simplebible.ui.activities;
 
+import android.app.Dialog;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(R.id.fragment_container, fragment);
         ft.commit();
 
-        new BCVDialog().show(getSupportFragmentManager(),"ok");
+        DialogUtils.showBookChapterVersePicker(this, BCVDialog.BCV.BOOK);
     }
 
     @Override

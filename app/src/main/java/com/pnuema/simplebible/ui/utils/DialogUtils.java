@@ -1,13 +1,17 @@
 package com.pnuema.simplebible.ui.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.ui.fragments.BCVDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +47,7 @@ public final class DialogUtils {
         return builder.show();
     }
 
-    public static AlertDialog showBookChapterVersePicker(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(R.layout.dialog_bookchapterverse_picker);
-        builder.setCancelable(true);
-        return builder.show();
+    public static void showBookChapterVersePicker(FragmentActivity activity, BCVDialog.BCV bcv) {
+        BCVDialog.instantiate(bcv).show(activity.getSupportFragmentManager(), "BCVDialog");
     }
 }

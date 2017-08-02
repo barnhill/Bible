@@ -14,11 +14,36 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.ui.utils.DialogUtils;
 
 public class BCVDialog extends DialogFragment {
+    public static final String ARG_STARTING_TAB = "STARTING_POINT";
     private FragmentTabHost mTabHost;
     private ViewPager viewPager;
     private BCVPagerAdapter adapter;
+    private int startingTab;
+
+    public enum BCV {
+        BOOK(0), CHAPTER(1), VERSE(2);
+
+        private int value;
+        BCV(int i) {
+            value = i;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public static BCVDialog instantiate(BCV startingTab) {
+        BCVDialog dialog = new BCVDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BCVDialog.ARG_STARTING_TAB, startingTab.getValue());
+        dialog.setArguments(bundle);
+
+        return dialog;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,11 +91,7 @@ public class BCVDialog extends DialogFragment {
 
     private class BCVPagerAdapter extends FragmentPagerAdapter {
         Bundle bundle;
-        String [] titles;
-
-        private BCVPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+        String[] titles;
 
         BCVPagerAdapter(FragmentManager fm, Bundle bundle) {
             super(fm);
@@ -96,33 +117,4 @@ public class BCVDialog extends DialogFragment {
             this.titles = titles;
         }
     }
-
-    /*public static class BCVListFragment extends ListFragment {
-        List<String> voters;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.list_fragment, container, false);
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            voters = (ArrayList) getArguments().getSerializable("voters");
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, voters);
-            setListAdapter(adapter);
-
-            getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getActivity(), ProfileActivity_.class);
-                    String login = voters.get(i);
-                    intent.putExtra("login", Utils.encodeString(login.substring(0, login.indexOf("(")).trim()));
-                    startActivity(intent);
-                }
-            });
-        }
-    }*/
-
 }
