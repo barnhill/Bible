@@ -8,20 +8,21 @@ import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.ui.fragments.BCVDialog;
+import com.pnuema.simplebible.ui.fragments.BCVSelectionListener;
 import com.pnuema.simplebible.ui.fragments.BookSelectionFragment;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link com.pnuema.simplebible.data.Books.Book} and makes a call to the
- * specified {@link BookSelectionFragment.OnBookSelectionFragmentInteractionListener}.
+ * specified {@link BCVSelectionListener}.
  */
 public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookSelectionRecyclerViewAdapter.ViewHolder> {
-
     private final List<Books.Book> mValues;
-    private final BookSelectionFragment.OnBookSelectionFragmentInteractionListener mListener;
+    private final BCVSelectionListener mListener;
 
-    public BookSelectionRecyclerViewAdapter(List<Books.Book> items, BookSelectionFragment.OnBookSelectionFragmentInteractionListener listener) {
+    public BookSelectionRecyclerViewAdapter(List<Books.Book> items, BCVSelectionListener listener) {
         mValues = items;
         mListener = listener;
     }

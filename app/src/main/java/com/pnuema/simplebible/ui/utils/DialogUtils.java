@@ -12,6 +12,8 @@ import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.ui.fragments.BCVDialog;
+import com.pnuema.simplebible.ui.fragments.BCVSelectionListener;
+import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public final class DialogUtils {
         return builder.show();
     }
 
-    public static void showBookChapterVersePicker(FragmentActivity activity, BCVDialog.BCV bcv) {
-        BCVDialog.instantiate(bcv).show(activity.getSupportFragmentManager(), "BCVDialog");
+    public static void showBookChapterVersePicker(FragmentActivity activity, BCVDialog.BCV bcv, NotifySelectionCompleted listener) {
+        BCVDialog.instantiate(bcv, listener).show(activity.getSupportFragmentManager(), "BCVDialog");
     }
 }

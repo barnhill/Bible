@@ -1,6 +1,5 @@
 package com.pnuema.simplebible.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -14,14 +13,47 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.ui.utils.DialogUtils;
+import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.Chapters;
+import com.pnuema.simplebible.data.Verses;
 
-public class BCVDialog extends DialogFragment {
+import java.util.ArrayList;
+
+public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     public static final String ARG_STARTING_TAB = "STARTING_POINT";
     private FragmentTabHost mTabHost;
     private ViewPager viewPager;
-    private BCVPagerAdapter adapter;
-    private int startingTab;
+    private NotifySelectionCompleted listener;
+    private String mBook;
+    private String mChapter;
+    private String mVerse;
+    private BCVSelectionListener selectionListener;
+
+    @Override
+    public void onBookSelected(Books.Book book) {
+        mBook = book.id;
+        mChapter = null;
+        mVerse = null;
+        refresh();//TODO remove this as the chapter and verse selection get implemented
+    }
+
+    @Override
+    public void onChapterSelected(Chapters.Chapter chapter) {
+        mChapter = chapter.id;
+        mVerse = null;
+    }
+
+    @Override
+    public void onVerseSelected(Verses.Verse verse) {
+        mVerse = verse.id;
+    }
+
+    @Override
+    public void refresh() {
+        if (listener != null) {
+            listener.onSelectionComplete(mBook, mChapter, mVerse);
+        }
+    }
 
     public enum BCV {
         BOOK(0), CHAPTER(1), VERSE(2);
@@ -36,13 +68,19 @@ public class BCVDialog extends DialogFragment {
         }
     }
 
-    public static BCVDialog instantiate(BCV startingTab) {
+    public static BCVDialog instantiate(BCV startingTab, NotifySelectionCompleted notifySelectionCompleted) {
         BCVDialog dialog = new BCVDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(BCVDialog.ARG_STARTING_TAB, startingTab.getValue());
         dialog.setArguments(bundle);
+        dialog.setListener(notifySelectionCompleted);
 
         return dialog;
+    }
+
+    private BCVDialog setListener(NotifySelectionCompleted listener) {
+        this.listener = listener;
+        return this;
     }
 
     @Override
@@ -52,12 +90,27 @@ public class BCVDialog extends DialogFragment {
         mTabHost = view.findViewById(R.id.tabs);
 
         mTabHost.setup(getActivity(), getChildFragmentManager());
-        mTabHost.addTab(mTabHost.newTabSpec("tabBook").setIndicator(getString(R.string.book)), Fragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tabChapter").setIndicator(getString(R.string.chapter)), Fragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tabVerse").setIndicator(getString(R.string.verse)), Fragment.class, null);
 
-        adapter = new BCVPagerAdapter(getChildFragmentManager(), getArguments());
-        adapter.setTitles(new String[]{getString(R.string.book),getString(R.string.chapter),getString(R.string.verse)});
+        Bundle args = getArguments();
+        int startTab = args.getInt(BCVDialog.ARG_STARTING_TAB, BCV.BOOK.getValue());
+        ArrayList<String> titles = new ArrayList<>();
+        if (startTab == BCV.BOOK.getValue()) {
+            mTabHost.addTab(mTabHost.newTabSpec("tabBook").setIndicator(getString(R.string.book)), Fragment.class, null);
+            titles.add(getString(R.string.book));
+        }
+
+        if (startTab <= BCV.CHAPTER.getValue()) {
+            mTabHost.addTab(mTabHost.newTabSpec("tabChapter").setIndicator(getString(R.string.chapter)), Fragment.class, null);
+            titles.add(getString(R.string.chapter));
+        }
+
+        mTabHost.addTab(mTabHost.newTabSpec("tabVerse").setIndicator(getString(R.string.verse)), Fragment.class, null);
+        titles.add(getString(R.string.verse));
+
+        BCVPagerAdapter adapter = new BCVPagerAdapter(getChildFragmentManager(), getArguments());
+        String[] arrTitles = new String[titles.size()];
+        titles.toArray(arrTitles);
+        adapter.setTitles(arrTitles);
 
         viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
@@ -86,6 +139,8 @@ public class BCVDialog extends DialogFragment {
             }
         });
 
+        selectionListener = this;
+
         return view;
     }
 
@@ -100,12 +155,17 @@ public class BCVDialog extends DialogFragment {
 
         @Override
         public Fragment getItem(int num) {
-            return BookSelectionFragment.newInstance();
+            if (num == BCV.BOOK.getValue()) {
+                return BookSelectionFragment.newInstance().setListener(selectionListener);
+            } else {
+                //TODO add other fragments for chapter and verse selection
+                return new Fragment();
+            }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mTabHost.getTabWidget().getTabCount();
         }
 
         @Override

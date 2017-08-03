@@ -22,11 +22,9 @@ import java.util.Observer;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnBookSelectionFragmentInteractionListener}
- * interface.
  */
 public class BookSelectionFragment extends Fragment implements Observer {
-    private OnBookSelectionFragmentInteractionListener mListener;
+    private BCVSelectionListener mListener;
     private final List<Books.Book> mBooks = new ArrayList<>();
     private BooksRetriever mRetriever = new BooksRetriever();
     private BookSelectionRecyclerViewAdapter mAdapter;
@@ -41,6 +39,11 @@ public class BookSelectionFragment extends Fragment implements Observer {
     @SuppressWarnings("unused")
     public static BookSelectionFragment newInstance() {
         return new BookSelectionFragment();
+    }
+
+    public BookSelectionFragment setListener(BCVSelectionListener listener) {
+        mListener = listener;
+        return this;
     }
 
     @Override
@@ -101,9 +104,5 @@ public class BookSelectionFragment extends Fragment implements Observer {
             mBooks.addAll(((Books)o).response.books);
             mAdapter.notifyDataSetChanged();
         }
-    }
-
-    public interface OnBookSelectionFragmentInteractionListener {
-        void onBookSelected(Books.Book item);
     }
 }

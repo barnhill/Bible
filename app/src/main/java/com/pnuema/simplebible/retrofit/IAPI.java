@@ -19,6 +19,6 @@ public interface IAPI {
     @GET("versions/{version}/books.js?include_chapters=false")
     Call<Chapters> getChapters(@Path("version") String version);
 
-    @GET("chapters/{version}:{book}.{chapter}/verses.js")
-    Call<Verses> getVerses(@Path("version") String version, @Path("book") String book, @Path("chapter") String chapter);
+    @GET("chapters/{book}.{chapter}/verses.js")
+    Call<Verses> getVerses(@Path("book") String book, @Path("chapter") String chapter);
 }

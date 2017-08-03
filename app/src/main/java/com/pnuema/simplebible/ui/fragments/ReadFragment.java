@@ -118,7 +118,7 @@ public class ReadFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         dataRetriever.addObserver(this);
-        dataRetriever.loadData(getContext(), mVersion, mBook, mChapter);
+        dataRetriever.loadData(getContext(), mBook, mChapter);
     }
 
     @Override

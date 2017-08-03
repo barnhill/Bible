@@ -14,9 +14,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VersesRetriever extends Observable {
-    public void loadData(Context context, String version, String book, String chapter) {
+    public void loadData(Context context, String book, String chapter) {
         IAPI api = API.getInstance(context).create(IAPI.class);
-        Call<Verses> call = api.getVerses(version, book, chapter);
+        Call<Verses> call = api.getVerses(book, chapter);
         call.enqueue(new Callback<Verses>() {
             @Override
             public void onResponse(@NonNull Call<Verses> call, @NonNull Response<Verses> response) {

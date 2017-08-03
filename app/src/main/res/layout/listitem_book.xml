@@ -2,7 +2,10 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/book"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/text_margin"
-    android:textAppearance="?attr/textAppearanceListItem" />
+    android:padding="@dimen/text_margin"
+    android:textSize="16sp"
+    android:clickable="true"
+    android:textAppearance="?attr/textAppearanceListItem"
+    android:background="?attr/selectableItemBackground"/>

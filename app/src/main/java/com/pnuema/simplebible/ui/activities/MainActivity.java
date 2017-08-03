@@ -1,6 +1,5 @@
 package com.pnuema.simplebible.ui.activities;
 
-import android.app.Dialog;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -14,16 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.ui.fragments.BCVDialog;
+import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
 import com.pnuema.simplebible.ui.utils.DialogUtils;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FrameLayout mFragmentContainer;
-
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +38,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //find views
-        mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment fragment = ReadFragment.newInstance("eng-KJVA", "Matt", "24", null); //TODO read preferences to get last used verse on shutdown
         ft.replace(R.id.fragment_container, fragment);
         ft.commit();
 
-        DialogUtils.showBookChapterVersePicker(this, BCVDialog.BCV.BOOK);
+        DialogUtils.showBookChapterVersePicker(this, BCVDialog.BCV.BOOK, this);
     }
 
     @Override
@@ -106,5 +102,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSelectionComplete(String book, String chapter, String verse) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragment = ReadFragment.newInstance("eng-KJVA", book, chapter, verse);
+        ft.replace(R.id.fragment_container, fragment);
+        ft.commit();
     }
 }
