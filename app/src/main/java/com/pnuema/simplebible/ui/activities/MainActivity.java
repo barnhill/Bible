@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.Chapters;
+import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.ui.fragments.BCVDialog;
 import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //find views
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragment = ReadFragment.newInstance("eng-KJVA", "Matt", "24", null); //TODO read preferences to get last used verse on shutdown
+        Fragment fragment = ReadFragment.newInstance("eng-KJVA", null, null, null); //TODO read preferences to get last used verse on shutdown
         ft.replace(R.id.fragment_container, fragment);
         ft.commit();
 
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSelectionComplete(String book, String chapter, String verse) {
+    public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment fragment = ReadFragment.newInstance("eng-KJVA", book, chapter, verse);

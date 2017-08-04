@@ -1,16 +1,18 @@
 package com.pnuema.simplebible.data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Chapters {
+public class Chapters implements Serializable {
     public ChaptersResponse response;
 
-    public class ChaptersResponse {
+    public class ChaptersResponse implements Serializable {
         public List<Chapter> chapters;
         public Meta meta;
     }
 
-    public class Chapter {
+    public class Chapter implements Serializable {
+        public String chapter;
         public String auditid;
         public String label;
         public String id;
@@ -21,11 +23,11 @@ public class Chapters {
         public String copyright;
     }
 
-    public class Parent {
+    public class Parent implements Serializable {
         public PathNameId book;
     }
 
-    public class AdjacentChapter {
+    public class AdjacentChapter implements Serializable {
         public PathNameId chapter;
     }
 }

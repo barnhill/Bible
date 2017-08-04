@@ -3,15 +3,15 @@ package com.pnuema.simplebible.data;
 import java.io.Serializable;
 import java.util.List;
 
-public class Books {
+public class Books implements Serializable {
     public BooksResponse response;
 
-    public class BooksResponse {
+    public class BooksResponse implements Serializable {
         public List<Book> books;
         public Meta meta;
     }
 
-    public class Book {
+    public class Book implements Serializable {
         public String version_id;
         public String name;
         public String abbr;
@@ -26,11 +26,11 @@ public class Books {
         public String copyright;
     }
 
-    public class Parent {
+    public class Parent implements Serializable {
         public PathNameId version;
     }
 
-    public class AdjacentBook {
+    public class AdjacentBook implements Serializable {
         public PathNameId book;
     }
 }

@@ -1,8 +1,6 @@
 package com.pnuema.simplebible.ui.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +10,6 @@ import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.ui.fragments.BCVDialog;
-import com.pnuema.simplebible.ui.fragments.BCVSelectionListener;
 import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
 
 import java.util.ArrayList;
@@ -37,7 +34,7 @@ public final class DialogUtils {
             mList.add(i);
         }
 
-        gridView.setAdapter(new ArrayAdapter<>(context, R.layout.dialog_number_picker, mList));
+        gridView.setAdapter(new ArrayAdapter<>(context, R.layout.item_number, mList));
         gridView.setNumColumns(4);
         gridView.setOnItemClickListener(onItemClickListener);
 

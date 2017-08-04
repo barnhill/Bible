@@ -1,5 +1,9 @@
 package com.pnuema.simplebible.ui.fragments;
 
+import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.Chapters;
+import com.pnuema.simplebible.data.Verses;
+
 public interface NotifySelectionCompleted {
-    void onSelectionComplete(String book, String chapter, String verse);
+    void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse);
 }

@@ -1,16 +1,17 @@
 package com.pnuema.simplebible.data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Verses {
+public class Verses implements Serializable {
     public VersesResponse response;
 
-    public class VersesResponse {
+    public class VersesResponse implements Serializable {
         public List<Verse> verses;
         public Meta meta;
     }
 
-    public class Verse {
+    public class Verse implements Serializable {
         public String auditid;
         public String verse;
         public String lastverse;
@@ -27,11 +28,11 @@ public class Verses {
         public String copyright;
     }
 
-    public class Parent {
+    public class Parent implements Serializable {
         public PathNameId chapter;
     }
 
-    public class AdjacentVerse {
+    public class AdjacentVerse implements Serializable {
         public PathNameId verse;
     }
 }

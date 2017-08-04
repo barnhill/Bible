@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
@@ -35,11 +37,10 @@ public class ReadFragment extends Fragment implements Observer {
 
     // TODO: Rename and change types of parameters
     private String mVersion;
-    private String mBook;
-    private String mChapter;
-    private String mVerse;
+    private Books.Book mBook;
+    private Chapters.Chapter mChapter;
+    private Verses.Verse mVerse;
 
-    private TextView mBookView;
     private TextView mChapterView;
     private TextView mVerseView;
 
@@ -59,13 +60,13 @@ public class ReadFragment extends Fragment implements Observer {
      * @param verse Verse to display
      * @return A new instance of fragment ReadFragment.
      */
-    public static ReadFragment newInstance(String version, String book, String chapter, String verse) {
+    public static ReadFragment newInstance(String version, Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
         ReadFragment fragment = new ReadFragment();
         Bundle args = new Bundle();
         args.putString(ARG_VERSION, version);
-        args.putString(ARG_BOOK, book);
-        args.putString(ARG_CHAPTER, chapter);
-        args.putString(ARG_VERSE, verse);
+        args.putSerializable(ARG_BOOK, book);
+        args.putSerializable(ARG_CHAPTER, chapter);
+        args.putSerializable(ARG_VERSE, verse);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,9 +76,9 @@ public class ReadFragment extends Fragment implements Observer {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mVersion = getArguments().getString(ARG_VERSION);
-            mBook = getArguments().getString(ARG_BOOK);
-            mChapter = getArguments().getString(ARG_CHAPTER, "1");
-            mVerse = getArguments().getString(ARG_VERSE, "1");
+            mBook = (Books.Book) getArguments().getSerializable(ARG_BOOK);
+            mChapter = (Chapters.Chapter) getArguments().getSerializable(ARG_CHAPTER);
+            mVerse = (Verses.Verse) getArguments().getSerializable(ARG_VERSE);
         }
 
         Activity activity = getActivity();
@@ -85,22 +86,22 @@ public class ReadFragment extends Fragment implements Observer {
             return;
         }
 
-        mBookView = activity.findViewById(R.id.selected_book);
-        if (mBookView != null) {
-            mBookView.setText(mBook);
+        dataRetriever = new VersesRetriever();
+
+        TextView mBookView = activity.findViewById(R.id.selected_book);
+        if (mBookView != null && mBook != null) {
+            mBookView.setText(mBook.name);
         }
 
         mChapterView = activity.findViewById(R.id.selected_chapter);
-        if (mChapterView != null) {
-            mChapterView.setText(mChapter);
+        if (mChapterView != null && mChapter != null) {
+            mChapterView.setText(mChapter.chapter);
         }
 
         mVerseView = activity.findViewById(R.id.selected_verse);
-        if (mVerseView != null) {
-            mVerseView.setText(mVerse);
+        if (mVerseView != null && mVerse != null) {
+            mVerseView.setText(mVerse.label);
         }
-
-        dataRetriever = new VersesRetriever();
     }
 
     @Override
@@ -118,7 +119,10 @@ public class ReadFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         dataRetriever.addObserver(this);
-        dataRetriever.loadData(getContext(), mBook, mChapter);
+
+        if (mChapter != null) {
+            dataRetriever.loadData(getContext(), mChapter.id);
+        }
     }
 
     @Override

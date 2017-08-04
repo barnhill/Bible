@@ -37,11 +37,11 @@ public class BookSelectionFragment extends Fragment implements Observer {
     }
 
     @SuppressWarnings("unused")
-    public static BookSelectionFragment newInstance() {
-        return new BookSelectionFragment();
+    public static BookSelectionFragment newInstance(BCVSelectionListener listener) {
+        return new BookSelectionFragment().setListener(listener);
     }
 
-    public BookSelectionFragment setListener(BCVSelectionListener listener) {
+    private BookSelectionFragment setListener(BCVSelectionListener listener) {
         mListener = listener;
         return this;
     }

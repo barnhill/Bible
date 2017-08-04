@@ -24,28 +24,30 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     private FragmentTabHost mTabHost;
     private ViewPager viewPager;
     private NotifySelectionCompleted listener;
-    private String mBook;
-    private String mChapter;
-    private String mVerse;
+    public static Books.Book mBook;
+    public static Chapters.Chapter mChapter;
+    public static Verses.Verse mVerse;
     private BCVSelectionListener selectionListener;
 
     @Override
     public void onBookSelected(Books.Book book) {
-        mBook = book.id;
+        mBook = book;
         mChapter = null;
+        mVerse = null;
+        mTabHost.getTabWidget().setCurrentTab(BCV.CHAPTER.getValue());
+        viewPager.setCurrentItem(BCV.CHAPTER.getValue());
+    }
+
+    @Override
+    public void onChapterSelected(Chapters.Chapter chapter) {
+        mChapter = chapter;
         mVerse = null;
         refresh();//TODO remove this as the chapter and verse selection get implemented
     }
 
     @Override
-    public void onChapterSelected(Chapters.Chapter chapter) {
-        mChapter = chapter.id;
-        mVerse = null;
-    }
-
-    @Override
     public void onVerseSelected(Verses.Verse verse) {
-        mVerse = verse.id;
+        mVerse = verse;
     }
 
     @Override
@@ -156,7 +158,9 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         @Override
         public Fragment getItem(int num) {
             if (num == BCV.BOOK.getValue()) {
-                return BookSelectionFragment.newInstance().setListener(selectionListener);
+                return BookSelectionFragment.newInstance(selectionListener);
+            } else if (num == BCV.CHAPTER.getValue()) {
+                return ChapterSelectionFragment.newInstance(selectionListener);
             } else {
                 //TODO add other fragments for chapter and verse selection
                 return new Fragment();
