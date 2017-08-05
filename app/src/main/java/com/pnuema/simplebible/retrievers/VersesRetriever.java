@@ -26,7 +26,7 @@ public class VersesRetriever extends Observable {
                 }
 
                 setChanged();
-                notifyObservers(verses.response.verses);
+                notifyObservers(verses);
             }
 
             @Override

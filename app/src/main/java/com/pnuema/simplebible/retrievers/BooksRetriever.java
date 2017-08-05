@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.retrofit.API;
 import com.pnuema.simplebible.retrofit.IAPI;
 import com.pnuema.simplebible.statics.Constants;
+import com.pnuema.simplebible.statics.CurrentSelected;
 
 import java.util.Iterator;
 import java.util.Observable;
@@ -17,9 +17,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BooksRetriever extends Observable {
-    public void loadData(Context context, String version) {
+    public void loadData(Context context) {
         IAPI api = API.getInstance(context).create(IAPI.class);
-        Call<Books> call = api.getBooks(version);
+        Call<Books> call = api.getBooks(CurrentSelected.getVersion().id);
         call.enqueue(new Callback<Books>() {
             @Override
             public void onResponse(@NonNull Call<Books> call, @NonNull Response<Books> response) {

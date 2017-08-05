@@ -1,9 +1,7 @@
 package com.pnuema.simplebible.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of books to pick from.
  * <p/>
  */
 public class BookSelectionFragment extends Fragment implements Observer {
@@ -58,10 +56,8 @@ public class BookSelectionFragment extends Fragment implements Observer {
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
             mAdapter = new BookSelectionRecyclerViewAdapter(mBooks, mListener);
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(mAdapter);
         }
 
@@ -72,23 +68,13 @@ public class BookSelectionFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         mRetriever.addObserver(this);
-        mRetriever.loadData(getContext(), "eng-KJVA"); //TODO read in version
+        mRetriever.loadData(getContext());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mRetriever.deleteObserver(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        /*if (context instanceof OnBookSelectionFragmentInteractionListener) {
-            mListener = (OnBookSelectionFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
-        }*/
+        mRetriever.deleteObservers();
     }
 
     @Override

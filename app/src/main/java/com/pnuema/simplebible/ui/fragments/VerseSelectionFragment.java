@@ -11,8 +11,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.retrievers.ChaptersRetriever;
+import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 
 import java.util.ArrayList;
@@ -21,36 +21,37 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * A fragment representing a list of chapter numbers to pick from.
+ * A fragment representing a list of verse numbers to pick from.
  * <p/>
  */
-public class ChapterSelectionFragment extends Fragment implements Observer {
+public class VerseSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
-    private final List<Chapters.Chapter> mChapters = new ArrayList<>();
-    private ChaptersRetriever mRetriever = new ChaptersRetriever();
+    private final List<Verses.Verse> mVerses = new ArrayList<>();
+    private VersesRetriever mRetriever = new VersesRetriever();
     private GridView mGridView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ChapterSelectionFragment() {
+    public VerseSelectionFragment() {
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && CurrentSelected.getBook() != null) {
-            mRetriever.loadData(getContext(), CurrentSelected.getBook().id);
+        mRetriever.addObserver(this);
+        if (isVisibleToUser && CurrentSelected.getChapter() != null) {
+            mRetriever.loadData(getContext(), CurrentSelected.getChapter().id);
         }
     }
 
     @SuppressWarnings("unused")
-    public static ChapterSelectionFragment newInstance(BCVSelectionListener listener) {
-        return new ChapterSelectionFragment().setListener(listener);
+    public static VerseSelectionFragment newInstance(BCVSelectionListener listener) {
+        return new VerseSelectionFragment().setListener(listener);
     }
 
-    private ChapterSelectionFragment setListener(BCVSelectionListener listener) {
+    private VerseSelectionFragment setListener(BCVSelectionListener listener) {
         mListener = listener;
         return this;
     }
@@ -64,12 +65,6 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mGridView = (GridView) inflater.inflate(R.layout.fragment_number_list, container, false);
         return mGridView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mRetriever.addObserver(this);
     }
 
     @Override
@@ -90,13 +85,13 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
             return;
         }
 
-        mChapters.clear();
-        if (o instanceof Chapters && ((Chapters)o).response.chapters != null) {
-            mChapters.addAll(((Chapters)o).response.chapters);
+        mVerses.clear();
+        if (o instanceof Verses && ((Verses)o).response.verses != null) {
+            mVerses.addAll(((Verses)o).response.verses);
         }
 
         List<Integer> mList = new ArrayList<>();
-        for (int i = 1; i < mChapters.size(); i++) {
+        for (int i = 1; i < mVerses.size(); i++) {
             mList.add(i);
         }
 
@@ -104,8 +99,8 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int chapterId = Integer.parseInt(((TextView)view).getText().toString());
-                mListener.onChapterSelected(mChapters.get(chapterId));
+                int verseId = Integer.parseInt(((TextView)view).getText().toString());
+                mListener.onVerseSelected(mVerses.get(verseId));
             }
         });
     }

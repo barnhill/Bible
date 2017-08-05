@@ -16,45 +16,52 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
 import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.statics.CurrentSelected;
 
 import java.util.ArrayList;
 
+/**
+ * Book/Chapter/Verse selection dialog
+ */
 public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     public static final String ARG_STARTING_TAB = "STARTING_POINT";
     private FragmentTabHost mTabHost;
     private ViewPager viewPager;
     private NotifySelectionCompleted listener;
-    public static Books.Book mBook;
-    public static Chapters.Chapter mChapter;
-    public static Verses.Verse mVerse;
     private BCVSelectionListener selectionListener;
 
     @Override
     public void onBookSelected(Books.Book book) {
-        mBook = book;
-        mChapter = null;
-        mVerse = null;
-        mTabHost.getTabWidget().setCurrentTab(BCV.CHAPTER.getValue());
-        viewPager.setCurrentItem(BCV.CHAPTER.getValue());
+        CurrentSelected.setBook(book);
+        CurrentSelected.clearChapter();
+        CurrentSelected.clearVerse();
+        gotoTab(BCV.CHAPTER);
     }
 
     @Override
     public void onChapterSelected(Chapters.Chapter chapter) {
-        mChapter = chapter;
-        mVerse = null;
-        refresh();//TODO remove this as the chapter and verse selection get implemented
+        CurrentSelected.setChapter(chapter);
+        CurrentSelected.clearVerse();
+        gotoTab(BCV.VERSE);
     }
 
     @Override
     public void onVerseSelected(Verses.Verse verse) {
-        mVerse = verse;
+        CurrentSelected.setVerse(verse);
+        refresh();
+    }
+
+    private void gotoTab(BCV tab) {
+        mTabHost.getTabWidget().setCurrentTab(tab.getValue());
+        viewPager.setCurrentItem(tab.getValue());
     }
 
     @Override
     public void refresh() {
         if (listener != null) {
-            listener.onSelectionComplete(mBook, mChapter, mVerse);
+            listener.onSelectionComplete(CurrentSelected.getBook(), CurrentSelected.getChapter(), CurrentSelected.getVerse());
         }
+        dismiss();
     }
 
     public enum BCV {
@@ -161,9 +168,10 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
                 return BookSelectionFragment.newInstance(selectionListener);
             } else if (num == BCV.CHAPTER.getValue()) {
                 return ChapterSelectionFragment.newInstance(selectionListener);
+            } else if (num == BCV.VERSE.getValue()) {
+                return VerseSelectionFragment.newInstance(selectionListener);
             } else {
-                //TODO add other fragments for chapter and verse selection
-                return new Fragment();
+                throw new IllegalStateException("Illegal fragment attempting to be displayed in the BCVDialog");
             }
         }
 

@@ -1,16 +1,17 @@
 package com.pnuema.simplebible.data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public final class Versions {
+public final class Versions implements Serializable {
     public VersionsResponse response;
 
-    public class VersionsResponse {
+    public class VersionsResponse implements Serializable {
         public List<Version> versions;
         public Meta meta;
     }
 
-    public class Version {
+    public class Version implements Serializable {
         public String id;
         public String name;
         public String lang;

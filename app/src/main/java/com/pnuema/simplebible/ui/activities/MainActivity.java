@@ -1,11 +1,10 @@
 package com.pnuema.simplebible.ui.activities;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,12 +17,14 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
 import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
-import com.pnuema.simplebible.ui.fragments.BCVDialog;
+import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
+import com.pnuema.simplebible.ui.fragments.NotifyVersionSelectionCompleted;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
 import com.pnuema.simplebible.ui.utils.DialogUtils;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted, NotifyVersionSelectionCompleted {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +41,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //find views
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragment = ReadFragment.newInstance("eng-KJVA", null, null, null); //TODO read preferences to get last used verse on shutdown
-        ft.replace(R.id.fragment_container, fragment);
-        ft.commit();
+        //TODO if last used book chapter and verse are stored go to read fragment
 
-        DialogUtils.showBookChapterVersePicker(this, BCVDialog.BCV.BOOK, this);
+        if (CurrentSelected.getVersion() == null) {
+            DialogUtils.showVersionsPicker(this, this);
+        }
     }
 
     @Override
@@ -107,12 +105,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    private void gotoRead() {
+        if (CurrentSelected.getVersion() != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment_container, ReadFragment.newInstance());
+            ft.commit();
+        }
+    }
+
     @Override
     public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragment = ReadFragment.newInstance("eng-KJVA", book, chapter, verse);
-        ft.replace(R.id.fragment_container, fragment);
-        ft.commit();
+        CurrentSelected.setBook(book);
+        CurrentSelected.setChapter(chapter);
+        CurrentSelected.setVerse(verse);
+        gotoRead();
+    }
+
+    @Override
+    public void onSelectionComplete(Versions.Version version) {
+        CurrentSelected.setVersion(version);
+        gotoRead();
     }
 }
