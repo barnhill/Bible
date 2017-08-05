@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Chapters;
@@ -104,8 +103,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int chapterId = Integer.parseInt(((TextView)view).getText().toString());
-                mListener.onChapterSelected(mChapters.get(chapterId));
+                mListener.onChapterSelected(mChapters.get(i));
             }
         });
     }

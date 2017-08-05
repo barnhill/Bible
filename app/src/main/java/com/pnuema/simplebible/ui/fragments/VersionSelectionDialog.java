@@ -11,6 +11,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Versions;
 import com.pnuema.simplebible.retrievers.VersionsRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.statics.LanguageUtils;
 import com.pnuema.simplebible.ui.adapters.VersionSelectionRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -73,7 +74,12 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     public void update(Observable observable, Object o) {
         mVersions.clear();
         if (o instanceof Versions && ((Versions)o).response != null && ((Versions)o).response.versions != null) {
-            mVersions.addAll(((Versions)o).response.versions);
+            String lang = LanguageUtils.getISOLanguage();
+            for (Versions.Version version : ((Versions)o).response.versions) {
+                if (version.lang.contains(lang)) {
+                    mVersions.add(version);
+                }
+            }
             mAdapter.notifyDataSetChanged();
         }
     }
