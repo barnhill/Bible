@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.pnuema.simplebible.statics.ConnectionUtils;
+
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import okhttp3.Cache;
 import okhttp3.Credentials;
@@ -27,12 +30,12 @@ public final class API {
     @SuppressLint("AuthLeak")
     public static Retrofit getInstance(Context context) {
         if (httpClient == null) {
-            int cacheSize = 20 * 1024 * 1024; // 20 MB
+            int cacheSize = 50 * 1024 * 1024; // 50 MB
             Cache cache = new Cache(context.getCacheDir(), cacheSize);
             httpClient = new OkHttpClient.Builder().cache(cache);
         }
         if (retrofit == null) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(Credentials.basic("joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1", "x"));
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(context, Credentials.basic("joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1", "x"));
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -44,15 +47,25 @@ public final class API {
 
     private static class AuthenticationInterceptor implements Interceptor {
         private String authToken;
+        private WeakReference<Context> context;
 
-        AuthenticationInterceptor(String token) {
+        AuthenticationInterceptor(Context context, String token) {
             this.authToken = token;
+            this.context = new WeakReference<>(context);
         }
 
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request original = chain.request();
-            Request request = original.newBuilder().header("Authorization", authToken).build();
+            Request request = original
+                    .newBuilder()
+                    .removeHeader("Pragma")
+                    .removeHeader("Cache-Control")
+                    .header("Authorization", authToken)
+                    .header("Cache-Control", context.get() != null && ConnectionUtils.isConnected(context.get())
+                            ? "public, max-age=2419200"
+                            : "public, only-if-cached, max-stale=2419200")
+                    .build();
             return chain.proceed(request);
         }
     }
