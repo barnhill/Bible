@@ -9,4 +9,6 @@
     <string name="book">Book</string>
     <string name="chapter">Chapter</string>
     <string name="verse">Verse</string>
+
+    <string name="book_chapter_header_format">%1$s\u0020\u0020\u0020%2$s</string>
 </resources>

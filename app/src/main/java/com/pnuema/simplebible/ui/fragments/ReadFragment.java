@@ -20,6 +20,7 @@ import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVDialog;
 import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
+import com.pnuema.simplebible.ui.dialogs.NotifyVersionSelectionCompleted;
 import com.pnuema.simplebible.ui.utils.DialogUtils;
 
 import java.util.Observable;
@@ -34,9 +35,8 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     private final VersesRetriever dataRetriever = new VersesRetriever();
     private VersesAdapter mAdapter;
 
-    TextView mBookView;
-    TextView mChapterView;
-    TextView mVerseView;
+    TextView mBookChapterView;
+    TextView mTranslationView;
 
     public ReadFragment() {
         // Required empty public constructor
@@ -58,9 +58,8 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         mAdapter = new VersesAdapter();
         recyclerView.setAdapter(mAdapter);
 
-        mBookView = getActivity().findViewById(R.id.selected_book);
-        mChapterView = getActivity().findViewById(R.id.selected_chapter);
-        mVerseView = getActivity().findViewById(R.id.selected_verse);
+        mBookChapterView = getActivity().findViewById(R.id.selected_book);
+        mTranslationView = getActivity().findViewById(R.id.selected_translation);
 
         setAppBarDisplay();
 
@@ -106,12 +105,12 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     private void setAppBarDisplay() {
-        if (mBookView != null) {
+        if (mBookChapterView != null) {
             if (CurrentSelected.getBook() != null) {
-                mBookView.setText(CurrentSelected.getBook().name);
+                mBookChapterView.setText(getContext().getString(R.string.book_chapter_header_format, CurrentSelected.getBook().name, CurrentSelected.getChapter().chapter));
             }
 
-            mBookView.setOnClickListener(new View.OnClickListener() {
+            mBookChapterView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this);
@@ -119,22 +118,12 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             });
         }
 
-        if (mChapterView != null) {
-            mChapterView.setText(CurrentSelected.getChapter() == null ? "1" : CurrentSelected.getChapter().chapter);
-            mChapterView.setOnClickListener(new View.OnClickListener() {
+        if (mTranslationView != null) {
+            mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().abbreviation);
+            mTranslationView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.CHAPTER, ReadFragment.this);
-                }
-            });
-        }
-
-        if (mVerseView != null) {
-            mVerseView.setText(CurrentSelected.getVerse() == null ? "1" : CurrentSelected.getVerse().verse);
-            mVerseView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.VERSE, ReadFragment.this);
+                    DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity());
                 }
             });
         }
