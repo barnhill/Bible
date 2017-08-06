@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.ui.fragments;
+package com.pnuema.simplebible.ui.dialogs;
 
 import com.pnuema.simplebible.data.Books;
 import com.pnuema.simplebible.data.Chapters;

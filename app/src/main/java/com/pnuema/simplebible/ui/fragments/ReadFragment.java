@@ -18,6 +18,8 @@ import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
+import com.pnuema.simplebible.ui.dialogs.BCVDialog;
+import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
 import com.pnuema.simplebible.ui.utils.DialogUtils;
 
 import java.util.Observable;
@@ -46,18 +48,6 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
      */
     public static ReadFragment newInstance() {
         return new ReadFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Activity activity = getActivity();
-        if (activity == null) {
-            return;
-        }
-
-        setAppBarDisplay();
     }
 
     @Override
@@ -140,7 +130,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         }
 
         if (mVerseView != null) {
-            mVerseView.setText(CurrentSelected.getVerse() == null ? "1" : CurrentSelected.getVerse().label);
+            mVerseView.setText(CurrentSelected.getVerse() == null ? "1" : CurrentSelected.getVerse().verse);
             mVerseView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

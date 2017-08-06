@@ -8,9 +8,7 @@ import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.ui.fragments.BCVDialog;
-import com.pnuema.simplebible.ui.fragments.BCVSelectionListener;
-import com.pnuema.simplebible.ui.fragments.BookSelectionFragment;
+import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
 import java.util.List;
 

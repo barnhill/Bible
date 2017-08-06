@@ -13,6 +13,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.retrievers.ChaptersRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +96,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
         }
 
         List<Integer> mList = new ArrayList<>();
-        for (int i = 1; i < mChapters.size(); i++) {
+        for (int i = 1; i <= mChapters.size(); i++) {
             mList.add(i);
         }
 

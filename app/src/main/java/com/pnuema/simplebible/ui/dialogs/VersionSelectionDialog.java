@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.ui.fragments;
+package com.pnuema.simplebible.ui.dialogs;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

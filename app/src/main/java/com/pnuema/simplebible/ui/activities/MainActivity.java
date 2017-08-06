@@ -19,8 +19,8 @@ import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.data.Versions;
 import com.pnuema.simplebible.statics.CurrentSelected;
-import com.pnuema.simplebible.ui.fragments.NotifySelectionCompleted;
-import com.pnuema.simplebible.ui.fragments.NotifyVersionSelectionCompleted;
+import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
+import com.pnuema.simplebible.ui.dialogs.NotifyVersionSelectionCompleted;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
 import com.pnuema.simplebible.ui.utils.DialogUtils;
 

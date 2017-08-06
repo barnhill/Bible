@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         }
 
         List<Integer> mList = new ArrayList<>();
-        for (int i = 1; i < mVerses.size(); i++) {
+        for (int i = 1; i <= mVerses.size(); i++) {
             mList.add(i);
         }
 
@@ -99,8 +99,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int verseId = Integer.parseInt(((TextView)view).getText().toString());
-                mListener.onVerseSelected(mVerses.get(verseId));
+                mListener.onVerseSelected(mVerses.get(i));
             }
         });
     }

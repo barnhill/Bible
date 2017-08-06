@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Versions;
-import com.pnuema.simplebible.ui.fragments.BCVSelectionListener;
-import com.pnuema.simplebible.ui.fragments.VersionSelectionListener;
+import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
+import com.pnuema.simplebible.ui.dialogs.VersionSelectionListener;
 
 import java.util.List;
 

@@ -11,6 +11,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
 import com.pnuema.simplebible.retrievers.BooksRetriever;
 import com.pnuema.simplebible.ui.adapters.BookSelectionRecyclerViewAdapter;
+import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;

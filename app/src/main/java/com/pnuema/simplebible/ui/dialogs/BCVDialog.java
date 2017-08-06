@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.ui.fragments;
+package com.pnuema.simplebible.ui.dialogs;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +17,9 @@ import com.pnuema.simplebible.data.Books;
 import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.ui.fragments.BookSelectionFragment;
+import com.pnuema.simplebible.ui.fragments.ChapterSelectionFragment;
+import com.pnuema.simplebible.ui.fragments.VerseSelectionFragment;
 
 import java.util.ArrayList;
 
