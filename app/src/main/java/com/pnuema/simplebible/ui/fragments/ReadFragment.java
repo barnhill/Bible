@@ -72,7 +72,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         dataRetriever.addObserver(this);
 
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getChapter().id);
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().id, CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
         }
     }
 
@@ -100,7 +100,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getChapter().id);
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().id, CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
         }
     }
 
