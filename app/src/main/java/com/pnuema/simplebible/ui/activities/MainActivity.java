@@ -19,6 +19,7 @@ import com.pnuema.simplebible.data.Chapters;
 import com.pnuema.simplebible.data.Verses;
 import com.pnuema.simplebible.data.Versions;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.ui.dialogs.BCVDialog;
 import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
 import com.pnuema.simplebible.ui.dialogs.NotifyVersionSelectionCompleted;
 import com.pnuema.simplebible.ui.fragments.ReadFragment;
@@ -40,11 +41,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        //TODO if last used book chapter and verse are stored go to read fragment
+    @Override
+    protected void onPause() {
+        CurrentSelected.savePreferences(this);
+        super.onPause();
+    }
 
+    @Override
+    protected void onResume() {
+        CurrentSelected.readPreferences(this);
+        super.onResume();
+
+        //if no version was selected prompt the user to select an initial version
         if (CurrentSelected.getVersion() == null) {
             DialogUtils.showVersionsPicker(this, this);
+        } else if (CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
+            gotoRead();
+        } else {
+            DialogUtils.showBookChapterVersePicker(this, BCVDialog.BCV.BOOK, this);
         }
     }
 
