@@ -34,9 +34,8 @@ import java.util.Observer;
 public class ReadFragment extends Fragment implements Observer, NotifySelectionCompleted {
     private final VersesRetriever dataRetriever = new VersesRetriever();
     private VersesAdapter mAdapter;
-
-    TextView mBookChapterView;
-    TextView mTranslationView;
+    private TextView mBookChapterView;
+    private TextView mTranslationView;
 
     public ReadFragment() {
         // Required empty public constructor

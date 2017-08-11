@@ -14,4 +14,4 @@
     android:textSize="18sp"
     android:lineSpacingExtra="10dp"
     android:background="@color/background_light"
-    tools:text="Verse text as would be seen in the application when text appears"/>
+    tools:text="Verse text as would be seen in the application when text appears in paragraph form.  Then the light of the world blah."/>
