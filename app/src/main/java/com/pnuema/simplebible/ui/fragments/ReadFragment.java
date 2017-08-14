@@ -27,9 +27,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReadFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * The reading pane fragment
  */
 public class ReadFragment extends Fragment implements Observer, NotifySelectionCompleted {
     private final VersesRetriever dataRetriever = new VersesRetriever();

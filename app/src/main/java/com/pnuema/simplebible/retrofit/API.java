@@ -21,9 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Houses all the api calls to get data
  */
-@SuppressWarnings("FieldCanBeLocal")
 public final class API {
-    private static String baseUrl = "https://bibles.org/v2/";
+    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "https://bibles.org/v2/";
+    @SuppressWarnings("FieldCanBeLocal") private static String apiKey = "joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1";
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
 
@@ -35,7 +35,7 @@ public final class API {
             httpClient = new OkHttpClient.Builder().cache(cache);
         }
         if (retrofit == null) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(context, Credentials.basic("joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1", "x"));
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(context, Credentials.basic(apiKey, "x"));
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
