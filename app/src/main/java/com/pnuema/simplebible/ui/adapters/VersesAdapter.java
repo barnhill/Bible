@@ -30,7 +30,8 @@ public class VersesAdapter extends RecyclerView.Adapter {
         }
 
         if (verseViewHolder != null) {
-            verseViewHolder.verseText.setText(fromHtml(mVerses.get(position).text));
+            Spanned spannedString = fromHtml(htmlFormatting(mVerses.get(position).text));
+            verseViewHolder.verseText.setText(spannedString);
         }
     }
 
@@ -52,5 +53,12 @@ public class VersesAdapter extends RecyclerView.Adapter {
         } else {
             return Html.fromHtml(source);
         }
+    }
+
+    //TODO finish formatting html prior to calling fromHtml
+    private static String htmlFormatting(String html) {
+        String formatted;
+        formatted = html.replaceAll("<p class=\"p\">", "").replaceAll("</p>", "");
+        return formatted;
     }
 }
