@@ -63,8 +63,8 @@ public final class API {
                     .removeHeader("Cache-Control")
                     .header("Authorization", authToken)
                     .header("Cache-Control", context.get() != null && ConnectionUtils.isConnected(context.get())
-                            ? "public, max-age=2419200"
-                            : "public, only-if-cached, max-stale=2419200")
+                            ? "public, max-age=2419200" //4 weeks cache when connected
+                            : "public, only-if-cached, max-stale=31536000") //1 year cache when not connected
                     .build();
             return chain.proceed(request);
         }

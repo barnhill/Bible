@@ -1,5 +1,7 @@
 package com.pnuema.simplebible.ui.adapters;
 
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
 import java.util.List;
@@ -35,6 +38,11 @@ public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookS
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).name);
+
+        boolean currentIsSelected = CurrentSelected.getBook() != null && CurrentSelected.getBook().id.equals(mValues.get(position).id);
+
+        holder.mContentView.setTextColor(ContextCompat.getColor(holder.mContentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
+        holder.mContentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
