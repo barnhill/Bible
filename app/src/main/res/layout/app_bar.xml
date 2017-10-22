@@ -14,6 +14,7 @@
         android:background="?attr/colorPrimary"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:contentScrim="?attr/colorPrimary"
         app:titleTextColor="@color/title_bar_foreground"
@@ -21,8 +22,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -32,18 +32,18 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAllCaps="true"
+                android:drawableEnd="@drawable/arrow_down_drop_circle_outline"
                 style="@style/BookChapterVerseButton"
-                tools:text="Matthew   2"
-                tools:ignore="ButtonStyle" />
+                tools:text="Deuteronomy   2" />
 
             <TextView
                 android:id="@+id/selected_translation"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
+                android:drawableEnd="@drawable/book_open_page_variant"
                 style="@style/BookChapterVerseButton"
-                tools:text="KJV"
-                tools:ignore="ButtonStyle" />
+                tools:text="KJV" />
 
         </LinearLayout>
 

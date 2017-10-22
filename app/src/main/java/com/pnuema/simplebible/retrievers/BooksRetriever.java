@@ -30,7 +30,7 @@ public class BooksRetriever extends Observable {
 
                 setChanged();
 
-                //TODO skip this if preference is set
+                //TODO skip this if preference is set to allow not just old and new testaments
                 Iterator<Books.Book> iterator = books.response.books.iterator();
                 while(iterator.hasNext()) {
                     Books.Book next = iterator.next();

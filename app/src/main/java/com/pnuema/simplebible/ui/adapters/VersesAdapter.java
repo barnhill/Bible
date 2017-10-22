@@ -31,7 +31,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
 
         if (verseViewHolder != null) {
             Spanned spannedString = fromHtml(htmlFormatting(mVerses.get(position).text));
-            verseViewHolder.verseText.setText(spannedString);
+            verseViewHolder.getVerseText().setText(spannedString);
         }
     }
 
