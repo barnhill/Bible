@@ -34,12 +34,18 @@
                 android:textAllCaps="true"
                 android:drawableEnd="@drawable/arrow_down_drop_circle_outline"
                 style="@style/BookChapterVerseButton"
-                tools:text="Deuteronomy   2" />
+                tools:text="Song of Solomon   2" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/selected_translation"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:maxLines="1"
                 android:textAlignment="center"
                 android:drawableEnd="@drawable/book_open_page_variant"
                 style="@style/BookChapterVerseButton"

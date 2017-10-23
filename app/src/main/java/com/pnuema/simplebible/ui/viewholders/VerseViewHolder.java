@@ -8,7 +8,8 @@ import android.widget.TextView;
 import com.pnuema.simplebible.R;
 
 public class VerseViewHolder extends RecyclerView.ViewHolder {
-    public TextView verseText;
+    private TextView verseText;
+
     public VerseViewHolder(@NonNull View itemView) {
         super(itemView);
 
