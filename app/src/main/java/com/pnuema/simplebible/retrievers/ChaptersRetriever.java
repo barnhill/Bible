@@ -3,13 +3,10 @@ package com.pnuema.simplebible.retrievers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
 import com.pnuema.simplebible.retrofit.API;
 import com.pnuema.simplebible.retrofit.IAPI;
-import com.pnuema.simplebible.statics.Constants;
 
-import java.util.Iterator;
 import java.util.Observable;
 
 import retrofit2.Call;

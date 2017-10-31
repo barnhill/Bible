@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.fragments.BookSelectionFragment;
 import com.pnuema.simplebible.ui.fragments.ChapterSelectionFragment;

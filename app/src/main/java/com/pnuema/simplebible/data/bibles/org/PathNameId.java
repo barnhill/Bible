@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.data;
+package com.pnuema.simplebible.data.bibles.org;
 
 public class PathNameId {
     public String path;

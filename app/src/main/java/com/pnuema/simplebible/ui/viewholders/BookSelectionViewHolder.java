@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.bibles.org.Books;
 
 public class BookSelectionViewHolder extends RecyclerView.ViewHolder {
     private final TextView mContentView;

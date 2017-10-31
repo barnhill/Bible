@@ -9,7 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.IVersion;
+import com.pnuema.simplebible.data.IVersionProvider;
 import com.pnuema.simplebible.retrievers.VersionsRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.statics.LanguageUtils;
@@ -23,11 +24,11 @@ import java.util.Observer;
 public class VersionSelectionDialog extends DialogFragment implements VersionSelectionListener, Observer {
     private NotifyVersionSelectionCompleted mListener;
     private VersionSelectionRecyclerViewAdapter mAdapter;
-    private final List<Versions.Version> mVersions = new ArrayList<>();
+    private final List<IVersion> mVersions = new ArrayList<>();
     private VersionsRetriever mRetriever = new VersionsRetriever();
 
     @Override
-    public void onVersionSelected(Versions.Version version) {
+    public void onVersionSelected(IVersion version) {
         CurrentSelected.setVersion(version);
         if (mListener != null) {
             mListener.onSelectionComplete(CurrentSelected.getVersion());
@@ -73,10 +74,10 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     @Override
     public void update(Observable observable, Object o) {
         mVersions.clear();
-        if (o instanceof Versions && ((Versions)o).response != null && ((Versions)o).response.versions != null) {
+        if (o instanceof IVersionProvider && ((IVersionProvider)o).getVersions() != null) {
             String lang = LanguageUtils.getISOLanguage();
-            for (Versions.Version version : ((Versions)o).response.versions) {
-                if (version.lang.contains(lang)) {
+            for (IVersion version : ((IVersionProvider)o).getVersions()) {
+                if (version.getLanguage().contains(lang)) {
                     mVersions.add(version);
                 }
             }

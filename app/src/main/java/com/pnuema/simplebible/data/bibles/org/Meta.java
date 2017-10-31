@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.data;
+package com.pnuema.simplebible.data.bibles.org;
 
 public final class Meta {
     public String fums;

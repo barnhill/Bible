@@ -5,16 +5,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.data.Verses;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.IVersion;
+import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.bibles.org.Versions;
 
 public final class CurrentSelected {
-    private static Versions.Version mVersion;
+    private static IVersion mVersion;
     private static Books.Book mBook;
     private static Chapters.Chapter mChapter;
     private static Verses.Verse mVerse;
+
+    private CurrentSelected() {
+    }
 
     public static Verses.Verse getVerse() {
         return mVerse;
@@ -52,11 +56,11 @@ public final class CurrentSelected {
         CurrentSelected.mBook = null;
     }
 
-    public static Versions.Version getVersion() {
+    public static IVersion getVersion() {
         return mVersion;
     }
 
-    public static void setVersion(Versions.Version mVersion) {
+    public static void setVersion(IVersion mVersion) {
         CurrentSelected.mVersion = mVersion;
     }
 

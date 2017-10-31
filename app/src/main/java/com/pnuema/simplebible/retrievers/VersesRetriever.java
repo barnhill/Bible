@@ -3,7 +3,7 @@ package com.pnuema.simplebible.retrievers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.retrofit.API;
 import com.pnuema.simplebible.retrofit.IAPI;
 

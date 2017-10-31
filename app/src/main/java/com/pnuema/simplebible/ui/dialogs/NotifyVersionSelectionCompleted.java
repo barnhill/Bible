@@ -1,7 +1,7 @@
 package com.pnuema.simplebible.ui.dialogs;
 
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.IVersion;
 
 public interface NotifyVersionSelectionCompleted {
-    void onSelectionComplete(Versions.Version version);
+    void onSelectionComplete(IVersion version);
 }

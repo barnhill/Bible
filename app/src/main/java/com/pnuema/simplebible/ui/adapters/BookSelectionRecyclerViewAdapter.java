@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Books;
+import com.pnuema.simplebible.data.bibles.org.Books;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 import com.pnuema.simplebible.ui.viewholders.BookSelectionViewHolder;
@@ -17,7 +17,7 @@ import com.pnuema.simplebible.ui.viewholders.BookSelectionViewHolder;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link com.pnuema.simplebible.data.Books.Book} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Books.Book} and makes a call to the
  * specified {@link BCVSelectionListener}.
  */
 public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookSelectionViewHolder> {

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 import com.pnuema.simplebible.ui.dialogs.VersionSelectionListener;
@@ -18,14 +18,14 @@ import com.pnuema.simplebible.ui.viewholders.VersionSelectionViewHolder;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Versions.Version} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link IVersion} and makes a call to the
  * specified {@link BCVSelectionListener}.
  */
 public class VersionSelectionRecyclerViewAdapter extends RecyclerView.Adapter<VersionSelectionViewHolder> {
-    private final List<Versions.Version> mValues;
+    private final List<IVersion> mValues;
     private final VersionSelectionListener mListener;
 
-    public VersionSelectionRecyclerViewAdapter(List<Versions.Version> items, VersionSelectionListener listener) {
+    public VersionSelectionRecyclerViewAdapter(List<IVersion> items, VersionSelectionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -44,9 +44,9 @@ public class VersionSelectionRecyclerViewAdapter extends RecyclerView.Adapter<Ve
         }
 
         holder.setItem(mValues.get(position));
-        contentView.setText(mValues.get(position).name);
+        contentView.setText(mValues.get(position).getDisplayText());
 
-        boolean currentIsSelected = CurrentSelected.getVersion() != null && CurrentSelected.getVersion().id.equals(mValues.get(position).id);
+        boolean currentIsSelected = CurrentSelected.getVersion() != null && CurrentSelected.getVersion().getId().equals(mValues.get(position).getId());
 
         contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
         contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);

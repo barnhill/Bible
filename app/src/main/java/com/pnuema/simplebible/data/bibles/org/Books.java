@@ -1,4 +1,4 @@
-package com.pnuema.simplebible.data;
+package com.pnuema.simplebible.data.bibles.org;
 
 import java.io.Serializable;
 import java.util.List;

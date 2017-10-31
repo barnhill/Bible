@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.ui.viewholders.VerseViewHolder;
 
 import java.util.ArrayList;

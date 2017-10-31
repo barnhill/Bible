@@ -14,10 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.data.Verses;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.IVersion;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVDialog;
 import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSelectionComplete(Versions.Version version) {
+    public void onSelectionComplete(IVersion version) {
         CurrentSelected.setVersion(version);
         gotoRead();
     }

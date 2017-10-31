@@ -2,6 +2,7 @@ package com.pnuema.simplebible.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
@@ -48,15 +49,20 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_read, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.versesRecyclerView);
         mAdapter = new VersesAdapter();
         recyclerView.setAdapter(mAdapter);
 
-        mBookChapterView = getActivity().findViewById(R.id.selected_book);
-        mTranslationView = getActivity().findViewById(R.id.selected_translation);
+        Activity activity = getActivity();
+        if (activity == null) {
+            return view;
+        }
+
+        mBookChapterView = activity.findViewById(R.id.selected_book);
+        mTranslationView = activity.findViewById(R.id.selected_translation);
 
         setAppBarDisplay();
 
@@ -69,7 +75,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         dataRetriever.addObserver(this);
 
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().id, CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
         }
     }
 
@@ -85,7 +91,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         if (activity instanceof AppCompatActivity) {
             ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
             if (actionBar != null) {
-                actionBar.setTitle(CurrentSelected.getVersion().name); //TODO read translation and put here
+                actionBar.setTitle(CurrentSelected.getVersion().getDisplayText()); //TODO read translation and put here
             }
         }
 
@@ -97,7 +103,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().id, CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
         }
     }
 
@@ -116,7 +122,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         }
 
         if (mTranslationView != null) {
-            mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().abbreviation);
+            mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().getAbbreviation());
             mTranslationView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

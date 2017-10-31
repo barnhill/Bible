@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
 import com.pnuema.simplebible.retrievers.ChaptersRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;

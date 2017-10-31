@@ -1,6 +1,8 @@
 package com.pnuema.simplebible.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Verses;
+import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
@@ -42,7 +44,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         super.setUserVisibleHint(isVisibleToUser);
         mRetriever.addObserver(this);
         if (isVisibleToUser && CurrentSelected.getChapter() != null) {
-            mRetriever.loadData(getContext(), CurrentSelected.getVersion().id, CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+            mRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
         }
     }
 
@@ -62,7 +64,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mGridView = (GridView) inflater.inflate(R.layout.fragment_number_list, container, false);
         return mGridView;
     }
@@ -81,7 +83,8 @@ public class VerseSelectionFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        if (getActivity() == null || getActivity().isFinishing()) {
+        Context context = getContext();
+        if (context == null || getActivity() == null || getActivity().isFinishing()) {
             return;
         }
 
@@ -95,7 +98,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
             mList.add(i);
         }
 
-        mGridView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.item_number, mList));
+        mGridView.setAdapter(new ArrayAdapter<>(context, R.layout.item_number, mList));
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

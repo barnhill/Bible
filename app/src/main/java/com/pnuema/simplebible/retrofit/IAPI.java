@@ -1,9 +1,9 @@
 package com.pnuema.simplebible.retrofit;
 
-import com.pnuema.simplebible.data.Books;
-import com.pnuema.simplebible.data.Chapters;
-import com.pnuema.simplebible.data.Verses;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.bibles.org.Versions;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

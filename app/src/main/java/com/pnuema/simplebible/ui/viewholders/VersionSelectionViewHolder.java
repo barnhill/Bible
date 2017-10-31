@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.Versions;
+import com.pnuema.simplebible.data.IVersion;
 
 public class VersionSelectionViewHolder extends RecyclerView.ViewHolder {
     private final TextView mContentView;
-    private Versions.Version mItem;
+    private IVersion mItem;
 
     public VersionSelectionViewHolder(View view) {
         super(view);
@@ -29,11 +29,11 @@ public class VersionSelectionViewHolder extends RecyclerView.ViewHolder {
     }
 
     @Nullable
-    public Versions.Version getItem() {
+    public IVersion getItem() {
         return mItem;
     }
 
-    public void setItem(@NonNull Versions.Version mItem) {
+    public void setItem(@NonNull IVersion mItem) {
         this.mItem = mItem;
     }
 }
