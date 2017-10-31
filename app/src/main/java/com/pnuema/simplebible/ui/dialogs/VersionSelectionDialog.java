@@ -1,6 +1,7 @@
 package com.pnuema.simplebible.ui.dialogs;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,13 +42,12 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
         return dialog;
     }
 
-    private VersionSelectionDialog setListener(NotifyVersionSelectionCompleted listener) {
+    private void setListener(NotifyVersionSelectionCompleted listener) {
         mListener = listener;
-        return this;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_version_picker, container);
 
         mAdapter = new VersionSelectionRecyclerViewAdapter(mVersions, this);

@@ -27,6 +27,9 @@ public final class API {
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
 
+    private API() {
+    }
+
     @SuppressLint("AuthLeak")
     public static Retrofit getInstance(Context context) {
         if (httpClient == null) {
