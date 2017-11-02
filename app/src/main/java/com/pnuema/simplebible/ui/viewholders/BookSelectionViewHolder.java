@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.IBook;
 
 public class BookSelectionViewHolder extends RecyclerView.ViewHolder {
     private final TextView mContentView;
-    private Books.Book mItem;
+    private IBook mItem;
 
     public BookSelectionViewHolder(View view) {
         super(view);
@@ -29,11 +29,11 @@ public class BookSelectionViewHolder extends RecyclerView.ViewHolder {
     }
 
     @Nullable
-    public Books.Book getItem() {
+    public IBook getItem() {
         return mItem;
     }
 
-    public void setItem(@NonNull Books.Book mItem) {
+    public void setItem(@NonNull IBook mItem) {
         this.mItem = mItem;
     }
 }

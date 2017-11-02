@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
-import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IVerse;
+import com.pnuema.simplebible.data.IVerseProvider;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
@@ -74,8 +75,8 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         super.onResume();
         dataRetriever.addObserver(this);
 
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 
@@ -95,22 +96,25 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             }
         }
 
-        //noinspection unchecked
-        mAdapter.updateVerses(((Verses) o).response.verses);
+        if (o instanceof IVerseProvider) {
+            //noinspection unchecked
+            mAdapter.updateVerses(((IVerseProvider) o).getVerses());
+        }
+
         setAppBarDisplay();
     }
 
     @Override
-    public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().id != null) {
-            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+    public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
+            dataRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 
     private void setAppBarDisplay() {
         if (mBookChapterView != null) {
             if (CurrentSelected.getBook() != null) {
-                mBookChapterView.setText(getContext().getString(R.string.book_chapter_header_format, CurrentSelected.getBook().name, CurrentSelected.getChapter().chapter));
+                mBookChapterView.setText(getString(R.string.book_chapter_header_format, CurrentSelected.getBook().getName(), CurrentSelected.getChapter().getName()));
             }
 
             mBookChapterView.setOnClickListener(new View.OnClickListener() {

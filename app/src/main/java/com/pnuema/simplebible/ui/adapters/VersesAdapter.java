@@ -8,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.ui.viewholders.VerseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VersesAdapter extends RecyclerView.Adapter {
-    private List<Verses.Verse> mVerses = new ArrayList<>();
+    private List<IVerse> mVerses = new ArrayList<>();
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -30,7 +30,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
         }
 
         if (verseViewHolder != null) {
-            Spanned spannedString = fromHtml(htmlFormatting(mVerses.get(position).text));
+            Spanned spannedString = fromHtml(htmlFormatting(mVerses.get(position).getText()));
             verseViewHolder.getVerseText().setText(spannedString);
         }
     }
@@ -40,7 +40,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
         return mVerses.size();
     }
 
-    public void updateVerses(List<Verses.Verse> verses) {
+    public void updateVerses(List<IVerse> verses) {
         mVerses.clear();
         mVerses.addAll(verses);
         notifyDataSetChanged();

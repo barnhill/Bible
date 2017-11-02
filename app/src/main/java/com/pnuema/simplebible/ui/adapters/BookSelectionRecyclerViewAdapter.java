@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 import com.pnuema.simplebible.ui.viewholders.BookSelectionViewHolder;
@@ -17,14 +17,14 @@ import com.pnuema.simplebible.ui.viewholders.BookSelectionViewHolder;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Books.Book} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link IBook} and makes a call to the
  * specified {@link BCVSelectionListener}.
  */
 public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookSelectionViewHolder> {
-    private final List<Books.Book> mValues;
+    private final List<IBook> mValues;
     private final BCVSelectionListener mListener;
 
-    public BookSelectionRecyclerViewAdapter(List<Books.Book> items, BCVSelectionListener listener) {
+    public BookSelectionRecyclerViewAdapter(List<IBook> items, BCVSelectionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -42,10 +42,12 @@ public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookS
             return;
         }
 
-        holder.setItem(mValues.get(position));
-        contentView.setText(mValues.get(position).name);
+        IBook book = mValues.get(position);
 
-        boolean currentIsSelected = CurrentSelected.getBook() != null && CurrentSelected.getBook().id.equals(mValues.get(position).id);
+        holder.setItem(book);
+        contentView.setText(book.getName());
+
+        boolean currentIsSelected = CurrentSelected.getBook() != null && CurrentSelected.getBook().getId().equals(book.getId());
 
         contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
         contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
@@ -53,7 +55,7 @@ public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookS
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (mListener != null) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onBookSelected(holder.getItem());

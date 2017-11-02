@@ -1,12 +1,12 @@
 package com.pnuema.simplebible.ui.dialogs;
 
-import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
-import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IVerse;
 
 public interface BCVSelectionListener {
-    void onBookSelected(Books.Book book);
-    void onChapterSelected(Chapters.Chapter chapter);
-    void onVerseSelected(Verses.Verse verse);
+    void onBookSelected(IBook book);
+    void onChapterSelected(IChapter chapter);
+    void onVerseSelected(IVerse verse);
     void refresh();
 }

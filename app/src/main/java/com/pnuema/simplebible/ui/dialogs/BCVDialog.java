@@ -1,6 +1,7 @@
 package com.pnuema.simplebible.ui.dialogs;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
-import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.fragments.BookSelectionFragment;
 import com.pnuema.simplebible.ui.fragments.ChapterSelectionFragment;
@@ -34,7 +35,7 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     private BCVSelectionListener selectionListener;
 
     @Override
-    public void onBookSelected(Books.Book book) {
+    public void onBookSelected(IBook book) {
         CurrentSelected.setBook(book);
         CurrentSelected.clearChapter();
         CurrentSelected.clearVerse();
@@ -42,14 +43,14 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     }
 
     @Override
-    public void onChapterSelected(Chapters.Chapter chapter) {
+    public void onChapterSelected(IChapter chapter) {
         CurrentSelected.setChapter(chapter);
         CurrentSelected.clearVerse();
         gotoTab(BCV.VERSE);
     }
 
     @Override
-    public void onVerseSelected(Verses.Verse verse) {
+    public void onVerseSelected(IVerse verse) {
         CurrentSelected.setVerse(verse);
         refresh();
     }
@@ -90,13 +91,12 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         return dialog;
     }
 
-    private BCVDialog setListener(NotifySelectionCompleted listener) {
+    private void setListener(NotifySelectionCompleted listener) {
         this.listener = listener;
-        return this;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container);
 
         mTabHost = view.findViewById(R.id.tabs);

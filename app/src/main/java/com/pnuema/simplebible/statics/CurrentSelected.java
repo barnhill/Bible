@@ -5,26 +5,29 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IVerse;
+import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.data.bibles.org.Books;
 import com.pnuema.simplebible.data.bibles.org.Chapters;
-import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.data.bibles.org.Versions;
 
 public final class CurrentSelected {
     private static IVersion mVersion;
-    private static Books.Book mBook;
-    private static Chapters.Chapter mChapter;
-    private static Verses.Verse mVerse;
+    private static IBook mBook;
+    private static IChapter mChapter;
+    private static IVerse mVerse;
 
     private CurrentSelected() {
     }
 
-    public static Verses.Verse getVerse() {
+    public static IVerse getVerse() {
         return mVerse;
     }
 
-    public static void setVerse(Verses.Verse mVerse) {
+    public static void setVerse(IVerse mVerse) {
         CurrentSelected.mVerse = mVerse;
     }
 
@@ -32,11 +35,11 @@ public final class CurrentSelected {
         CurrentSelected.mVerse = null;
     }
 
-    public static Chapters.Chapter getChapter() {
+    public static IChapter getChapter() {
         return mChapter;
     }
 
-    public static void setChapter(Chapters.Chapter mChapter) {
+    public static void setChapter(IChapter mChapter) {
         CurrentSelected.mChapter = mChapter;
     }
 
@@ -44,11 +47,11 @@ public final class CurrentSelected {
         CurrentSelected.mChapter = null;
     }
 
-    public static Books.Book getBook() {
+    public static IBook getBook() {
         return mBook;
     }
 
-    public static void setBook(Books.Book mBook) {
+    public static void setBook(IBook mBook) {
         CurrentSelected.mBook = mBook;
     }
 

@@ -1,6 +1,8 @@
 package com.pnuema.simplebible.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IChapterProvider;
 import com.pnuema.simplebible.retrievers.ChaptersRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
@@ -26,7 +29,7 @@ import java.util.Observer;
  */
 public class ChapterSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
-    private final List<Chapters.Chapter> mChapters = new ArrayList<>();
+    private final List<IChapter> mChapters = new ArrayList<>();
     private ChaptersRetriever mRetriever = new ChaptersRetriever();
     private GridView mGridView;
 
@@ -41,7 +44,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && CurrentSelected.getBook() != null) {
-            mRetriever.loadData(getContext(), CurrentSelected.getBook().id);
+            mRetriever.loadData(getContext(), CurrentSelected.getBook().getId());
         }
     }
 
@@ -61,7 +64,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mGridView = (GridView) inflater.inflate(R.layout.fragment_number_list, container, false);
         return mGridView;
     }
@@ -86,13 +89,14 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        if (getActivity() == null || getActivity().isFinishing()) {
+        Activity activity = getActivity();
+        if (activity == null || activity.isFinishing()) {
             return;
         }
 
         mChapters.clear();
-        if (o instanceof Chapters && ((Chapters)o).response.chapters != null) {
-            mChapters.addAll(((Chapters)o).response.chapters);
+        if (o instanceof IChapterProvider && ((IChapterProvider)o).getChapters() != null) {
+            mChapters.addAll(((IChapterProvider)o).getChapters());
         }
 
         List<Integer> mList = new ArrayList<>();
@@ -100,7 +104,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
             mList.add(i);
         }
 
-        mGridView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.item_number, mList));
+        mGridView.setAdapter(new ArrayAdapter<>(activity, R.layout.item_number, mList));
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

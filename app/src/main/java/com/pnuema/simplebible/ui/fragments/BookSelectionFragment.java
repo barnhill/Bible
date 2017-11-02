@@ -1,6 +1,7 @@
 package com.pnuema.simplebible.ui.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IBookProvider;
 import com.pnuema.simplebible.retrievers.BooksRetriever;
 import com.pnuema.simplebible.ui.adapters.BookSelectionRecyclerViewAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
@@ -24,7 +26,7 @@ import java.util.Observer;
  */
 public class BookSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
-    private final List<Books.Book> mBooks = new ArrayList<>();
+    private final List<IBook> mBooks = new ArrayList<>();
     private BooksRetriever mRetriever = new BooksRetriever();
     private BookSelectionRecyclerViewAdapter mAdapter;
 
@@ -51,7 +53,7 @@ public class BookSelectionFragment extends Fragment implements Observer {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
 
@@ -87,8 +89,8 @@ public class BookSelectionFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         mBooks.clear();
-        if (o instanceof Books && ((Books)o).response != null && ((Books)o).response.books != null) {
-            mBooks.addAll(((Books)o).response.books);
+        if (o instanceof IBookProvider && ((IBookProvider)o).getBooks() != null) {
+            mBooks.addAll(((IBookProvider)o).getBooks());
             mAdapter.notifyDataSetChanged();
         }
     }

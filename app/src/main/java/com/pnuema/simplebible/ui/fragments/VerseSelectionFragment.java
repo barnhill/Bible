@@ -12,7 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Verses;
+import com.pnuema.simplebible.data.IVerse;
+import com.pnuema.simplebible.data.IVerseProvider;
 import com.pnuema.simplebible.retrievers.VersesRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
@@ -28,7 +29,7 @@ import java.util.Observer;
  */
 public class VerseSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
-    private final List<Verses.Verse> mVerses = new ArrayList<>();
+    private final List<IVerse> mVerses = new ArrayList<>();
     private VersesRetriever mRetriever = new VersesRetriever();
     private GridView mGridView;
 
@@ -44,7 +45,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         super.setUserVisibleHint(isVisibleToUser);
         mRetriever.addObserver(this);
         if (isVisibleToUser && CurrentSelected.getChapter() != null) {
-            mRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().abbr, CurrentSelected.getChapter().chapter);
+            mRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 
@@ -89,8 +90,8 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         }
 
         mVerses.clear();
-        if (o instanceof Verses && ((Verses)o).response.verses != null) {
-            mVerses.addAll(((Verses)o).response.verses);
+        if (o instanceof IVerseProvider && ((IVerseProvider)o).getVerses() != null) {
+            mVerses.addAll(((IVerseProvider)o).getVerses());
         }
 
         List<Integer> mList = new ArrayList<>();

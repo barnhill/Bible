@@ -14,10 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.pnuema.simplebible.R;
-import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVersion;
-import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVDialog;
 import com.pnuema.simplebible.ui.dialogs.NotifySelectionCompleted;
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSelectionComplete(Books.Book book, Chapters.Chapter chapter, Verses.Verse verse) {
+    public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
         CurrentSelected.setBook(book);
         CurrentSelected.setChapter(chapter);
         CurrentSelected.setVerse(verse);

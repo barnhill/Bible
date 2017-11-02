@@ -1,17 +1,33 @@
 package com.pnuema.simplebible.data.bibles.org;
 
+import com.pnuema.simplebible.data.IVerse;
+import com.pnuema.simplebible.data.IVerseProvider;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Verses implements Serializable {
+public class Verses implements IVerseProvider, Serializable {
     public VersesResponse response;
+
+    @Override
+    public List<IVerse> getVerses() {
+        if (response == null) {
+            return null;
+        }
+
+        List<IVerse> list = new ArrayList<>();
+        list.addAll(response.verses);
+
+        return list;
+    }
 
     public class VersesResponse implements Serializable {
         public List<Verse> verses;
         public Meta meta;
     }
 
-    public class Verse implements Serializable {
+    public class Verse implements IVerse, Serializable {
         public String auditid;
         public String verse;
         public String lastverse;
@@ -26,6 +42,11 @@ public class Verses implements Serializable {
         public AdjacentVerse next;
         public AdjacentVerse previous;
         public String copyright;
+
+        @Override
+        public String getText() {
+            return text;
+        }
     }
 
     public class Parent implements Serializable {
