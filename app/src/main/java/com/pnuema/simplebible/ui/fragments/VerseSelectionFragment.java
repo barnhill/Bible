@@ -14,7 +14,8 @@ import android.widget.GridView;
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
-import com.pnuema.simplebible.retrievers.VersesRetriever;
+import com.pnuema.simplebible.retrievers.BaseRetreiver;
+import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
@@ -30,7 +31,7 @@ import java.util.Observer;
 public class VerseSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
     private final List<IVerse> mVerses = new ArrayList<>();
-    private VersesRetriever mRetriever = new VersesRetriever();
+    private BaseRetreiver mRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
     private GridView mGridView;
 
     /**
@@ -45,7 +46,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         super.setUserVisibleHint(isVisibleToUser);
         mRetriever.addObserver(this);
         if (isVisibleToUser && CurrentSelected.getChapter() != null) {
-            mRetriever.loadData(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            mRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 

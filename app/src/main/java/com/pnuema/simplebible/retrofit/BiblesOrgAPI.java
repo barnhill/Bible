@@ -21,13 +21,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Houses all the api calls to get data
  */
-public final class API {
+public final class BiblesOrgAPI {
     @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "https://bibles.org/v2/";
     @SuppressWarnings("FieldCanBeLocal") private static String apiKey = "joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1";
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
 
-    private API() {
+    private BiblesOrgAPI() {
     }
 
     @SuppressLint("AuthLeak")

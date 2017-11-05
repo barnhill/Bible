@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.data.IVersionProvider;
-import com.pnuema.simplebible.retrievers.VersionsRetriever;
+import com.pnuema.simplebible.retrievers.BaseRetreiver;
+import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.statics.LanguageUtils;
 import com.pnuema.simplebible.ui.adapters.VersionSelectionRecyclerViewAdapter;
@@ -25,13 +26,13 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     private NotifyVersionSelectionCompleted mListener;
     private VersionSelectionRecyclerViewAdapter mAdapter;
     private final List<IVersion> mVersions = new ArrayList<>();
-    private VersionsRetriever mRetriever = new VersionsRetriever();
+    private BaseRetreiver mRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
 
     @Override
     public void onVersionSelected(IVersion version) {
         CurrentSelected.setVersion(version);
         if (mListener != null) {
-            mListener.onSelectionComplete(CurrentSelected.getVersion());
+            mListener.onSelectionComplete(version);
         }
         dismiss();
     }
@@ -62,7 +63,7 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     public void onResume() {
         super.onResume();
         mRetriever.addObserver(this);
-        mRetriever.loadData(getContext());
+        mRetriever.getVersions(getContext());
     }
 
     @Override
