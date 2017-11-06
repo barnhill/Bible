@@ -104,6 +104,12 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         mTabHost.setup(getActivity(), getChildFragmentManager());
 
         Bundle args = getArguments();
+
+        if (args == null) {
+            //TODO log message about arguments being null
+            return view;
+        }
+
         int startTab = args.getInt(BCVDialog.ARG_STARTING_TAB, BCV.BOOK.getValue());
         ArrayList<String> titles = new ArrayList<>();
         if (startTab == BCV.BOOK.getValue()) {

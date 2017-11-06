@@ -1,5 +1,6 @@
 package com.pnuema.simplebible.data;
 
 public interface IVerse {
-    String getText();
+    CharSequence getText();
+    String getVerseNumber();
 }

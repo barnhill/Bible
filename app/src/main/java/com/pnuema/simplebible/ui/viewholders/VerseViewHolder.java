@@ -20,8 +20,4 @@ public class VerseViewHolder extends RecyclerView.ViewHolder {
         return verseText;
     }
 
-    public void setVerseText(TextView verseText) {
-        this.verseText = verseText;
-    }
-
 }

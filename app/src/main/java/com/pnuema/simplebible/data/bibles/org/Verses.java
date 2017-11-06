@@ -1,7 +1,10 @@
 package com.pnuema.simplebible.data.bibles.org;
 
+import android.text.Spanned;
+
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
+import com.pnuema.simplebible.statics.HtmlUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,8 +47,20 @@ public class Verses implements IVerseProvider, Serializable {
         public String copyright;
 
         @Override
-        public String getText() {
-            return text;
+        public Spanned getText() {
+            return HtmlUtils.fromHtml(htmlFormatting(text));
+        }
+
+        @Override
+        public String getVerseNumber() {
+            return verse;
+        }
+
+        //TODO finish formatting html prior to calling fromHtml
+        private String htmlFormatting(String verseText) {
+            String formatted = text.replaceAll("<p class=\"p\">", "").replaceAll("</p>", "");
+            formatted = formatted.replaceAll("(<sup)\\s[a-zA-Z]+.+(sup>)", "<font color=\"#757575\"><small>" + getVerseNumber() + "&nbsp;&nbsp;</small></font>");
+            return formatted;
         }
     }
 

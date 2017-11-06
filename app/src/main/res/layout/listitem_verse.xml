@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/verseText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="4dp"
     android:paddingEnd="14dp"
     android:paddingStart="14dp"
     android:textColor="@color/primary_text"
