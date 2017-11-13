@@ -1,7 +1,10 @@
 package com.pnuema.simplebible.data.bibles.org;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.Spanned;
 
+import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
 import com.pnuema.simplebible.statics.HtmlUtils;
@@ -9,9 +12,12 @@ import com.pnuema.simplebible.statics.HtmlUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Verses implements IVerseProvider, Serializable {
     public VersesResponse response;
+    private static Pattern patternTitle = Pattern.compile("<h\\d\\b[^>]*>(.*?)<\\/h\\d>");
 
     @Override
     public List<IVerse> getVerses() {
@@ -47,8 +53,8 @@ public class Verses implements IVerseProvider, Serializable {
         public String copyright;
 
         @Override
-        public Spanned getText() {
-            return HtmlUtils.fromHtml(htmlFormatting(text));
+        public Spanned getText(Context context) {
+            return HtmlUtils.fromHtml(htmlFormatting(context));
         }
 
         @Override
@@ -56,10 +62,27 @@ public class Verses implements IVerseProvider, Serializable {
             return verse;
         }
 
+        @Override
+        public String getCopyright() {
+            return copyright;
+        }
+
         //TODO finish formatting html prior to calling fromHtml
-        private String htmlFormatting(String verseText) {
+        private String htmlFormatting(Context context) {
+            //remove paragraph tags
             String formatted = text.replaceAll("<p class=\"p\">", "").replaceAll("</p>", "");
-            formatted = formatted.replaceAll("(<sup)\\s[a-zA-Z]+.+(sup>)", "<font color=\"#757575\"><small>" + getVerseNumber() + "&nbsp;&nbsp;</small></font>");
+
+            //verse number
+            formatted = formatted.replaceAll("(<sup)\\s[a-zA-Z]+.+(sup>)", "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(context, R.color.secondary_text) & 0xffffff) + "\"><small>" + getVerseNumber() + "&nbsp;&nbsp;</small></font>");
+
+            //titles
+            Matcher matcher = patternTitle.matcher(formatted);
+            if (matcher.find()) {
+                for (int i = 0; i <= matcher.groupCount(); i++) {
+                    formatted = formatted.replaceFirst(patternTitle.pattern(), "<br/><font color=\"" + String.format("#%06x", ContextCompat.getColor(context, R.color.primary_text) & 0xffffff) + "\"><b>" +  matcher.group(i) + "</b></font><br/>");
+                }
+            }
+
             return formatted;
         }
     }

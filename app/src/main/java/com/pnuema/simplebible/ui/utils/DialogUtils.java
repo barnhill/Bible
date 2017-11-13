@@ -11,6 +11,9 @@ import com.pnuema.simplebible.ui.dialogs.VersionSelectionDialog;
  * Dialog utilities to generate and display dialogs.
  */
 public final class DialogUtils {
+    private DialogUtils() {
+    }
+
     public static void showBookChapterVersePicker(FragmentActivity activity, BCVDialog.BCV bcv, NotifySelectionCompleted listener) {
         BCVDialog.instantiate(bcv, listener).show(activity.getSupportFragmentManager(), "BCVDialog");
     }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"}) //gson
 public final class Versions implements Serializable, IVersionProvider {
     public VersionsResponse response;
 

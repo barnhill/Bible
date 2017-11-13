@@ -5,6 +5,9 @@ import android.text.Html;
 import android.text.Spanned;
 
 public final class HtmlUtils {
+    private HtmlUtils() {
+    }
+
     @SuppressWarnings("deprecation")
     public static Spanned fromHtml(String source) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

@@ -15,12 +15,13 @@
     <color name="background_light_selected">#efefef</color>
     <color name="background_dark">#1e1e1e</color>
 
+    <color name="controls_dark">#131619</color>
+    <drawable name="background_selected">@color/primary</drawable>
+
+    <!-- color codes only -->
     <color name="darkgrey">#212121</color>
     <color name="mediumgrey">#dcdcdc</color>
     <color name="lightgrey">#fcfefd</color>
     <color name="ghosttext">#909090</color>
     <color name="white">#ffffff</color>
-
-    <color name="controls_dark">#131619</color>
-    <drawable name="background_selected">@color/primary</drawable>
 </resources>

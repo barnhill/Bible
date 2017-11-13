@@ -7,25 +7,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.simplebible.R;
+import com.pnuema.simplebible.statics.HtmlUtils;
 
-public class VerseViewHolder extends RecyclerView.ViewHolder {
-    private TextView verseText;
+public class CopyrightViewHolder extends RecyclerView.ViewHolder {
+    private TextView copyrightText;
 
-    public VerseViewHolder(@NonNull ViewGroup parent) {
+    public CopyrightViewHolder(@NonNull ViewGroup parent) {
         super(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false));
 
-        verseText = itemView.findViewById(R.id.verseText);
+        copyrightText = itemView.findViewById(R.id.copyrightText);
     }
 
-    public void setVerseText(CharSequence text) {
-        verseText.setText(text);
+    public void setText(String text) {
+        copyrightText.setText(HtmlUtils.fromHtml(text));
     }
 
     public static int getType() {
         return getLayout();
     }
 
-    private static int getLayout() {
-        return R.layout.listitem_verse;
+    private static int getLayout(){
+        return R.layout.listitem_copyright;
     }
 }

@@ -4,12 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.pnuema.simplebible.statics.ConnectionUtils;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -38,11 +39,11 @@ public final class BiblesOrgAPI {
             httpClient = new OkHttpClient.Builder().cache(cache);
         }
         if (retrofit == null) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(context, Credentials.basic(apiKey, "x"));
+            AuthenticationInterceptor authInterceptor = new AuthenticationInterceptor(Credentials.basic(apiKey, "x"));
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.addInterceptor(interceptor).build())
+                    .client(httpClient.addNetworkInterceptor(authInterceptor).addNetworkInterceptor(new StethoInterceptor()).build())
                     .build();
         }
         return retrofit;
@@ -50,24 +51,25 @@ public final class BiblesOrgAPI {
 
     private static class AuthenticationInterceptor implements Interceptor {
         private String authToken;
-        private WeakReference<Context> context;
 
-        AuthenticationInterceptor(Context context, String token) {
+        AuthenticationInterceptor(String token) {
             this.authToken = token;
-            this.context = new WeakReference<>(context);
         }
 
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request original = chain.request();
+
+            CacheControl cacheControl = new CacheControl.Builder()
+                    .maxAge(365, TimeUnit.DAYS)
+                    .build();
+
             Request request = original
                     .newBuilder()
                     .removeHeader("Pragma")
                     .removeHeader("Cache-Control")
                     .header("Authorization", authToken)
-                    .header("Cache-Control", context.get() != null && ConnectionUtils.isConnected(context.get())
-                            ? "public, max-age=2419200" //4 weeks cache when connected
-                            : "public, only-if-cached, max-stale=31536000") //1 year cache when not connected
+                    .header("Cache-Control", cacheControl.toString())
                     .build();
             return chain.proceed(request);
         }

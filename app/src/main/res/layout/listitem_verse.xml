@@ -5,7 +5,6 @@
     android:id="@+id/verseText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dp"
     android:paddingEnd="14dp"
     android:paddingStart="14dp"
     android:textColor="@color/primary_text"

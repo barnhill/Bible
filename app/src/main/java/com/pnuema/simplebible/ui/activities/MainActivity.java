@@ -106,11 +106,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentTransaction ft = fm.beginTransaction();
             Fragment fragment = fm.findFragmentByTag(ReadFragment.class.getSimpleName());
             if (fragment != null) {
-                ft.remove(fragment);
+                //ft.remove(fragment);
+            } else {
+                ft.add(R.id.fragment_container, ReadFragment.newInstance(), ReadFragment.class.getSimpleName());
+                ft.commit();
             }
-            ft.add(R.id.fragment_container, ReadFragment.newInstance(), ReadFragment.class.getSimpleName());
-            ft.commit();
         }
+    }
+
+    @Override
+    public void onSelectionPreloadChapter(IBook book, IChapter chapter) {
+        CurrentSelected.setBook(book);
+        CurrentSelected.setChapter(chapter);
+        gotoRead();
     }
 
     @Override

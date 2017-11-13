@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public final class BiblesOrgRetriever extends BaseRetreiver {
+public final class BiblesOrgRetriever extends BaseRetriever {
     @Override
     public void getVersions(Context context) {
         IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);

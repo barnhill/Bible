@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.Observable;
 
-public abstract class BaseRetreiver extends Observable {
-    public BaseRetreiver() {
+public abstract class BaseRetriever extends Observable {
+    BaseRetriever() {
     }
 
     public abstract void getVersions(Context context);

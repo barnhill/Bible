@@ -17,7 +17,7 @@ import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
-import com.pnuema.simplebible.retrievers.BaseRetreiver;
+import com.pnuema.simplebible.retrievers.BaseRetriever;
 import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
@@ -33,10 +33,11 @@ import java.util.Observer;
  * The reading pane fragment
  */
 public class ReadFragment extends Fragment implements Observer, NotifySelectionCompleted {
-    private final BaseRetreiver dataRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
+    private final BaseRetriever dataRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
     private VersesAdapter mAdapter;
     private TextView mBookChapterView;
     private TextView mTranslationView;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public ReadFragment() {
         // Required empty public constructor
@@ -56,6 +57,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         View view = inflater.inflate(R.layout.fragment_read, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.versesRecyclerView);
         mAdapter = new VersesAdapter();
+        mLayoutManager = recyclerView.getLayoutManager();
         recyclerView.setAdapter(mAdapter);
 
         Activity activity = getActivity();
@@ -106,10 +108,22 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     @Override
+    public void onSelectionPreloadChapter(IBook book, IChapter chapter) {
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
+            dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+        }
+    }
+
+    @Override
     public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
             dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
+    }
+
+    private void scrollToVerse(IVerse verse) {
+        //TODO implement scrolling to verse
+        mLayoutManager.scrollToPosition(Integer.parseInt(verse.getVerseNumber()));
     }
 
     private void setAppBarDisplay() {
