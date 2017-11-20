@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     private TextView mBookChapterView;
     private TextView mTranslationView;
     private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView mRecyclerView;
 
     public ReadFragment() {
         // Required empty public constructor
@@ -55,10 +57,10 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_read, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.versesRecyclerView);
+        mRecyclerView = view.findViewById(R.id.versesRecyclerView);
         mAdapter = new VersesAdapter();
-        mLayoutManager = recyclerView.getLayoutManager();
-        recyclerView.setAdapter(mAdapter);
+        mLayoutManager = mRecyclerView.getLayoutManager();
+        mRecyclerView.setAdapter(mAdapter);
 
         Activity activity = getActivity();
         if (activity == null) {
@@ -102,6 +104,10 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         if (o instanceof IVerseProvider) {
             //noinspection unchecked
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
+
+            if (!TextUtils.isEmpty(CurrentSelected.getVerse().getVerseNumber()) && TextUtils.isDigitsOnly(CurrentSelected.getVerse().getVerseNumber())) {
+                mRecyclerView.scrollToPosition(Integer.parseInt(CurrentSelected.getVerse().getVerseNumber()));
+            }
         }
 
         setAppBarDisplay();
