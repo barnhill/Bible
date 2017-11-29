@@ -9,4 +9,6 @@
     <string name="book">Book</string>
     <string name="chapter">Chapter</string>
     <string name="verse">Verse</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
 </resources>

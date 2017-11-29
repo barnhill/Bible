@@ -106,7 +106,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
             if (!TextUtils.isEmpty(CurrentSelected.getVerse().getVerseNumber()) && TextUtils.isDigitsOnly(CurrentSelected.getVerse().getVerseNumber())) {
-                mRecyclerView.scrollToPosition(Integer.parseInt(CurrentSelected.getVerse().getVerseNumber()));
+                mRecyclerView.scrollToPosition(Integer.parseInt(CurrentSelected.getVerse().getVerseNumber()) - 1);
             }
         }
 
