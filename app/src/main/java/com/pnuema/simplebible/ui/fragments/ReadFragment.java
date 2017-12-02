@@ -2,10 +2,12 @@ package com.pnuema.simplebible.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,7 +41,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     private TextView mBookChapterView;
     private TextView mTranslationView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView mRecyclerView;
+    private RecyclerView.SmoothScroller mSmoothScroller;
 
     public ReadFragment() {
         // Required empty public constructor
@@ -57,7 +59,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_read, container, false);
-        mRecyclerView = view.findViewById(R.id.versesRecyclerView);
+        RecyclerView mRecyclerView = view.findViewById(R.id.versesRecyclerView);
         mAdapter = new VersesAdapter();
         mLayoutManager = mRecyclerView.getLayoutManager();
         mRecyclerView.setAdapter(mAdapter);
@@ -66,6 +68,12 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         if (activity == null) {
             return view;
         }
+
+        mSmoothScroller = new LinearSmoothScroller(activity) {
+            @Override protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
 
         mBookChapterView = activity.findViewById(R.id.selected_book);
         mTranslationView = activity.findViewById(R.id.selected_translation);
@@ -106,7 +114,12 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
             if (!TextUtils.isEmpty(CurrentSelected.getVerse().getVerseNumber()) && TextUtils.isDigitsOnly(CurrentSelected.getVerse().getVerseNumber())) {
-                mRecyclerView.scrollToPosition(Integer.parseInt(CurrentSelected.getVerse().getVerseNumber()) - 1);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollToVerse(CurrentSelected.getVerse());
+                    }
+                });
             }
         }
 
@@ -115,7 +128,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
 
     @Override
     public void onSelectionPreloadChapter(IBook book, IChapter chapter) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
             dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
@@ -124,12 +137,13 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
             dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            scrollToVerse(CurrentSelected.getVerse());
         }
     }
 
     private void scrollToVerse(IVerse verse) {
-        //TODO implement scrolling to verse
-        mLayoutManager.scrollToPosition(Integer.parseInt(verse.getVerseNumber()));
+        mSmoothScroller.setTargetPosition(Integer.parseInt(verse.getVerseNumber()) - 1);
+        mLayoutManager.startSmoothScroll(mSmoothScroller);
     }
 
     private void setAppBarDisplay() {
