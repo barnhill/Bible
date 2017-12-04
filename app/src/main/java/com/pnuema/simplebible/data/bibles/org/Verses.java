@@ -67,7 +67,6 @@ public class Verses implements IVerseProvider, Serializable {
             return copyright;
         }
 
-        //TODO finish formatting html prior to calling fromHtml
         private String htmlFormatting(Context context) {
             //remove paragraph tags
             String formatted = text.replaceAll("<p class=\"p\">", "").replaceAll("</p>", "");

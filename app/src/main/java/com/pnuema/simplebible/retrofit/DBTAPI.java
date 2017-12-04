@@ -2,18 +2,15 @@ package com.pnuema.simplebible.retrofit;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.pnuema.simplebible.statics.ConnectionUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,9 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Houses all the api calls to get data
  */
 @SuppressWarnings("FieldCanBeLocal")
-public final class BiblesOrgAPI {
-    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "https://bibles.org/v2/";
-    @SuppressWarnings("FieldCanBeLocal") private static String apiKey = "joMYGKFIjcYh1KiwYpE3lg08fla0cqEeSaM09II1";
+public final class DBTAPI {
+    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "http://dbt.io/";
+    @SuppressWarnings("FieldCanBeLocal") private static String apiKey = "8f72735adeb17ee752db6eeb6b759958";
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
     private static String CACHE_FOLDER = "http-cache";
@@ -36,7 +33,11 @@ public final class BiblesOrgAPI {
     private static int CACHE_OFFLINE_DAYS = 365;
     private static int CACHE_ONLINE_DAYS = 2;
 
-    private BiblesOrgAPI() {
+    private DBTAPI() {
+    }
+
+    public static String getApiKey() {
+        return apiKey;
     }
 
     @SuppressLint("AuthLeak")
@@ -45,8 +46,7 @@ public final class BiblesOrgAPI {
             httpClient = new OkHttpClient.Builder();
         }
         if (retrofit == null) {
-            httpClient.addNetworkInterceptor(new AuthenticationInterceptor(Credentials.basic(apiKey, "x")))
-                      .addNetworkInterceptor(new StethoInterceptor())
+            httpClient.addNetworkInterceptor(new StethoInterceptor())
                       .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                       .addInterceptor(provideOfflineCacheInterceptor(context))
                       .addNetworkInterceptor(provideCacheInterceptor())
@@ -69,27 +69,6 @@ public final class BiblesOrgAPI {
         catch (Exception ignored) {}
 
         return cache;
-    }
-
-    private static class AuthenticationInterceptor implements Interceptor {
-        private String authToken;
-
-        AuthenticationInterceptor(String token) {
-            this.authToken = token;
-        }
-
-        @Override
-        public Response intercept(@NonNull Chain chain) throws IOException {
-            Request original = chain.request();
-
-            Request request = original
-                    .newBuilder()
-                    .removeHeader("Pragma")
-                    .header("Authorization", authToken)
-                    .build();
-
-            return chain.proceed(request);
-        }
     }
 
     private static Interceptor provideCacheInterceptor() {

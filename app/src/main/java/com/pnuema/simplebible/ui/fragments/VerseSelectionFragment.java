@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
@@ -15,7 +14,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
-import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
+import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
@@ -31,7 +30,7 @@ import java.util.Observer;
 public class VerseSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
     private final List<IVerse> mVerses = new ArrayList<>();
-    private BaseRetriever mRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
     private GridView mGridView;
 
     /**
@@ -101,11 +100,6 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         }
 
         mGridView.setAdapter(new ArrayAdapter<>(context, R.layout.item_number, mList));
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mListener.onVerseSelected(mVerses.get(i));
-            }
-        });
+        mGridView.setOnItemClickListener((adapterView, view, i, l) -> mListener.onVerseSelected(mVerses.get(i)));
     }
 }

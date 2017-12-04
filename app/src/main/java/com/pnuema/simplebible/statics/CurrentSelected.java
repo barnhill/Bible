@@ -3,15 +3,15 @@ package com.pnuema.simplebible.statics;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
-import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
+import com.pnuema.simplebible.data.bibles.org.Chapter;
 import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.data.bibles.org.Versions;
 
@@ -24,6 +24,7 @@ public final class CurrentSelected {
     private CurrentSelected() {
     }
 
+    @Nullable
     public static IVerse getVerse() {
         return mVerse;
     }
@@ -71,10 +72,10 @@ public final class CurrentSelected {
     public static void readPreferences(Activity activity) {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
 
-        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION, activity.getString(R.string.default_version_selected)), Versions.Version.class));
-        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK, activity.getString(R.string.default_book_selected)), Books.Book.class));
-        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER, activity.getString(R.string.default_chapter_selected)), Chapters.Chapter.class));
-        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE, activity.getString(R.string.default_verse_selected)), Verses.Verse.class));
+        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION, ""), Versions.Version.class));
+        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK, ""), Books.Book.class));
+        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER, ""), Chapter.class));
+        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE, ""), Verses.Verse.class));
     }
 
     public static void savePreferences(Activity activity) {

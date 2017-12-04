@@ -3,8 +3,9 @@ package com.pnuema.simplebible.retrievers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.pnuema.simplebible.data.IBook;
+import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.bibles.org.Books;
-import com.pnuema.simplebible.data.bibles.org.Chapters;
 import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.data.bibles.org.Versions;
 import com.pnuema.simplebible.retrofit.BiblesOrgAPI;
@@ -13,6 +14,7 @@ import com.pnuema.simplebible.statics.Constants;
 import com.pnuema.simplebible.statics.CurrentSelected;
 
 import java.util.Iterator;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +28,10 @@ public final class BiblesOrgRetriever extends BaseRetriever {
         call.enqueue(new Callback<Versions>() {
             @Override
             public void onResponse(@NonNull Call<Versions> call, @NonNull Response<Versions> response) {
+                if (!response.isSuccessful()) {
+                    return;
+                }
+
                 Versions versions = response.body();
                 if (versions == null || versions.response == null) {
                     return;
@@ -44,12 +50,30 @@ public final class BiblesOrgRetriever extends BaseRetriever {
     @Override
     public void getChapters(Context context, String book) {
         IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);
-        Call<Chapters> call = api.getChapters(book);
-        call.enqueue(new Callback<Chapters>() {
+        Call<Books> call = api.getBooks(CurrentSelected.getVersion().getId()); //books call gets the chapters too and caches them so that two calls arent necessary from bibles.org
+        call.enqueue(new Callback<Books>() {
             @Override
-            public void onResponse(@NonNull Call<Chapters> call, @NonNull Response<Chapters> response) {
-                Chapters chapters = response.body();
-                if (chapters == null || chapters.response == null || !response.isSuccessful()) {
+            public void onResponse(@NonNull Call<Books> call, @NonNull Response<Books> response) {
+                Books books = response.body();
+
+                if (books == null || !response.isSuccessful()) {
+                    return;
+                }
+
+                IBook targetBook = null;
+                for (IBook listBook : books.getBooks()) {
+                     if (listBook.getId().equalsIgnoreCase(book)) {
+                         targetBook = listBook;
+                         break;
+                     }
+                }
+
+                if (targetBook == null || targetBook.getChapters() == null || targetBook.getChapters().isEmpty()) {
+                    return;
+                }
+
+                List<IChapter> chapters = targetBook.getChapters();
+                if (chapters == null) {
                     return;
                 }
 
@@ -58,7 +82,7 @@ public final class BiblesOrgRetriever extends BaseRetriever {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Chapters> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Books> call, @NonNull Throwable t) {
             }
         });
     }

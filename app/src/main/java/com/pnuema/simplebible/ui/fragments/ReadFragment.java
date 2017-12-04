@@ -21,7 +21,7 @@ import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
-import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
+import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVDialog;
@@ -36,7 +36,7 @@ import java.util.Observer;
  * The reading pane fragment
  */
 public class ReadFragment extends Fragment implements Observer, NotifySelectionCompleted {
-    private final BaseRetriever dataRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
+    private final BaseRetriever dataRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
     private VersesAdapter mAdapter;
     private TextView mBookChapterView;
     private TextView mTranslationView;
@@ -63,6 +63,10 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         mAdapter = new VersesAdapter();
         mLayoutManager = mRecyclerView.getLayoutManager();
         mRecyclerView.setAdapter(mAdapter);
+
+        //preload the versions
+        //new DBTRetriever().getBooks(getContext());
+        //new DBTRetriever().getVersions(getContext());
 
         Activity activity = getActivity();
         if (activity == null) {
@@ -105,7 +109,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         if (activity instanceof AppCompatActivity) {
             ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
             if (actionBar != null) {
-                actionBar.setTitle(CurrentSelected.getVersion().getDisplayText()); //TODO read translation and put here
+                actionBar.setTitle(CurrentSelected.getVersion().getDisplayText());
             }
         }
 
@@ -113,13 +117,9 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             //noinspection unchecked
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
-            if (!TextUtils.isEmpty(CurrentSelected.getVerse().getVerseNumber()) && TextUtils.isDigitsOnly(CurrentSelected.getVerse().getVerseNumber())) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollToVerse(CurrentSelected.getVerse());
-                    }
-                });
+            final IVerse verse = CurrentSelected.getVerse();
+            if (verse != null && !TextUtils.isEmpty(verse.getVerseNumber()) && TextUtils.isDigitsOnly(verse.getVerseNumber())) {
+                new Handler().post(() -> scrollToVerse(verse));
             }
         }
 
@@ -148,26 +148,16 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
 
     private void setAppBarDisplay() {
         if (mBookChapterView != null) {
-            if (CurrentSelected.getBook() != null) {
+            if (CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
                 mBookChapterView.setText(getString(R.string.book_chapter_header_format, CurrentSelected.getBook().getName(), CurrentSelected.getChapter().getName()));
             }
 
-            mBookChapterView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this);
-                }
-            });
+            mBookChapterView.setOnClickListener(view -> DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this));
         }
 
         if (mTranslationView != null) {
             mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().getAbbreviation());
-            mTranslationView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity());
-                }
-            });
+            mTranslationView.setOnClickListener(view -> DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity()));
         }
     }
 }

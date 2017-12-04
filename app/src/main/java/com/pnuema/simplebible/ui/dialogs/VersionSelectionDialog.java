@@ -12,7 +12,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IVersion;
 import com.pnuema.simplebible.data.IVersionProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
-import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
+import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.statics.LanguageUtils;
 import com.pnuema.simplebible.ui.adapters.VersionSelectionRecyclerViewAdapter;
@@ -26,7 +26,7 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     private NotifyVersionSelectionCompleted mListener;
     private VersionSelectionRecyclerViewAdapter mAdapter;
     private final List<IVersion> mVersions = new ArrayList<>();
-    private BaseRetriever mRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
 
     @Override
     public void onVersionSelected(IVersion version) {

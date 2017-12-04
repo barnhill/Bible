@@ -2,6 +2,8 @@ package com.pnuema.simplebible.data.bibles.org;
 
 import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IBookProvider;
+import com.pnuema.simplebible.data.IChapter;
+import com.pnuema.simplebible.data.IChapterProvider;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class Books implements IBookProvider, Serializable {
         public Meta meta;
     }
 
-    public class Book implements IBook, Serializable {
+    public class Book implements IBook, IChapterProvider, Serializable {
         public String version_id;
         public String name;
         public String abbr;
@@ -40,6 +42,7 @@ public class Books implements IBookProvider, Serializable {
         public AdjacentBook next;
         public AdjacentBook previous;
         public String copyright;
+        public List<Chapter> chapters;
 
         @Override
         public String getId() {
@@ -54,6 +57,11 @@ public class Books implements IBookProvider, Serializable {
         @Override
         public String getAbbreviation() {
             return abbr;
+        }
+
+        @Override
+        public List<IChapter> getChapters() {
+            return new ArrayList<>(chapters);
         }
     }
 

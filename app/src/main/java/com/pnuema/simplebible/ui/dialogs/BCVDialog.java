@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IBook;
@@ -149,12 +148,9 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
             }
         });
 
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String s) {
-                int i = mTabHost.getCurrentTab();
-                viewPager.setCurrentItem(i);
-            }
+        mTabHost.setOnTabChangedListener(s -> {
+            int i = mTabHost.getCurrentTab();
+            viewPager.setCurrentItem(i);
         });
 
         selectionListener = this;

@@ -12,7 +12,7 @@ import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IBookProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
-import com.pnuema.simplebible.retrievers.BiblesOrgRetriever;
+import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.ui.adapters.BookSelectionRecyclerViewAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
@@ -28,7 +28,7 @@ import java.util.Observer;
 public class BookSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
     private final List<IBook> mBooks = new ArrayList<>();
-    private BaseRetriever mRetriever = new BiblesOrgRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
     private BookSelectionRecyclerViewAdapter mAdapter;
 
     /**

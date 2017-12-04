@@ -23,37 +23,11 @@ public class Chapters implements IChapterProvider, Serializable {
     }
 
     public class ChaptersResponse implements Serializable {
-        public List<Chapter> chapters;
-        public Meta meta;
-    }
-
-    public class Chapter implements IChapter, Serializable {
-        public String chapter;
-        public String auditid;
-        public String label;
-        public String id;
-        public String osis_end;
-        public Parent parent;
-        public AdjacentChapter next;
-        public AdjacentChapter previous;
-        public String copyright;
-
-        @Override
-        public String getId() {
-            return id;
-        }
-
-        @Override
-        public String getName() {
-            return chapter;
-        }
+        List<Chapter> chapters;
+        Meta meta;
     }
 
     public class Parent implements Serializable {
         public PathNameId book;
-    }
-
-    public class AdjacentChapter implements Serializable {
-        public PathNameId chapter;
     }
 }
