@@ -1,5 +1,7 @@
 language: android
 jdk: oraclejdk8
+# See https://github.com/travis-ci/travis-ci/issues/5582
+sudo: required
 android:
   before_install:
     - mkdir "$ANDROID_HOME/licenses" || true
@@ -8,19 +10,16 @@ android:
 
   components:
     - tools
-    - platform-tools
     - tools
-    - android-27
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-27
+
+  before_script:
+    - echo y | ${ANDROID_HOME}tools/bin/sdkmanager --channel=3 "tools" "platform-tools" "build-tools;26.0.2" "platforms;android-27" "extras;google;m2repository" "extras;google;google_play_services"
 
   licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    - '.+'
+     - '.+'
 
 script:
-  - ./gradlew assemble lint
+  - ./gradlew clean assemble lint
