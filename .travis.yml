@@ -10,7 +10,6 @@ android:
     - tools
     - platform-tools
     - tools
-    - build-tools-27.0.0
     - android-27
     - extra-google-google_play_services
     - extra-google-m2repository
@@ -21,6 +20,7 @@ android:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
+    - '.+'
 
 script:
   - ./gradlew assemble lint
