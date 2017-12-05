@@ -20,8 +20,6 @@ import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.IVerse;
 import com.pnuema.simplebible.data.IVerseProvider;
-import com.pnuema.simplebible.retrievers.BaseRetriever;
-import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.VersesAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVDialog;
@@ -36,7 +34,6 @@ import java.util.Observer;
  * The reading pane fragment
  */
 public class ReadFragment extends Fragment implements Observer, NotifySelectionCompleted {
-    private final BaseRetriever dataRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
     private VersesAdapter mAdapter;
     private TextView mBookChapterView;
     private TextView mTranslationView;
@@ -90,17 +87,17 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onResume() {
         super.onResume();
-        dataRetriever.addObserver(this);
+        CurrentSelected.getRetriever().addObserver(this);
 
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
-            dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        dataRetriever.deleteObserver(this);
+        CurrentSelected.getRetriever().deleteObserver(this);
     }
 
     @Override
@@ -129,14 +126,14 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onSelectionPreloadChapter(IBook book, IChapter chapter) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
-            dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 
     @Override
     public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
-            dataRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
             scrollToVerse(CurrentSelected.getVerse());
         }
     }

@@ -19,7 +19,7 @@ public class Versions implements IVersionProvider {
         HashSet<String> dupeSet = new HashSet<>();
         for (Volume volume : volumes) {
             if ("text".equalsIgnoreCase(volume.getMedia()) && dupeSet.add(volume.getVersionCode())) {
-                versions.add(new Version(volume.getDamId(), volume.getVolumeName(), volume.getLanguageFamilyIso(), volume.getVersionCode()));
+                versions.add(new Version(volume.getDamId(), volume.getVersionName().length() > 3 ? volume.getVersionName() : volume.getVolumeName(), volume.getLanguageFamilyIso(), volume.getVersionCode()));
             }
         }
     }

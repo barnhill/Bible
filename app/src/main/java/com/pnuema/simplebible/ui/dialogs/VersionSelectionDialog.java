@@ -63,7 +63,7 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     public void onResume() {
         super.onResume();
         mRetriever.addObserver(this);
-        mRetriever.getVersions(getContext());
+        mRetriever.getVersions();
     }
 
     @Override

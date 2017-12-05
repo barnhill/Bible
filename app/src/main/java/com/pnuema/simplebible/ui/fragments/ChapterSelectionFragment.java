@@ -44,7 +44,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && CurrentSelected.getBook() != null) {
-            mRetriever.getChapters(getContext(), CurrentSelected.getBook().getId());
+            mRetriever.getChapters(CurrentSelected.getBook().getId());
         }
     }
 

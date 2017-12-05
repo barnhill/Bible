@@ -72,7 +72,7 @@ public class BookSelectionFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         mRetriever.addObserver(this);
-        mRetriever.getBooks(getContext());
+        mRetriever.getBooks();
     }
 
     @Override

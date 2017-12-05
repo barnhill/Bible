@@ -1,15 +1,19 @@
 package com.pnuema.simplebible.retrievers;
 
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IChapter;
 import com.pnuema.simplebible.data.bibles.org.Books;
+import com.pnuema.simplebible.data.bibles.org.Chapter;
 import com.pnuema.simplebible.data.bibles.org.Verses;
 import com.pnuema.simplebible.data.bibles.org.Versions;
 import com.pnuema.simplebible.retrofit.BiblesOrgAPI;
 import com.pnuema.simplebible.retrofit.IBiblesOrgAPI;
+import com.pnuema.simplebible.statics.App;
 import com.pnuema.simplebible.statics.Constants;
 import com.pnuema.simplebible.statics.CurrentSelected;
 
@@ -20,10 +24,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Retriever for bibles.org
+ */
 public final class BiblesOrgRetriever extends BaseRetriever {
     @Override
-    public void getVersions(Context context) {
-        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);
+    public void savePrefs() {
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + getTag(), new Gson().toJson(CurrentSelected.getVersion()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + getTag(), new Gson().toJson(CurrentSelected.getBook()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + getTag(), new Gson().toJson(CurrentSelected.getChapter()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + getTag(), new Gson().toJson(CurrentSelected.getVerse()));
+    }
+
+    @Override
+    public void readPrefs() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+
+        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), ""), Versions.Version.class));
+        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), ""), Books.Book.class));
+        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), ""), Chapter.class));
+        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), ""), Verses.Verse.class));
+    }
+
+    @Override
+    public void getVersions() {
+        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(App.getContext()).create(IBiblesOrgAPI.class);
         Call<Versions> call = api.getVersions();
         call.enqueue(new Callback<Versions>() {
             @Override
@@ -48,8 +73,8 @@ public final class BiblesOrgRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getChapters(Context context, String book) {
-        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);
+    public void getChapters(String book) {
+        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(App.getContext()).create(IBiblesOrgAPI.class);
         Call<Books> call = api.getBooks(CurrentSelected.getVersion().getId()); //books call gets the chapters too and caches them so that two calls arent necessary from bibles.org
         call.enqueue(new Callback<Books>() {
             @Override
@@ -88,8 +113,8 @@ public final class BiblesOrgRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getBooks(Context context) {
-        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);
+    public void getBooks() {
+        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(App.getContext()).create(IBiblesOrgAPI.class);
         Call<Books> call = api.getBooks(CurrentSelected.getVersion().getId());
         call.enqueue(new Callback<Books>() {
             @Override
@@ -119,8 +144,8 @@ public final class BiblesOrgRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getVerses(Context context, String version, String book, String chapter) {
-        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(context).create(IBiblesOrgAPI.class);
+    public void getVerses(String version, String book, String chapter) {
+        IBiblesOrgAPI api = BiblesOrgAPI.getInstance(App.getContext()).create(IBiblesOrgAPI.class);
         Call<Verses> call = api.getVerses(version, book, chapter);
         call.enqueue(new Callback<Verses>() {
             @Override

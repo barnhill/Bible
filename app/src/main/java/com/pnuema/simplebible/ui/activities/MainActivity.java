@@ -45,13 +45,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onPause() {
-        CurrentSelected.savePreferences(this);
+        CurrentSelected.savePreferences();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        CurrentSelected.readPreferences(this);
+        CurrentSelected.readPreferences();
         super.onResume();
 
         //if no version was selected prompt the user to select an initial version

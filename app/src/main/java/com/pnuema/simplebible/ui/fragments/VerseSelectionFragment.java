@@ -45,7 +45,7 @@ public class VerseSelectionFragment extends Fragment implements Observer {
         super.setUserVisibleHint(isVisibleToUser);
         mRetriever.addObserver(this);
         if (isVisibleToUser && CurrentSelected.getChapter() != null) {
-            mRetriever.getVerses(getContext(), CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            mRetriever.getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
         }
     }
 

@@ -1,14 +1,19 @@
 package com.pnuema.simplebible.retrievers;
 
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.pnuema.simplebible.data.bibles.org.Chapter;
 import com.pnuema.simplebible.data.dbt.Books;
 import com.pnuema.simplebible.data.dbt.Verses;
 import com.pnuema.simplebible.data.dbt.Versions;
 import com.pnuema.simplebible.data.dbt.Volume;
 import com.pnuema.simplebible.retrofit.DBTAPI;
 import com.pnuema.simplebible.retrofit.IDBTAPI;
+import com.pnuema.simplebible.statics.App;
+import com.pnuema.simplebible.statics.Constants;
 import com.pnuema.simplebible.statics.CurrentSelected;
 
 import java.util.ArrayList;
@@ -24,8 +29,26 @@ import retrofit2.Response;
  */
 public final class DBTRetriever extends BaseRetriever {
     @Override
-    public void getVersions(Context context) {
-        IDBTAPI api = DBTAPI.getInstance(context).create(IDBTAPI.class);
+    public void savePrefs() {
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + getTag(), new Gson().toJson(CurrentSelected.getVersion()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + getTag(), new Gson().toJson(CurrentSelected.getBook()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + getTag(), new Gson().toJson(CurrentSelected.getChapter()));
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + getTag(), new Gson().toJson(CurrentSelected.getVerse()));
+    }
+
+    @Override
+    public void readPrefs() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+
+        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), "[]"), Versions.Version.class));
+        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), "[]"), Books.Book.class));
+        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), "[]"), Chapter.class));
+        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), "[]"), Verses.Verse.class));
+    }
+
+    @Override
+    public void getVersions() {
+        IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
         Call<List<Volume>> call = api.getVersions(DBTAPI.getApiKey(), Locale.getDefault().getISO3Language());
 
         call.enqueue(new Callback<List<Volume>>() {
@@ -51,8 +74,8 @@ public final class DBTRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getChapters(Context context, String bookId) {
-        IDBTAPI api = DBTAPI.getInstance(context).create(IDBTAPI.class);
+    public void getChapters(String bookId) {
+        IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
 
         //setup for old testament retrieval
         String damid = CurrentSelected.getVersion().getId().substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
@@ -112,8 +135,8 @@ public final class DBTRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getBooks(Context context) {
-        IDBTAPI api = DBTAPI.getInstance(context).create(IDBTAPI.class);
+    public void getBooks() {
+        IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
 
         //setup for old testament retrieval
         String damid = CurrentSelected.getVersion().getId().substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
@@ -163,8 +186,8 @@ public final class DBTRetriever extends BaseRetriever {
     }
 
     @Override
-    public void getVerses(Context context, String damId, String book, String chapter) {
-        IDBTAPI api = DBTAPI.getInstance(context).create(IDBTAPI.class);
+    public void getVerses(String damId, String book, String chapter) {
+        IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
         Call<List<Verses.Verse>> call = api.getVerses(DBTAPI.getApiKey(), ((Books.Book)CurrentSelected.getBook()).getDamId(), book, chapter);
         call.enqueue(new Callback<List<Verses.Verse>>() {
             @Override
