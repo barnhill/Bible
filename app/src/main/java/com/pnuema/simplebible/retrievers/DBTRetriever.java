@@ -5,8 +5,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.pnuema.simplebible.data.bibles.org.Chapter;
 import com.pnuema.simplebible.data.dbt.Books;
+import com.pnuema.simplebible.data.dbt.Chapter;
 import com.pnuema.simplebible.data.dbt.Verses;
 import com.pnuema.simplebible.data.dbt.Versions;
 import com.pnuema.simplebible.data.dbt.Volume;
