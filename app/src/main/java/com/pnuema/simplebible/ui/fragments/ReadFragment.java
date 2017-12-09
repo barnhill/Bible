@@ -120,7 +120,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
             }
         }
 
-        setAppBarDisplay();
+        setBookChapterText();
     }
 
     @Override
@@ -145,9 +145,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
 
     private void setAppBarDisplay() {
         if (mBookChapterView != null) {
-            if (CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
-                mBookChapterView.setText(getString(R.string.book_chapter_header_format, CurrentSelected.getBook().getName(), CurrentSelected.getChapter().getName()));
-            }
+            setBookChapterText();
 
             mBookChapterView.setOnClickListener(view -> DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this));
         }
@@ -155,6 +153,12 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         if (mTranslationView != null) {
             mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().getAbbreviation());
             mTranslationView.setOnClickListener(view -> DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity()));
+        }
+    }
+
+    private void setBookChapterText() {
+        if (mBookChapterView != null && CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
+            mBookChapterView.setText(getString(R.string.book_chapter_header_format, CurrentSelected.getBook().getName(), CurrentSelected.getChapter().getName()));
         }
     }
 }

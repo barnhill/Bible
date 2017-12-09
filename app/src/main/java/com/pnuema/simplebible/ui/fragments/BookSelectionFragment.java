@@ -3,6 +3,7 @@ package com.pnuema.simplebible.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.pnuema.simplebible.data.IBook;
 import com.pnuema.simplebible.data.IBookProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
 import com.pnuema.simplebible.retrievers.DBTRetriever;
+import com.pnuema.simplebible.statics.CurrentSelected;
 import com.pnuema.simplebible.ui.adapters.BookSelectionRecyclerViewAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
 
@@ -30,6 +32,7 @@ public class BookSelectionFragment extends Fragment implements Observer {
     private final List<IBook> mBooks = new ArrayList<>();
     private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
     private BookSelectionRecyclerViewAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,8 +64,8 @@ public class BookSelectionFragment extends Fragment implements Observer {
         // Set the adapter
         if (view instanceof RecyclerView) {
             mAdapter = new BookSelectionRecyclerViewAdapter(mBooks, mListener);
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setAdapter(mAdapter);
+            mRecyclerView = (RecyclerView) view;
+            mRecyclerView.setAdapter(mAdapter);
         }
 
         return view;
@@ -71,6 +74,7 @@ public class BookSelectionFragment extends Fragment implements Observer {
     @Override
     public void onResume() {
         super.onResume();
+
         mRetriever.addObserver(this);
         mRetriever.getBooks();
     }
@@ -93,6 +97,14 @@ public class BookSelectionFragment extends Fragment implements Observer {
         if (o instanceof IBookProvider && ((IBookProvider)o).getBooks() != null) {
             mBooks.addAll(((IBookProvider)o).getBooks());
             mAdapter.notifyDataSetChanged();
+
+            if (CurrentSelected.getBook() != null) {
+                for (IBook book : mBooks) {
+                    if (book.getId().equalsIgnoreCase(CurrentSelected.getBook().getId())) {
+                        ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mBooks.indexOf(book), mRecyclerView.getHeight()/2);
+                    }
+                }
+            }
         }
     }
 }
