@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 
 import com.pnuema.simplebible.R;
 import com.pnuema.simplebible.data.IChapter;
@@ -16,7 +16,9 @@ import com.pnuema.simplebible.data.IChapterProvider;
 import com.pnuema.simplebible.retrievers.BaseRetriever;
 import com.pnuema.simplebible.retrievers.DBTRetriever;
 import com.pnuema.simplebible.statics.CurrentSelected;
+import com.pnuema.simplebible.ui.adapters.NumberSelectionAdapter;
 import com.pnuema.simplebible.ui.dialogs.BCVSelectionListener;
+import com.pnuema.simplebible.ui.dialogs.NumberSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,11 @@ import java.util.Observer;
  * A fragment representing a list of chapter numbers to pick from.
  * <p/>
  */
-public class ChapterSelectionFragment extends Fragment implements Observer {
+public class ChapterSelectionFragment extends Fragment implements Observer, NumberSelectionListener {
     private BCVSelectionListener mListener;
     private final List<IChapter> mChapters = new ArrayList<>();
     private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
-    private GridView mGridView;
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,8 +67,9 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mGridView = (GridView) inflater.inflate(R.layout.fragment_number_list, container, false);
-        return mGridView;
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_number_list, container, false);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        return mRecyclerView;
     }
 
     @Override
@@ -98,14 +101,12 @@ public class ChapterSelectionFragment extends Fragment implements Observer {
         if (o instanceof IChapterProvider) {
             //noinspection unchecked
             mChapters.addAll(((IChapterProvider)o).getChapters());
+            mRecyclerView.setAdapter(new NumberSelectionAdapter(mChapters.size(), CurrentSelected.getChapter() == null || CurrentSelected.getChapter().getId() == null ? null : Integer.parseInt(CurrentSelected.getChapter().getId()), this));
         }
+    }
 
-        List<Integer> mList = new ArrayList<>();
-        for (int i = 1; i <= mChapters.size(); i++) {
-            mList.add(i);
-        }
-
-        mGridView.setAdapter(new ArrayAdapter<>(activity, R.layout.item_number, mList));
-        mGridView.setOnItemClickListener((adapterView, view, i, l) -> mListener.onChapterSelected(mChapters.get(i)));
+    @Override
+    public void numberSelected(int number) {
+        mListener.onChapterSelected(mChapters.get(number));
     }
 }

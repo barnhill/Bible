@@ -4,7 +4,6 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -51,14 +50,11 @@ public class VersionSelectionRecyclerViewAdapter extends RecyclerView.Adapter<Ve
         contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
         contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onVersionSelected(holder.getItem());
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (mListener != null) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onVersionSelected(holder.getItem());
             }
         });
     }
