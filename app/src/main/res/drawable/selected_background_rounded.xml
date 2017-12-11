@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?android:attr/colorControlHighlight">
-    <item android:id="@android:id/mask">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/primary_text" />
-            <corners android:radius="10dp" />
-        </shape>
-    </item>
-    <item android:drawable="@color/background_light" />
-</ripple>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid android:color="?android:attr/colorControlHighlight"/>
+
+    <size
+        android:width="28dp"
+        android:height="28dp"/>
+
+</shape>

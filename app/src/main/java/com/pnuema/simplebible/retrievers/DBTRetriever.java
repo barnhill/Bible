@@ -188,7 +188,7 @@ public final class DBTRetriever extends BaseRetriever {
     @Override
     public void getVerses(String damId, String book, String chapter) {
         IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
-        Call<List<Verses.Verse>> call = api.getVerses(DBTAPI.getApiKey(), ((Books.Book)CurrentSelected.getBook()).getDamId(), book, chapter);
+        Call<List<Verses.Verse>> call = api.getVerses(DBTAPI.getApiKey(), CurrentSelected.getVersion().getId(), book, chapter);
         call.enqueue(new Callback<List<Verses.Verse>>() {
             @Override
             public void onResponse(@NonNull Call<List<Verses.Verse>> call, @NonNull Response<List<Verses.Verse>> response) {

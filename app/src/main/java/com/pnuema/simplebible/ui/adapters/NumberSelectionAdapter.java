@@ -25,7 +25,7 @@ public final class NumberSelectionAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new NumberSelectionViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_number, parent, false));
+                .inflate(R.layout.listitem_number, parent, false));
     }
 
     @Override
@@ -40,8 +40,9 @@ public final class NumberSelectionAdapter extends RecyclerView.Adapter {
 
         boolean currentIsSelected = mCurrentSelected != null && mCurrentSelected == position + 1;
 
-        textView.setTextColor(ContextCompat.getColor(textView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
+        textView.setTextColor(ContextCompat.getColor(textView.getContext(), currentIsSelected ? R.color.white : R.color.primary_text));
         textView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
+        textView.setBackground(textView.getContext().getDrawable(currentIsSelected ? R.drawable.selected_background_rounded : R.drawable.selectable_background_rounded));
 
         holder.itemView.setOnClickListener(v -> mOnClickListener.numberSelected(position));
     }
