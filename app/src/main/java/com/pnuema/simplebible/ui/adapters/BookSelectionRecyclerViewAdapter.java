@@ -46,7 +46,7 @@ public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookS
         holder.setItem(book);
         contentView.setText(book.getName());
 
-        boolean currentIsSelected = CurrentSelected.getBook() != null && CurrentSelected.getBook().getId().equals(book.getId());
+        boolean currentIsSelected = CurrentSelected.getBook() != null && book.getId().equals(CurrentSelected.getBook().getId());
 
         contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
         contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);

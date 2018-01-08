@@ -28,6 +28,10 @@ import retrofit2.Response;
  * Retriever for dbt.io
  */
 public final class DBTRetriever extends BaseRetriever {
+    private static final String DEFAULT_DAM_ID = "ENGKJVO2ET";
+    private static final String OT_SUFFIX = "O2";
+    private static final String NT_SUFFIX = "N2";
+
     @Override
     public void savePrefs() {
         CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + getTag(), new Gson().toJson(CurrentSelected.getVersion()));
@@ -40,10 +44,10 @@ public final class DBTRetriever extends BaseRetriever {
     public void readPrefs() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
-        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), "[]"), Versions.Version.class));
-        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), "[]"), Books.Book.class));
-        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), "[]"), Chapter.class));
-        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), "[]"), Verses.Verse.class));
+        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), "{}"), Versions.Version.class));
+        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), "{}"), Books.Book.class));
+        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), "{}"), Chapter.class));
+        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), "{}"), Verses.Verse.class));
     }
 
     @Override
@@ -78,7 +82,8 @@ public final class DBTRetriever extends BaseRetriever {
         IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
 
         //setup for old testament retrieval
-        String damid = CurrentSelected.getVersion().getId().substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
+        String fullDamId = CurrentSelected.getVersion().getId() == null ? DEFAULT_DAM_ID : CurrentSelected.getVersion().getId();
+        String damid = fullDamId.substring(0, 6) + OT_SUFFIX + fullDamId.substring(8);
 
         Call<List<Books.Book>> callot = api.getBooks(DBTAPI.getApiKey(), damid);
         callot.enqueue(new Callback<List<Books.Book>>() {
@@ -92,7 +97,7 @@ public final class DBTRetriever extends BaseRetriever {
                 List<Books.Book> bookList = new ArrayList<>(books);
 
                 //setup for new testament retrieval
-                String damid2 = CurrentSelected.getVersion().getId().substring(0, 6) + "N1" + CurrentSelected.getVersion().getId().substring(8);
+                String damid2 = fullDamId.substring(0, 6) + NT_SUFFIX + fullDamId.substring(8);
                 Call<List<Books.Book>> NTCall = api.getBooks(DBTAPI.getApiKey(), damid2);
                 NTCall.enqueue(new Callback<List<Books.Book>>() {
                     @Override
@@ -139,7 +144,8 @@ public final class DBTRetriever extends BaseRetriever {
         IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
 
         //setup for old testament retrieval
-        String damid = CurrentSelected.getVersion().getId().substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
+        String fullDamId = CurrentSelected.getVersion().getId() == null ? DEFAULT_DAM_ID : CurrentSelected.getVersion().getId();
+        String damid = fullDamId.substring(0, 6) + OT_SUFFIX + fullDamId.substring(8);
 
         Call<List<Books.Book>> callot = api.getBooks(DBTAPI.getApiKey(), damid);
         callot.enqueue(new Callback<List<Books.Book>>() {
@@ -153,7 +159,7 @@ public final class DBTRetriever extends BaseRetriever {
                 List<Books.Book> bookList = new ArrayList<>(books);
 
                 //setup for new testament retrieval
-                String damid2 = CurrentSelected.getVersion().getId().substring(0, 6) + "N1" + CurrentSelected.getVersion().getId().substring(8);
+                String damid2 = fullDamId.substring(0, 6) + NT_SUFFIX + fullDamId.substring(8);
                 Call<List<Books.Book>> NTCall = api.getBooks(DBTAPI.getApiKey(), damid2);
                 NTCall.enqueue(new Callback<List<Books.Book>>() {
                     @Override
@@ -190,7 +196,8 @@ public final class DBTRetriever extends BaseRetriever {
         IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
 
         //setup for old testament retrieval
-        String damid = damId.substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
+        String fullDamId = CurrentSelected.getVersion().getId() == null ? DEFAULT_DAM_ID : CurrentSelected.getVersion().getId();
+        String damid = fullDamId.substring(0, 6) + OT_SUFFIX + fullDamId.substring(8);
 
         Call<List<Verses.Verse>> callot = api.getVerses(DBTAPI.getApiKey(), damid, book, chapter);
         callot.enqueue(new Callback<List<Verses.Verse>>() {
@@ -208,7 +215,7 @@ public final class DBTRetriever extends BaseRetriever {
                 }
 
                 //setup for new testament retrieval
-                String damid2 = damId.substring(0, 6) + "N1" + CurrentSelected.getVersion().getId().substring(8);
+                String damid2 = fullDamId.substring(0, 6) + NT_SUFFIX + fullDamId.substring(8);
 
                 Call<List<Verses.Verse>> callot = api.getVerses(DBTAPI.getApiKey(), damid2, book, chapter);
                 callot.enqueue(new Callback<List<Verses.Verse>>() {
