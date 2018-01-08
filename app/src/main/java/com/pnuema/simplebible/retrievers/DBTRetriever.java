@@ -188,8 +188,12 @@ public final class DBTRetriever extends BaseRetriever {
     @Override
     public void getVerses(String damId, String book, String chapter) {
         IDBTAPI api = DBTAPI.getInstance(App.getContext()).create(IDBTAPI.class);
-        Call<List<Verses.Verse>> call = api.getVerses(DBTAPI.getApiKey(), CurrentSelected.getVersion().getId(), book, chapter);
-        call.enqueue(new Callback<List<Verses.Verse>>() {
+
+        //setup for old testament retrieval
+        String damid = damId.substring(0, 6) + "O1" + CurrentSelected.getVersion().getId().substring(8);
+
+        Call<List<Verses.Verse>> callot = api.getVerses(DBTAPI.getApiKey(), damid, book, chapter);
+        callot.enqueue(new Callback<List<Verses.Verse>>() {
             @Override
             public void onResponse(@NonNull Call<List<Verses.Verse>> call, @NonNull Response<List<Verses.Verse>> response) {
                 List<Verses.Verse> verses = response.body();
@@ -197,8 +201,36 @@ public final class DBTRetriever extends BaseRetriever {
                     return;
                 }
 
-                setChanged();
-                notifyObservers(new Verses(new ArrayList<>(verses)));
+                if (!verses.isEmpty()) {
+                    setChanged();
+                    notifyObservers(new Verses(new ArrayList<>(verses)));
+                    return;
+                }
+
+                //setup for new testament retrieval
+                String damid2 = damId.substring(0, 6) + "N1" + CurrentSelected.getVersion().getId().substring(8);
+
+                Call<List<Verses.Verse>> callot = api.getVerses(DBTAPI.getApiKey(), damid2, book, chapter);
+                callot.enqueue(new Callback<List<Verses.Verse>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Verses.Verse>> call, @NonNull Response<List<Verses.Verse>> response) {
+                        List<Verses.Verse> versesNT = response.body();
+                        if (!response.isSuccessful() || versesNT == null) {
+                            //NT failure
+                            setChanged();
+                            notifyObservers(null);
+                            return;
+                        }
+
+                        setChanged();
+                        notifyObservers(new Verses(new ArrayList<>(versesNT)));
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Verses.Verse>> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
 
             @Override
