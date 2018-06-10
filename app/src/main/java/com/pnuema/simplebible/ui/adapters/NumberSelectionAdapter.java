@@ -1,6 +1,7 @@
 package com.pnuema.simplebible.ui.adapters;
 
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public final class NumberSelectionAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TextView textView = ((NumberSelectionViewHolder) holder).getTextView();
 
         if (textView == null) {

@@ -93,9 +93,10 @@ public class VerseSelectionFragment extends Fragment implements Observer, Number
         }
 
         mVerses.clear();
-        if (o instanceof IVerseProvider && ((IVerseProvider)o).getVerses() != null) {
+        IVerse verse = CurrentSelected.getVerse();
+        if (o instanceof IVerseProvider && ((IVerseProvider)o).getVerses() != null && verse != null) {
             mVerses.addAll(((IVerseProvider)o).getVerses());
-            mGridView.setAdapter(new NumberSelectionAdapter(mVerses.size(), CurrentSelected.getVerse() == null ? null : Integer.parseInt(CurrentSelected.getVerse().getVerseNumber()), this));
+            mGridView.setAdapter(new NumberSelectionAdapter(mVerses.size(), CurrentSelected.getVerse() == null ? null : Integer.parseInt(verse.getVerseNumber()), this));
         }
     }
 

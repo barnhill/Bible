@@ -10,8 +10,8 @@
             <solid android:color="?android:attr/colorControlHighlight"/>
 
             <size
-                android:width="28dp"
-                android:height="28dp"/>
+                android:width="24dp"
+                android:height="24dp"/>
 
         </shape>
 

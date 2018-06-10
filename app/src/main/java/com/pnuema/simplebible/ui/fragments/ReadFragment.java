@@ -132,9 +132,9 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
 
     @Override
     public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null && verse != null) {
             CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
-            scrollToVerse(CurrentSelected.getVerse());
+            scrollToVerse(verse);
         }
     }
 
@@ -144,9 +144,11 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     private void setAppBarDisplay() {
+        if (!isAdded() || getActivity() == null) {
+            return;
+        }
         if (mBookChapterView != null) {
             setBookChapterText();
-
             mBookChapterView.setOnClickListener(view -> DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this));
         }
 

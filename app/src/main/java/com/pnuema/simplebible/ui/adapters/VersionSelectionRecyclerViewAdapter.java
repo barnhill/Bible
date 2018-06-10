@@ -1,6 +1,7 @@
 package com.pnuema.simplebible.ui.adapters;
 
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,14 +30,15 @@ public class VersionSelectionRecyclerViewAdapter extends RecyclerView.Adapter<Ve
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    public VersionSelectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VersionSelectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new VersionSelectionViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_version, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final VersionSelectionViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final VersionSelectionViewHolder holder, int position) {
         TextView contentView = holder.getContentView();
         if (contentView == null) {
             return;
@@ -45,7 +47,7 @@ public class VersionSelectionRecyclerViewAdapter extends RecyclerView.Adapter<Ve
         holder.setItem(mValues.get(position));
         contentView.setText(mValues.get(position).getDisplayText());
 
-        boolean currentIsSelected = CurrentSelected.getVersion() != null && CurrentSelected.getVersion().getId().equals(mValues.get(position).getId());
+        boolean currentIsSelected = CurrentSelected.getVersion() != null && CurrentSelected.getVersion().getId() != null && CurrentSelected.getVersion().getId().equals(mValues.get(position).getId());
 
         contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
         contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
