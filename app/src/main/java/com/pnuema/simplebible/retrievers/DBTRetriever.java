@@ -44,10 +44,10 @@ public final class DBTRetriever extends BaseRetriever {
     public void readPrefs() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
-        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), "{}"), Versions.Version.class));
-        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), "{}"), Books.Book.class));
-        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), "{}"), Chapter.class));
-        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), "{}"), Verses.Verse.class));
+        CurrentSelected.setVersion(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + getTag(), "{\"abbreviation\":\"KJV\",\"display\":\"King James Version\",\"id\":\"ENGKJVN1ET\",\"language\":\"eng\"}"), Versions.Version.class));
+        CurrentSelected.setBook(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + getTag(), "{\"book_id\":\"Gen\",\"book_name\":\"Genesis\",\"book_order\":\"1\",\"chapters\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50\",\"dam_id\":\"ENGKJVO2ET\",\"number_of_chapters\":\"50\"}"), Books.Book.class));
+        CurrentSelected.setChapter(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + getTag(), "{\"id\":\"1\",\"name\":\"1\"}"), Chapter.class));
+        CurrentSelected.setVerse(new Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + getTag(), "{\"book_id\":\"Gen\",\"book_name\":\"Genesis\",\"book_order\":\"1\",\"chapter_id\":\"1\",\"chapter_title\":\"Chapter 1\",\"paragraph_number\":\"1\",\"verse_id\":\"1\",\"verse_text\":\"In the beginning God created the heaven and the earth.\"}"), Verses.Verse.class));
     }
 
     @Override
