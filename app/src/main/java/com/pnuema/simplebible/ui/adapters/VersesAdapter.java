@@ -1,5 +1,6 @@
 package com.pnuema.simplebible.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -14,19 +15,20 @@ public class VersesAdapter extends RecyclerView.Adapter {
     private List<IVerse> mVerses = new ArrayList<>();
     private String copyrightText;
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VerseViewHolder.getType()) {
             return new VerseViewHolder(parent);
         } else if (viewType == CopyrightViewHolder.getType()) {
             return new CopyrightViewHolder(parent);
         }
 
-        return null;
+        throw new IllegalArgumentException("No viewholder that matches the requested type");
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VerseViewHolder) {
             ((VerseViewHolder) holder).setVerseText(mVerses.get(position).getText(holder.itemView.getContext()));
         } else if (holder instanceof CopyrightViewHolder) {
