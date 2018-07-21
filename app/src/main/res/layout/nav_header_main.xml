@@ -14,7 +14,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <com.pnuema.simplebible.ui.elements.CircleImageView
+    <com.pnuema.bible.ui.elements.CircleImageView
         android:id="@+id/header_user_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
