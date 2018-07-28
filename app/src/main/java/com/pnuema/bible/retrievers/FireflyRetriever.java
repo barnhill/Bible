@@ -62,7 +62,7 @@ public final class FireflyRetriever extends BaseRetriever {
                 }
 
                 setChanged();
-                notifyObservers(new Versions(versions));
+                notifyObservers(new Versions(new ArrayList<>(versions)));
             }
 
             @Override
@@ -151,7 +151,7 @@ public final class FireflyRetriever extends BaseRetriever {
                 }
 
                 setChanged();
-                notifyObservers(new Verses(verses));
+                notifyObservers(new Verses(new ArrayList<>(verses)));
             }
 
             @Override

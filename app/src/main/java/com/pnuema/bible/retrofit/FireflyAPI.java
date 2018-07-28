@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @SuppressWarnings("FieldCanBeLocal")
 public final class FireflyAPI {
-    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "http://firefly.pnuema.com/api/v1/"; //TODO move to SSL
+    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "http://firefly.pnuema.com/api/v1/";
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
     private static String CACHE_FOLDER = "http-cache";

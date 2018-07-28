@@ -28,7 +28,7 @@ import java.util.Observer;
  */
 public class VerseSelectionFragment extends Fragment implements Observer, NumberSelectionListener {
     private BCVSelectionListener mListener;
-    private BaseRetriever mRetriever = new FireflyRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new FireflyRetriever();
     private RecyclerView mGridView;
 
     /**

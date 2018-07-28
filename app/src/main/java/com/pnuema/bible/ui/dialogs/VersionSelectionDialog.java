@@ -26,7 +26,7 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     private NotifyVersionSelectionCompleted mListener;
     private VersionSelectionRecyclerViewAdapter mAdapter;
     private final List<IVersion> mVersions = new ArrayList<>();
-    private BaseRetriever mRetriever = new FireflyRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new FireflyRetriever();
 
     @Override
     public void onVersionSelected(final String version) {

@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.pnuema.bible.R;
 import com.pnuema.bible.data.IBook;
 import com.pnuema.bible.data.IBookProvider;
-import com.pnuema.bible.data.firefly.Verses;
-import com.pnuema.bible.data.firefly.Version;
-import com.pnuema.bible.data.firefly.Versions;
+import com.pnuema.bible.data.IVerseProvider;
+import com.pnuema.bible.data.IVersion;
+import com.pnuema.bible.data.IVersionProvider;
+import com.pnuema.bible.retrievers.BaseRetriever;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.ui.adapters.VersesAdapter;
 import com.pnuema.bible.ui.dialogs.BCVDialog;
@@ -42,6 +44,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.SmoothScroller mSmoothScroller;
     private List<IBook> books = new ArrayList<>();
+    private BaseRetriever mRetriever = new FireflyRetriever();
 
     public ReadFragment() {
         // Required empty public constructor
@@ -86,43 +89,41 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onResume() {
         super.onResume();
-        CurrentSelected.getRetriever().addObserver(this);
+        mRetriever.addObserver(this);
 
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
 
         if (CurrentSelected.getVersion() != null) {
-            CurrentSelected.getRetriever().getVersions();
+            mRetriever.getVersions();
         }
 
         if (CurrentSelected.getBook() != null && books.isEmpty()) {
-            CurrentSelected.getRetriever().getBooks();
+            mRetriever.getBooks();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CurrentSelected.getRetriever().deleteObserver(this);
+        mRetriever.deleteObserver(this);
     }
 
     @Override
     public void update(final Observable observable, final Object o) {
         final Activity activity = getActivity();
-        if (activity instanceof AppCompatActivity && o instanceof Versions) {
-            final List<Version> versions = ((Versions)o).getVersions();
-            for (final Version version : versions) {
+        if (o instanceof IVersionProvider && activity instanceof AppCompatActivity) {
+            final List<IVersion> versions = ((IVersionProvider)o).getVersions();
+            for (final IVersion version : versions) {
                 if (version.getAbbreviation().equals(CurrentSelected.getVersion())) {
                     mTranslationView.setText(version.getAbbreviation().toUpperCase());
                     break;
                 }
             }
-        }
-
-        if (o instanceof Verses) {
+        } else if (o instanceof IVerseProvider) {
             //noinspection unchecked
-            mAdapter.updateVerses(((Verses) o).getVerses());
+            mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
             if (CurrentSelected.getVerse() != null) {
                 new Handler().post(() -> scrollToVerse(CurrentSelected.getVerse()));
@@ -139,14 +140,14 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onSelectionPreloadChapter(final int book, final int chapter) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
     }
 
     @Override
     public void onSelectionComplete(final int book, final int chapter, final int verse) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
             scrollToVerse(verse);
         }
     }

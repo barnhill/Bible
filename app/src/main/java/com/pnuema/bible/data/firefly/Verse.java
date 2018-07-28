@@ -1,6 +1,5 @@
 package com.pnuema.bible.data.firefly;
 
-import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
 import com.pnuema.bible.R;
@@ -46,8 +45,8 @@ public class Verse implements IVerse {
     }
 
     @Override
-    public CharSequence getText(final Context context) {
-        return null;
+    public String getText() {
+        return getVerseText();
     }
 
     @Override
@@ -56,6 +55,7 @@ public class Verse implements IVerse {
     }
 
     private String formatHtmlVerse() {
+        verseText = verseText.replace("¶", "");
         return "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(App.getContext(), R.color.secondary_text) & 0xffffff) + "\"><small>" + getVerseNumber() + "&nbsp;&nbsp;</small></font>" + verseText;
     }
 }

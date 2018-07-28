@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.pnuema.bible.data.firefly.Verse;
+import com.pnuema.bible.data.IVerse;
 import com.pnuema.bible.statics.HtmlUtils;
 import com.pnuema.bible.ui.viewholders.CopyrightViewHolder;
 import com.pnuema.bible.ui.viewholders.VerseViewHolder;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VersesAdapter extends RecyclerView.Adapter {
-    private List<Verse> mVerses = new ArrayList<>();
+    private List<IVerse> mVerses = new ArrayList<>();
     private String copyrightText;
 
     @NonNull
@@ -31,7 +31,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof VerseViewHolder) {
-            ((VerseViewHolder) holder).setVerseText(formatText(mVerses.get(position).getVerseText()));
+            ((VerseViewHolder) holder).setVerseText(HtmlUtils.fromHtml(mVerses.get(position).getText()));
         } else if (holder instanceof CopyrightViewHolder) {
             ((CopyrightViewHolder) holder).setText(copyrightText);
         }
@@ -53,13 +53,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
         return mVerses.size() + (copyrightText == null ? 0 : 1); //account for the copyright item
     }
 
-    private static CharSequence formatText(final String unformatted) {
-        final String formatted = unformatted.replace("¶", "");
-
-        return HtmlUtils.fromHtml(formatted);
-    }
-
-    public void updateVerses(final List<Verse> verses) {
+    public void updateVerses(final List<IVerse> verses) {
         mVerses.clear();
         mVerses.addAll(verses);
 

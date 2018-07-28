@@ -1,15 +1,18 @@
 package com.pnuema.bible.data.firefly;
 
+import com.pnuema.bible.data.IVerse;
+import com.pnuema.bible.data.IVerseProvider;
+
 import java.util.List;
 
-public class Verses {
-    private List<Verse> verses;
+public class Verses implements IVerseProvider {
+    private List<IVerse> verses;
 
-    public Verses(final List<Verse> verses) {
+    public Verses(final List<IVerse> verses) {
         this.verses = verses;
     }
 
-    public List<Verse> getVerses() {
+    public List<IVerse> getVerses() {
         return verses;
     }
 }

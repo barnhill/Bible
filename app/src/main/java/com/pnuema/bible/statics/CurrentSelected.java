@@ -2,44 +2,24 @@ package com.pnuema.bible.statics;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 
 import com.pnuema.bible.retrievers.BaseRetriever;
-
-import java.lang.reflect.InvocationTargetException;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 
 public final class CurrentSelected {
     private static String mVersion;
     private static Integer mBook;
     private static Integer mChapter;
     private static Integer mVerse;
-    private static BaseRetriever mRetriever;
+    private static BaseRetriever mRetriever = new FireflyRetriever();
 
     private CurrentSelected() {
     }
 
-    public static BaseRetriever getRetriever() {
-        final String type = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString(Constants.KEY_RETRIEVER_TYPE, Constants.DEFAULT_RETRIEVER_TYPE);
-
-        if (mRetriever == null || !mRetriever.getClass().getName().equalsIgnoreCase(type)) {
-            try {
-                mRetriever = (BaseRetriever) Class.forName(type).getConstructor().newInstance();
-                mRetriever.readPrefs();
-            } catch (java.lang.InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassNotFoundException ignored) {
-                throw new IllegalStateException("Can not create instance of retriever");
-            }
-        }
-
-        return mRetriever;
-    }
-
-    //TODO allow switching retriever sources(DBT, Bibles.org ... etc)
-    public static void setRetriever(final Class clazz) {
-        savePref(Constants.KEY_RETRIEVER_TYPE, clazz.getName());
-    }
-
-    @Nullable
     public static Integer getVerse() {
+        if (mVerse == null) {
+            setVerse(1);
+        }
         return mVerse;
     }
 
@@ -71,10 +51,6 @@ public final class CurrentSelected {
         CurrentSelected.mBook = mBook;
     }
 
-    public static void clearBook() {
-        CurrentSelected.mBook = null;
-    }
-
     public static String getVersion() {
         return mVersion;
     }
@@ -84,11 +60,11 @@ public final class CurrentSelected {
     }
 
     public static void readPreferences() {
-        getRetriever().readPrefs();
+        mRetriever.readPrefs();
     }
 
     public static void savePreferences() {
-        getRetriever().savePrefs();
+        mRetriever.savePrefs();
     }
 
     public static void savePref(final String prefName, final String prefValue) {
