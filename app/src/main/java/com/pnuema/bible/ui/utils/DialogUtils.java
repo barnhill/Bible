@@ -14,11 +14,11 @@ public final class DialogUtils {
     private DialogUtils() {
     }
 
-    public static void showBookChapterVersePicker(FragmentActivity activity, BCVDialog.BCV bcv, NotifySelectionCompleted listener) {
+    public static void showBookChapterVersePicker(final FragmentActivity activity, final BCVDialog.BCV bcv, final NotifySelectionCompleted listener) {
         BCVDialog.instantiate(bcv, listener).show(activity.getSupportFragmentManager(), "BCVDialog");
     }
 
-    public static void showVersionsPicker(FragmentActivity activity, NotifyVersionSelectionCompleted listener) {
+    public static void showVersionsPicker(final FragmentActivity activity, final NotifyVersionSelectionCompleted listener) {
         VersionSelectionDialog.instantiate(listener).show(activity.getSupportFragmentManager(), "VersionsDialog");
     }
 }

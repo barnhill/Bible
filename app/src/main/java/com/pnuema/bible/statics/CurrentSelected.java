@@ -4,26 +4,22 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-import com.pnuema.bible.data.IBook;
-import com.pnuema.bible.data.IChapter;
-import com.pnuema.bible.data.IVerse;
-import com.pnuema.bible.data.IVersion;
 import com.pnuema.bible.retrievers.BaseRetriever;
 
 import java.lang.reflect.InvocationTargetException;
 
 public final class CurrentSelected {
-    private static IVersion mVersion;
-    private static IBook mBook;
-    private static IChapter mChapter;
-    private static IVerse mVerse;
+    private static String mVersion;
+    private static Integer mBook;
+    private static Integer mChapter;
+    private static Integer mVerse;
     private static BaseRetriever mRetriever;
 
     private CurrentSelected() {
     }
 
     public static BaseRetriever getRetriever() {
-        String type = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString(Constants.KEY_RETRIEVER_TYPE, Constants.DEFAULT_RETRIEVER_TYPE);
+        final String type = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString(Constants.KEY_RETRIEVER_TYPE, Constants.DEFAULT_RETRIEVER_TYPE);
 
         if (mRetriever == null || !mRetriever.getClass().getName().equalsIgnoreCase(type)) {
             try {
@@ -38,16 +34,16 @@ public final class CurrentSelected {
     }
 
     //TODO allow switching retriever sources(DBT, Bibles.org ... etc)
-    public static void setRetriever(Class clazz) {
+    public static void setRetriever(final Class clazz) {
         savePref(Constants.KEY_RETRIEVER_TYPE, clazz.getName());
     }
 
     @Nullable
-    public static IVerse getVerse() {
+    public static Integer getVerse() {
         return mVerse;
     }
 
-    public static void setVerse(IVerse mVerse) {
+    public static void setVerse(final Integer mVerse) {
         CurrentSelected.mVerse = mVerse;
     }
 
@@ -55,11 +51,11 @@ public final class CurrentSelected {
         CurrentSelected.mVerse = null;
     }
 
-    public static IChapter getChapter() {
+    public static Integer getChapter() {
         return mChapter;
     }
 
-    public static void setChapter(IChapter mChapter) {
+    public static void setChapter(final Integer mChapter) {
         CurrentSelected.mChapter = mChapter;
     }
 
@@ -67,11 +63,11 @@ public final class CurrentSelected {
         CurrentSelected.mChapter = null;
     }
 
-    public static IBook getBook() {
+    public static Integer getBook() {
         return mBook;
     }
 
-    public static void setBook(IBook mBook) {
+    public static void setBook(final Integer mBook) {
         CurrentSelected.mBook = mBook;
     }
 
@@ -79,11 +75,11 @@ public final class CurrentSelected {
         CurrentSelected.mBook = null;
     }
 
-    public static IVersion getVersion() {
+    public static String getVersion() {
         return mVersion;
     }
 
-    public static void setVersion(IVersion mVersion) {
+    public static void setVersion(final String mVersion) {
         CurrentSelected.mVersion = mVersion;
     }
 
@@ -95,9 +91,9 @@ public final class CurrentSelected {
         getRetriever().savePrefs();
     }
 
-    public static void savePref(String prefName, String prefValue) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        SharedPreferences.Editor editor = sharedPref.edit();
+    public static void savePref(final String prefName, final String prefValue) {
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        final SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(prefName, prefValue);
         editor.apply();
     }

@@ -13,7 +13,7 @@ public class BookSelectionViewHolder extends RecyclerView.ViewHolder {
     private final TextView mContentView;
     private IBook mItem;
 
-    public BookSelectionViewHolder(View view) {
+    public BookSelectionViewHolder(final View view) {
         super(view);
         mContentView = view.findViewById(R.id.book);
     }
@@ -33,7 +33,7 @@ public class BookSelectionViewHolder extends RecyclerView.ViewHolder {
         return mItem;
     }
 
-    public void setItem(@NonNull IBook mItem) {
+    public void setItem(@NonNull final IBook mItem) {
         this.mItem = mItem;
     }
 }

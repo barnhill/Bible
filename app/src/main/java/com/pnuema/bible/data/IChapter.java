@@ -1,6 +1,6 @@
 package com.pnuema.bible.data;
 
 public interface IChapter {
-    String getId();
+    int getId();
     String getName();
 }

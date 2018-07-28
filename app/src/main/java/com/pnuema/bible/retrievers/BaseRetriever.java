@@ -20,5 +20,7 @@ public abstract class BaseRetriever extends Observable {
 
     public abstract void getChapters(String book);
 
+    public abstract void getVerseCount(String version, String book, String chapter);
+
     public abstract void getVerses(String version, String book, String chapter);
 }

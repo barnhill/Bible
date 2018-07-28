@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 
 import com.pnuema.bible.R;
 import com.pnuema.bible.data.IVersion;
-import com.pnuema.bible.data.IVersionProvider;
+import com.pnuema.bible.data.firefly.Versions;
 import com.pnuema.bible.retrievers.BaseRetriever;
-import com.pnuema.bible.retrievers.DBTRetriever;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.statics.LanguageUtils;
 import com.pnuema.bible.ui.adapters.VersionSelectionRecyclerViewAdapter;
@@ -26,10 +26,10 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     private NotifyVersionSelectionCompleted mListener;
     private VersionSelectionRecyclerViewAdapter mAdapter;
     private final List<IVersion> mVersions = new ArrayList<>();
-    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new FireflyRetriever(); //TODO have this select which retriever based on version
 
     @Override
-    public void onVersionSelected(IVersion version) {
+    public void onVersionSelected(final String version) {
         CurrentSelected.setVersion(version);
         if (mListener != null) {
             mListener.onSelectionComplete(version);
@@ -37,23 +37,23 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
         dismiss();
     }
 
-    public static VersionSelectionDialog instantiate(NotifyVersionSelectionCompleted notifySelectionCompleted) {
-        VersionSelectionDialog dialog = new VersionSelectionDialog();
+    public static VersionSelectionDialog instantiate(final NotifyVersionSelectionCompleted notifySelectionCompleted) {
+        final VersionSelectionDialog dialog = new VersionSelectionDialog();
         dialog.setListener(notifySelectionCompleted);
 
         return dialog;
     }
 
-    private void setListener(NotifyVersionSelectionCompleted listener) {
+    private void setListener(final NotifyVersionSelectionCompleted listener) {
         mListener = listener;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_version_picker, container);
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.dialog_version_picker, container);
 
         mAdapter = new VersionSelectionRecyclerViewAdapter(mVersions, this);
-        RecyclerView recyclerView = view.findViewById(R.id.versionRecyclerView);
+        final RecyclerView recyclerView = view.findViewById(R.id.versionRecyclerView);
         recyclerView.setAdapter(mAdapter);
 
         return view;
@@ -73,11 +73,11 @@ public class VersionSelectionDialog extends DialogFragment implements VersionSel
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void update(final Observable observable, final Object o) {
         mVersions.clear();
-        if (o instanceof IVersionProvider && ((IVersionProvider)o).getVersions() != null) {
-            String lang = LanguageUtils.getISOLanguage();
-            for (IVersion version : ((IVersionProvider)o).getVersions()) {
+        if (o instanceof Versions) {
+            final String lang = LanguageUtils.getISOLanguage();
+            for (final IVersion version : ((Versions)o).getVersions()) {
                 if (version.getLanguage().contains(lang)) {
                     mVersions.add(version);
                 }

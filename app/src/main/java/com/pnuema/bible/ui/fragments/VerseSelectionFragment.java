@@ -11,17 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pnuema.bible.R;
-import com.pnuema.bible.data.IVerse;
-import com.pnuema.bible.data.IVerseProvider;
+import com.pnuema.bible.data.firefly.VerseCount;
 import com.pnuema.bible.retrievers.BaseRetriever;
-import com.pnuema.bible.retrievers.DBTRetriever;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.ui.adapters.NumberSelectionAdapter;
 import com.pnuema.bible.ui.dialogs.BCVSelectionListener;
 import com.pnuema.bible.ui.dialogs.NumberSelectionListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,8 +28,7 @@ import java.util.Observer;
  */
 public class VerseSelectionFragment extends Fragment implements Observer, NumberSelectionListener {
     private BCVSelectionListener mListener;
-    private final List<IVerse> mVerses = new ArrayList<>();
-    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new FireflyRetriever(); //TODO have this select which retriever based on version
     private RecyclerView mGridView;
 
     /**
@@ -43,31 +39,31 @@ public class VerseSelectionFragment extends Fragment implements Observer, Number
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    public void setUserVisibleHint(final boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         mRetriever.addObserver(this);
         if (isVisibleToUser && CurrentSelected.getChapter() != null) {
-            mRetriever.getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            mRetriever.getVerseCount(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
     }
 
     @SuppressWarnings("unused")
-    public static VerseSelectionFragment newInstance(BCVSelectionListener listener) {
+    public static VerseSelectionFragment newInstance(final BCVSelectionListener listener) {
         return new VerseSelectionFragment().setListener(listener);
     }
 
-    private VerseSelectionFragment setListener(BCVSelectionListener listener) {
+    private VerseSelectionFragment setListener(final BCVSelectionListener listener) {
         mListener = listener;
         return this;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         mGridView = (RecyclerView) inflater.inflate(R.layout.fragment_number_list, container, false);
         mGridView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         return mGridView;
@@ -86,22 +82,19 @@ public class VerseSelectionFragment extends Fragment implements Observer, Number
     }
 
     @Override
-    public void update(Observable observable, Object o) {
-        Context context = getContext();
+    public void update(final Observable observable, final Object o) {
+        final Context context = getContext();
         if (context == null || getActivity() == null || getActivity().isFinishing()) {
             return;
         }
 
-        mVerses.clear();
-        IVerse verse = CurrentSelected.getVerse();
-        if (o instanceof IVerseProvider && ((IVerseProvider)o).getVerses() != null) {
-            mVerses.addAll(((IVerseProvider)o).getVerses());
-            mGridView.setAdapter(new NumberSelectionAdapter(mVerses.size(), verse == null ? null : Integer.parseInt(verse.getVerseNumber()), this));
+        if (o instanceof VerseCount) {
+            mGridView.setAdapter(new NumberSelectionAdapter(((VerseCount)o).getVerseCount(), CurrentSelected.getVerse(), this));
         }
     }
 
     @Override
-    public void numberSelected(int number) {
-        mListener.onVerseSelected(mVerses.get(number));
+    public void numberSelected(final int number) {
+        mListener.onVerseSelected(number);
     }
 }

@@ -4,7 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.pnuema.bible.data.IVerse;
+import com.pnuema.bible.data.firefly.Verse;
+import com.pnuema.bible.statics.HtmlUtils;
 import com.pnuema.bible.ui.viewholders.CopyrightViewHolder;
 import com.pnuema.bible.ui.viewholders.VerseViewHolder;
 
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VersesAdapter extends RecyclerView.Adapter {
-    private List<IVerse> mVerses = new ArrayList<>();
+    private List<Verse> mVerses = new ArrayList<>();
     private String copyrightText;
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         if (viewType == VerseViewHolder.getType()) {
             return new VerseViewHolder(parent);
         } else if (viewType == CopyrightViewHolder.getType()) {
@@ -28,16 +29,16 @@ public class VersesAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof VerseViewHolder) {
-            ((VerseViewHolder) holder).setVerseText(mVerses.get(position).getText(holder.itemView.getContext()));
+            ((VerseViewHolder) holder).setVerseText(formatText(mVerses.get(position).getVerseText()));
         } else if (holder instanceof CopyrightViewHolder) {
             ((CopyrightViewHolder) holder).setText(copyrightText);
         }
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(final int position) {
         if (position < mVerses.size()) {
             return VerseViewHolder.getType();
         } else if (position == mVerses.size()) {
@@ -52,13 +53,19 @@ public class VersesAdapter extends RecyclerView.Adapter {
         return mVerses.size() + (copyrightText == null ? 0 : 1); //account for the copyright item
     }
 
-    public void updateVerses(List<IVerse> verses) {
+    private static CharSequence formatText(final String unformatted) {
+        final String formatted = unformatted.replace("¶", "");
+
+        return HtmlUtils.fromHtml(formatted);
+    }
+
+    public void updateVerses(final List<Verse> verses) {
         mVerses.clear();
         mVerses.addAll(verses);
 
-        if (!verses.isEmpty()) {
+       /* if (!verses.isEmpty()) {
             copyrightText = verses.get(0).getCopyright();
-        }
+        }*/ //TODO show copyright text
 
         notifyDataSetChanged();
     }

@@ -1,7 +1,7 @@
 package com.pnuema.bible.data;
 
-import java.util.List;
+import com.pnuema.bible.data.firefly.ChapterCount;
 
 public interface IChapterProvider {
-    List<IChapter> getChapters();
+    ChapterCount getChapters();
 }
