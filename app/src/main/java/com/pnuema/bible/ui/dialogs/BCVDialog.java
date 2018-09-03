@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pnuema.bible.R;
-import com.pnuema.bible.data.IBook;
-import com.pnuema.bible.data.IChapter;
-import com.pnuema.bible.data.IVerse;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.ui.fragments.BookSelectionFragment;
 import com.pnuema.bible.ui.fragments.ChapterSelectionFragment;
@@ -34,7 +31,7 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     private BCVSelectionListener selectionListener;
 
     @Override
-    public void onBookSelected(IBook book) {
+    public void onBookSelected(final int book) {
         CurrentSelected.setBook(book);
         CurrentSelected.clearChapter();
         CurrentSelected.clearVerse();
@@ -42,19 +39,19 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     }
 
     @Override
-    public void onChapterSelected(IChapter chapter) {
+    public void onChapterSelected(final int chapter) {
         CurrentSelected.setChapter(chapter);
         CurrentSelected.clearVerse();
         gotoTab(BCV.VERSE);
     }
 
     @Override
-    public void onVerseSelected(IVerse verse) {
+    public void onVerseSelected(final int verse) {
         CurrentSelected.setVerse(verse);
         refresh();
     }
 
-    private void gotoTab(BCV tab) {
+    private void gotoTab(final BCV tab) {
         mTabHost.getTabWidget().setCurrentTab(tab.getValue());
         viewPager.setCurrentItem(tab.getValue());
     }
@@ -71,7 +68,7 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         BOOK(0), CHAPTER(1), VERSE(2);
 
         private int value;
-        BCV(int i) {
+        BCV(final int i) {
             value = i;
         }
 
@@ -80,9 +77,9 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         }
     }
 
-    public static BCVDialog instantiate(BCV startingTab, NotifySelectionCompleted notifySelectionCompleted) {
-        BCVDialog dialog = new BCVDialog();
-        Bundle bundle = new Bundle();
+    public static BCVDialog instantiate(final BCV startingTab, final NotifySelectionCompleted notifySelectionCompleted) {
+        final BCVDialog dialog = new BCVDialog();
+        final Bundle bundle = new Bundle();
         bundle.putInt(BCVDialog.ARG_STARTING_TAB, startingTab.getValue());
         dialog.setArguments(bundle);
         dialog.setListener(notifySelectionCompleted);
@@ -90,27 +87,27 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         return dialog;
     }
 
-    private void setListener(NotifySelectionCompleted listener) {
+    private void setListener(final NotifySelectionCompleted listener) {
         this.listener = listener;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container);
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container);
 
         mTabHost = view.findViewById(R.id.tabs);
 
         mTabHost.setup(getActivity(), getChildFragmentManager());
 
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
 
         if (args == null) {
             //TODO log message about arguments being null
             return view;
         }
 
-        int startTab = args.getInt(BCVDialog.ARG_STARTING_TAB, BCV.BOOK.getValue());
-        ArrayList<String> titles = new ArrayList<>();
+        final int startTab = args.getInt(BCVDialog.ARG_STARTING_TAB, BCV.BOOK.getValue());
+        final ArrayList<String> titles = new ArrayList<>();
         if (startTab == BCV.BOOK.getValue()) {
             mTabHost.addTab(mTabHost.newTabSpec("tabBook").setIndicator(getString(R.string.book)), Fragment.class, null);
             titles.add(getString(R.string.book));
@@ -124,8 +121,8 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         mTabHost.addTab(mTabHost.newTabSpec("tabVerse").setIndicator(getString(R.string.verse)), Fragment.class, null);
         titles.add(getString(R.string.verse));
 
-        BCVPagerAdapter adapter = new BCVPagerAdapter(getChildFragmentManager(), getArguments());
-        String[] arrTitles = new String[titles.size()];
+        final BCVPagerAdapter adapter = new BCVPagerAdapter(getChildFragmentManager(), getArguments());
+        final String[] arrTitles = new String[titles.size()];
         titles.toArray(arrTitles);
         adapter.setTitles(arrTitles);
 
@@ -134,22 +131,22 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i2) {
+            public void onPageScrolled(final int i, final float v, final int i2) {
             }
 
             @Override
-            public void onPageSelected(int i) {
+            public void onPageSelected(final int i) {
                 mTabHost.setCurrentTab(i);
             }
 
             @Override
-            public void onPageScrollStateChanged(int i) {
+            public void onPageScrollStateChanged(final int i) {
 
             }
         });
 
         mTabHost.setOnTabChangedListener(s -> {
-            int i = mTabHost.getCurrentTab();
+            final int i = mTabHost.getCurrentTab();
             viewPager.setCurrentItem(i);
         });
 
@@ -162,13 +159,13 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         Bundle bundle;
         String[] titles;
 
-        BCVPagerAdapter(FragmentManager fm, Bundle bundle) {
+        BCVPagerAdapter(final FragmentManager fm, final Bundle bundle) {
             super(fm);
             this.bundle = bundle;
         }
 
         @Override
-        public Fragment getItem(int num) {
+        public Fragment getItem(final int num) {
             if (num == BCV.BOOK.getValue()) {
                 return BookSelectionFragment.newInstance(selectionListener);
             } else if (num == BCV.CHAPTER.getValue()) {
@@ -186,11 +183,11 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public CharSequence getPageTitle(final int position) {
             return titles[position];
         }
 
-        void setTitles(String[] titles) {
+        void setTitles(final String[] titles) {
             this.titles = titles;
         }
     }

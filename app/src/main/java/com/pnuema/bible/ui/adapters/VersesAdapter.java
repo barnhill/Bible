@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.pnuema.bible.data.IVerse;
+import com.pnuema.bible.statics.HtmlUtils;
 import com.pnuema.bible.ui.viewholders.CopyrightViewHolder;
 import com.pnuema.bible.ui.viewholders.VerseViewHolder;
 
@@ -17,7 +18,7 @@ public class VersesAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         if (viewType == VerseViewHolder.getType()) {
             return new VerseViewHolder(parent);
         } else if (viewType == CopyrightViewHolder.getType()) {
@@ -28,16 +29,16 @@ public class VersesAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof VerseViewHolder) {
-            ((VerseViewHolder) holder).setVerseText(mVerses.get(position).getText(holder.itemView.getContext()));
+            ((VerseViewHolder) holder).setVerseText(HtmlUtils.fromHtml(mVerses.get(position).getText()));
         } else if (holder instanceof CopyrightViewHolder) {
             ((CopyrightViewHolder) holder).setText(copyrightText);
         }
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(final int position) {
         if (position < mVerses.size()) {
             return VerseViewHolder.getType();
         } else if (position == mVerses.size()) {
@@ -52,13 +53,13 @@ public class VersesAdapter extends RecyclerView.Adapter {
         return mVerses.size() + (copyrightText == null ? 0 : 1); //account for the copyright item
     }
 
-    public void updateVerses(List<IVerse> verses) {
+    public void updateVerses(final List<IVerse> verses) {
         mVerses.clear();
         mVerses.addAll(verses);
 
-        if (!verses.isEmpty()) {
+       /* if (!verses.isEmpty()) {
             copyrightText = verses.get(0).getCopyright();
-        }
+        }*/ //TODO show copyright text
 
         notifyDataSetChanged();
     }

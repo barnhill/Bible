@@ -11,13 +11,13 @@ import com.pnuema.bible.R;
 public class VerseViewHolder extends RecyclerView.ViewHolder {
     private TextView verseText;
 
-    public VerseViewHolder(@NonNull ViewGroup parent) {
+    public VerseViewHolder(@NonNull final ViewGroup parent) {
         super(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false));
 
         verseText = itemView.findViewById(R.id.verseText);
     }
 
-    public void setVerseText(CharSequence text) {
+    public void setVerseText(final CharSequence text) {
         verseText.setText(text);
     }
 

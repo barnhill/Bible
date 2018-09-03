@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="book_chapter_header_format" translatable="false">%1$s\u0020\u0020\u0020%2$s</string>
+    <string name="book_chapter_header_format" translatable="false">%1$s\u0020\u0020\u0020%2$d</string>
 
     <!-- Defaults for current selected (JSON must be escaped) -->
     <string name="default_version_selected" translatable="false">{\"abbreviation\":\"KJV\",\"audio\":\"NONE\",\"contact_url\":\"http:\/\/www.biblesociety.org.uk\/\",\"copyright\":\"\\u003cp\\u003eKing James Version 1611 (Authorized Version). Copyright status: UK English with BFBS additions \u00A9 2011 British and Foreign Bible Society; Crown Copyright in UK\\u003c\/p\\u003e\",\"id\":\"eng-KJV\",\"info\":\"\",\"lang\":\"eng-GB\",\"lang_code\":\"ISO 639-3\",\"lang_name\":\"English (British)\",\"lang_name_eng\":\"English\",\"name\":\"King James Version\",\"updated_at\":\"2013-10-22T19:12:08-05:00\"}</string>

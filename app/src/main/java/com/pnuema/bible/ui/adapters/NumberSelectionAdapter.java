@@ -17,21 +17,21 @@ public final class NumberSelectionAdapter extends RecyclerView.Adapter {
     private NumberSelectionListener mOnClickListener;
     private Integer mCurrentSelected;
 
-    public NumberSelectionAdapter(int maxNumber, Integer currentSelected, NumberSelectionListener onClickListener) {
+    public NumberSelectionAdapter(final int maxNumber, final Integer currentSelected, final NumberSelectionListener onClickListener) {
         mMaxNumber = maxNumber;
         mOnClickListener = onClickListener;
         mCurrentSelected = currentSelected;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         return new NumberSelectionViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_number, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TextView textView = ((NumberSelectionViewHolder) holder).getTextView();
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+        final TextView textView = ((NumberSelectionViewHolder) holder).getTextView();
 
         if (textView == null) {
             return;
@@ -39,13 +39,13 @@ public final class NumberSelectionAdapter extends RecyclerView.Adapter {
 
         textView.setText(String.valueOf(position + 1));
 
-        boolean currentIsSelected = mCurrentSelected != null && mCurrentSelected == position + 1;
+        final boolean currentIsSelected = mCurrentSelected != null && mCurrentSelected == position + 1;
 
         textView.setTextColor(ContextCompat.getColor(textView.getContext(), currentIsSelected ? R.color.white : R.color.primary_text));
         textView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
         textView.setBackground(textView.getContext().getDrawable(currentIsSelected ? R.drawable.selected_background_rounded : R.drawable.selectable_background_rounded));
 
-        holder.itemView.setOnClickListener(v -> mOnClickListener.numberSelected(position));
+        holder.itemView.setOnClickListener(v -> mOnClickListener.numberSelected(position + 1));
     }
 
     @Override

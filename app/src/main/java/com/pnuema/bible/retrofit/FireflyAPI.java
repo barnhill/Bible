@@ -23,9 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Houses all the api calls to get data
  */
 @SuppressWarnings("FieldCanBeLocal")
-public final class DBTAPI {
-    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "http://dbt.io/";
-    @SuppressWarnings("FieldCanBeLocal") private static String apiKey = "8f72735adeb17ee752db6eeb6b759958";
+public final class FireflyAPI {
+    @SuppressWarnings("FieldCanBeLocal") private static String baseUrl = "http://firefly.pnuema.com/api/v1/";
     private static Retrofit retrofit;
     private static OkHttpClient.Builder httpClient;
     private static String CACHE_FOLDER = "http-cache";
@@ -33,15 +32,11 @@ public final class DBTAPI {
     private static int CACHE_OFFLINE_DAYS = 365;
     private static int CACHE_ONLINE_DAYS = 2;
 
-    private DBTAPI() {
-    }
-
-    public static String getApiKey() {
-        return apiKey;
+    private FireflyAPI() {
     }
 
     @SuppressLint("AuthLeak")
-    public static Retrofit getInstance(Context context) {
+    public static Retrofit getInstance(final Context context) {
         if (httpClient == null) {
             httpClient = new OkHttpClient.Builder();
         }
@@ -61,22 +56,22 @@ public final class DBTAPI {
         return retrofit;
     }
 
-    private static Cache provideCache (Context context) {
+    private static Cache provideCache (final Context context) {
         Cache cache = null;
         try {
             cache = new Cache( new File( context.getCacheDir(), CACHE_FOLDER ), 10 * 1024 * 1024 ); // 10 MB
         }
-        catch (Exception ignored) {}
+        catch (final Exception ignored) {}
 
         return cache;
     }
 
     private static Interceptor provideCacheInterceptor() {
         return chain -> {
-            Response response = chain.proceed(chain.request());
+            final Response response = chain.proceed(chain.request());
 
             // re-write response header to force use of cache
-            CacheControl cacheControl = new CacheControl.Builder()
+            final CacheControl cacheControl = new CacheControl.Builder()
                     .maxAge(CACHE_ONLINE_DAYS, TimeUnit.DAYS)
                     .build();
 
@@ -91,7 +86,7 @@ public final class DBTAPI {
             Request request = chain.request();
 
             if (!ConnectionUtils.isConnected(context)) {
-                CacheControl cacheControl = new CacheControl.Builder()
+                final CacheControl cacheControl = new CacheControl.Builder()
                         .maxStale(CACHE_OFFLINE_DAYS, TimeUnit.DAYS)
                         .build();
 

@@ -13,7 +13,7 @@ import com.pnuema.bible.R;
 import com.pnuema.bible.data.IBook;
 import com.pnuema.bible.data.IBookProvider;
 import com.pnuema.bible.retrievers.BaseRetriever;
-import com.pnuema.bible.retrievers.DBTRetriever;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.ui.adapters.BookSelectionRecyclerViewAdapter;
 import com.pnuema.bible.ui.dialogs.BCVSelectionListener;
@@ -30,7 +30,7 @@ import java.util.Observer;
 public class BookSelectionFragment extends Fragment implements Observer {
     private BCVSelectionListener mListener;
     private final List<IBook> mBooks = new ArrayList<>();
-    private BaseRetriever mRetriever = new DBTRetriever(); //TODO have this select which retriever based on version
+    private BaseRetriever mRetriever = new FireflyRetriever();
     private BookSelectionRecyclerViewAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -42,24 +42,24 @@ public class BookSelectionFragment extends Fragment implements Observer {
     }
 
     @SuppressWarnings("unused")
-    public static BookSelectionFragment newInstance(BCVSelectionListener listener) {
+    public static BookSelectionFragment newInstance(final BCVSelectionListener listener) {
         return new BookSelectionFragment().setListener(listener);
     }
 
-    private BookSelectionFragment setListener(BCVSelectionListener listener) {
+    private BookSelectionFragment setListener(final BCVSelectionListener listener) {
         mListener = listener;
         return this;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_book_list, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_book_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -92,15 +92,15 @@ public class BookSelectionFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void update(final Observable observable, final Object o) {
         mBooks.clear();
-        if (o instanceof IBookProvider && ((IBookProvider)o).getBooks() != null) {
+        if (o instanceof IBookProvider) {
             mBooks.addAll(((IBookProvider)o).getBooks());
             mAdapter.notifyDataSetChanged();
 
-            if (CurrentSelected.getBook() != null) {
-                for (IBook book : mBooks) {
-                    if (book.getId().equalsIgnoreCase(CurrentSelected.getBook().getId())) {
+            if (CurrentSelected.getBook() != null && !mBooks.isEmpty()) {
+                for (final IBook book : mBooks) {
+                    if (book.getId() == CurrentSelected.getBook()) {
                         ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mBooks.indexOf(book), mRecyclerView.getHeight()/2);
                     }
                 }

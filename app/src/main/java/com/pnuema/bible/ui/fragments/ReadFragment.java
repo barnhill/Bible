@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,12 @@ import android.widget.TextView;
 
 import com.pnuema.bible.R;
 import com.pnuema.bible.data.IBook;
-import com.pnuema.bible.data.IChapter;
-import com.pnuema.bible.data.IVerse;
+import com.pnuema.bible.data.IBookProvider;
 import com.pnuema.bible.data.IVerseProvider;
+import com.pnuema.bible.data.IVersion;
+import com.pnuema.bible.data.IVersionProvider;
+import com.pnuema.bible.retrievers.BaseRetriever;
+import com.pnuema.bible.retrievers.FireflyRetriever;
 import com.pnuema.bible.statics.CurrentSelected;
 import com.pnuema.bible.ui.adapters.VersesAdapter;
 import com.pnuema.bible.ui.dialogs.BCVDialog;
@@ -27,6 +29,8 @@ import com.pnuema.bible.ui.dialogs.NotifySelectionCompleted;
 import com.pnuema.bible.ui.dialogs.NotifyVersionSelectionCompleted;
 import com.pnuema.bible.ui.utils.DialogUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,6 +43,8 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     private TextView mTranslationView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.SmoothScroller mSmoothScroller;
+    private List<IBook> books = new ArrayList<>();
+    private BaseRetriever mRetriever = new FireflyRetriever();
 
     public ReadFragment() {
         // Required empty public constructor
@@ -53,19 +59,15 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_read, container, false);
-        RecyclerView mRecyclerView = view.findViewById(R.id.versesRecyclerView);
+        final View view = inflater.inflate(R.layout.fragment_read, container, false);
+        final RecyclerView mRecyclerView = view.findViewById(R.id.versesRecyclerView);
         mAdapter = new VersesAdapter();
         mLayoutManager = mRecyclerView.getLayoutManager();
         mRecyclerView.setAdapter(mAdapter);
 
-        //preload the versions
-        //new DBTRetriever().getBooks(getContext());
-        //new DBTRetriever().getVersions(getContext());
-
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         if (activity == null) {
             return view;
         }
@@ -87,59 +89,74 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     @Override
     public void onResume() {
         super.onResume();
-        CurrentSelected.getRetriever().addObserver(this);
+        mRetriever.addObserver(this);
 
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
+        }
+
+        if (CurrentSelected.getVersion() != null) {
+            mRetriever.getVersions();
+        }
+
+        if (CurrentSelected.getBook() != null && books.isEmpty()) {
+            mRetriever.getBooks();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CurrentSelected.getRetriever().deleteObserver(this);
+        mRetriever.deleteObserver(this);
     }
 
     @Override
-    public void update(Observable observable, Object o) {
-        Activity activity = getActivity();
-        if (activity instanceof AppCompatActivity) {
-            ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setTitle(CurrentSelected.getVersion().getDisplayText());
+    public void update(final Observable observable, final Object o) {
+        final Activity activity = getActivity();
+        if (o instanceof IVersionProvider && activity instanceof AppCompatActivity) {
+            final List<IVersion> versions = ((IVersionProvider)o).getVersions();
+            for (final IVersion version : versions) {
+                if (version.getAbbreviation().equals(CurrentSelected.getVersion())) {
+                    mTranslationView.setText(version.getAbbreviation().toUpperCase());
+                    break;
+                }
             }
-        }
-
-        if (o instanceof IVerseProvider) {
+        } else if (o instanceof IVerseProvider) {
             //noinspection unchecked
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
-            final IVerse verse = CurrentSelected.getVerse();
-            if (verse != null && !TextUtils.isEmpty(verse.getVerseNumber()) && TextUtils.isDigitsOnly(verse.getVerseNumber())) {
-                new Handler().post(() -> scrollToVerse(verse));
+            if (CurrentSelected.getVerse() != null) {
+                new Handler().post(() -> scrollToVerse(CurrentSelected.getVerse()));
             }
-        }
 
-        setBookChapterText();
+            setBookChapterText();
+        } else if (o instanceof IBookProvider) {
+            books.clear();
+            books.addAll(((IBookProvider)o).getBooks());
+            setBookChapterText();
+        }
     }
 
     @Override
-    public void onSelectionPreloadChapter(IBook book, IChapter chapter) {
+    public void onSelectionPreloadChapter(final int book, final int chapter) {
         if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
     }
 
     @Override
-    public void onSelectionComplete(IBook book, IChapter chapter, IVerse verse) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter().getId() != null && verse != null) {
-            CurrentSelected.getRetriever().getVerses(CurrentSelected.getVersion().getId(), CurrentSelected.getBook().getAbbreviation(), CurrentSelected.getChapter().getName());
+    public void onSelectionComplete(final int book, final int chapter, final int verse) {
+        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
+            mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
             scrollToVerse(verse);
         }
     }
 
-    private void scrollToVerse(IVerse verse) {
-        mSmoothScroller.setTargetPosition(Integer.parseInt(verse.getVerseNumber()) - 1);
+    private void scrollToVerse(@Nullable final Integer verse) {
+        if (verse == null) {
+            return;
+        }
+        mSmoothScroller.setTargetPosition(verse - 1);
         mLayoutManager.startSmoothScroll(mSmoothScroller);
     }
 
@@ -153,14 +170,17 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
         }
 
         if (mTranslationView != null) {
-            mTranslationView.setText(CurrentSelected.getChapter() == null ? "<?>" : CurrentSelected.getVersion().getAbbreviation());
             mTranslationView.setOnClickListener(view -> DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity()));
         }
     }
 
     private void setBookChapterText() {
         if (mBookChapterView != null && CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
-            mBookChapterView.setText(getString(R.string.book_chapter_header_format, CurrentSelected.getBook().getName(), CurrentSelected.getChapter().getName()));
+            for (final IBook book : books) {
+                if (book.getId() == CurrentSelected.getBook()) {
+                    mBookChapterView.setText(getString(R.string.book_chapter_header_format, book.getName(), CurrentSelected.getChapter()));
+                }
+            }
         }
     }
 }
