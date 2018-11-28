@@ -1,6 +1,6 @@
 package com.pnuema.bible.data.firefly;
 
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.pnuema.bible.R;
 import com.pnuema.bible.data.IVerse;

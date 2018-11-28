@@ -1,6 +1,6 @@
 package com.pnuema.bible.ui.utils;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.pnuema.bible.ui.dialogs.BCVDialog;
 import com.pnuema.bible.ui.dialogs.NotifySelectionCompleted;
