@@ -9,6 +9,7 @@ import com.pnuema.bible.statics.ConnectionUtils;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -56,14 +57,14 @@ public final class FireflyAPI {
         return retrofit;
     }
 
+    @Nullable
     private static Cache provideCache (final Context context) {
-        Cache cache = null;
         try {
-            cache = new Cache( new File( context.getCacheDir(), CACHE_FOLDER ), 10 * 1024 * 1024 ); // 10 MB
+            return new Cache( new File( context.getCacheDir(), CACHE_FOLDER ), 10 * 1024 * 1024 ); // 10 MB
         }
         catch (final Exception ignored) {}
 
-        return cache;
+        return null;
     }
 
     private static Interceptor provideCacheInterceptor() {

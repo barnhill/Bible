@@ -9,7 +9,7 @@ public final class HtmlUtils {
     }
 
     @SuppressWarnings("deprecation")
-    public static Spanned fromHtml(String source) {
+    public static Spanned fromHtml(final String source) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
         } else {
