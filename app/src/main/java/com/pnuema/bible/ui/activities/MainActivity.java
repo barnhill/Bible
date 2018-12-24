@@ -2,30 +2,35 @@ package com.pnuema.bible.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.android.material.navigation.NavigationView;
 import com.pnuema.bible.R;
 import com.pnuema.bible.statics.CurrentSelected;
+import com.pnuema.bible.statics.DeepLinks;
 import com.pnuema.bible.ui.dialogs.BCVDialog;
 import com.pnuema.bible.ui.dialogs.NotifySelectionCompleted;
 import com.pnuema.bible.ui.dialogs.NotifyVersionSelectionCompleted;
 import com.pnuema.bible.ui.fragments.ReadFragment;
 import com.pnuema.bible.ui.utils.DialogUtils;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted, NotifyVersionSelectionCompleted {
+    private ReadFragment readFragment;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DeepLinks.handleDeepLinks(getIntent());
+
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,6 +52,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         CurrentSelected.savePreferences();
         super.onPause();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        DeepLinks.handleDeepLinks(intent);
+        super.onNewIntent(intent);
     }
 
     @Override
@@ -97,10 +109,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void gotoRead() {
         if (CurrentSelected.getVersion() != null) {
-            final FragmentManager fm = getSupportFragmentManager();
-            final FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.fragment_container, ReadFragment.newInstance(), ReadFragment.class.getSimpleName());
-            ft.commit();
+            if (readFragment == null) {
+                readFragment = ReadFragment.newInstance();
+                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragment_container, readFragment, ReadFragment.class.getSimpleName());
+                ft.commit();
+            } else {
+                readFragment.refresh();
+            }
         }
     }
 

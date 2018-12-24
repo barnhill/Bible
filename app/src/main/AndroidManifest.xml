@@ -19,6 +19,7 @@
         tools:targetApi="n">
         <activity
             android:name=".ui.activities.MainActivity"
+            android:launchMode="singleTop"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -27,10 +28,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http"
-                      android:host="www.pnuema.com"
-                      android:pathPrefix="/bible" />
+                <data android:scheme="bible" android:host="bible" />
             </intent-filter>
         </activity>
     </application>
