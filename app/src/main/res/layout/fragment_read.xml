@@ -7,5 +7,5 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context="com.pnuema.bible.ui.fragments.ReadFragment"/>
+    tools:context=".ui.fragments.ReadFragment"/>
 

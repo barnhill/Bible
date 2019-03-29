@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.oss.licenses.plugin'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.pnuema.bible"
+        applicationId "com.pnuema.android.bible"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -26,18 +26,18 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.5'
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.8'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-storage:16.0.5'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
-    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1052769235470:android:b90a82d59de955d2",
         "android_client_info": {
-          "package_name": "com.pnuema.bible"
+          "package_name": "com.pnuema.android.bible"
         }
       },
       "oauth_client": [

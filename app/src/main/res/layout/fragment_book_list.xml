@@ -10,5 +10,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context="com.pnuema.bible.ui.fragments.BookSelectionFragment"
+    tools:context=".ui.fragments.BookSelectionFragment"
     tools:listitem="@layout/listitem_book" />
