@@ -8,10 +8,8 @@
     android:paddingTop="4dp"
     android:paddingEnd="14dp"
     android:paddingStart="14dp"
-    android:textColor="@color/primary_text"
     android:textIsSelectable="true"
     android:fontFamily="sans-serif"
     android:textSize="18sp"
     android:lineSpacingExtra="10dp"
-    android:background="@color/background_light"
     tools:text="Verse text as would be seen in the application when text appears in paragraph form.  Then the light of the world blah."/>

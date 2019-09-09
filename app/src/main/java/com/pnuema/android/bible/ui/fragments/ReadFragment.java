@@ -96,7 +96,7 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
     }
 
     public void refresh() {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
+        if (CurrentSelected.getChapter() != null) {
             mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
 
@@ -127,7 +127,6 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
                 }
             }
         } else if (o instanceof IVerseProvider) {
-            //noinspection unchecked
             mAdapter.updateVerses(((IVerseProvider) o).getVerses());
 
             if (CurrentSelected.getVerse() != null) {
@@ -144,14 +143,14 @@ public class ReadFragment extends Fragment implements Observer, NotifySelectionC
 
     @Override
     public void onSelectionPreloadChapter(final int book, final int chapter) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
+        if (CurrentSelected.getChapter() != null) {
             mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
     }
 
     @Override
     public void onSelectionComplete(final int book, final int chapter, final int verse) {
-        if (CurrentSelected.getChapter() != null && CurrentSelected.getChapter() != null) {
+        if (CurrentSelected.getChapter() != null) {
             mRetriever.getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
             scrollToVerse(verse);
         }

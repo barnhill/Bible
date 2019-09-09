@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(final Intent intent) {
         setIntent(intent);
         DeepLinks.handleDeepLinks(intent);
         super.onNewIntent(intent);

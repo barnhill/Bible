@@ -1,34 +1,27 @@
 package com.pnuema.android.bible.ui.dialogs;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTabHost;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.pnuema.android.bible.R;
 import com.pnuema.android.bible.statics.CurrentSelected;
-import com.pnuema.android.bible.ui.fragments.BookSelectionFragment;
-import com.pnuema.android.bible.ui.fragments.ChapterSelectionFragment;
-import com.pnuema.android.bible.ui.fragments.VerseSelectionFragment;
+import com.pnuema.android.bible.ui.SectionsPagerAdapter;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Book/Chapter/Verse selection dialog
  */
 public class BCVDialog extends DialogFragment implements BCVSelectionListener {
-    public static final String ARG_STARTING_TAB = "STARTING_POINT";
-    private FragmentTabHost mTabHost;
+    private static final String ARG_STARTING_TAB = "STARTING_POINT";
+    private SectionsPagerAdapter pagerAdapter;
     private ViewPager viewPager;
     private NotifySelectionCompleted listener;
-    private BCVSelectionListener selectionListener;
 
     @Override
     public void onBookSelected(final int book) {
@@ -52,7 +45,6 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     }
 
     private void gotoTab(final BCV tab) {
-        mTabHost.getTabWidget().setCurrentTab(tab.getValue());
         viewPager.setCurrentItem(tab.getValue());
     }
 
@@ -95,9 +87,16 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container);
 
-        mTabHost = view.findViewById(R.id.tabs);
+        if (getActivity() == null) {
+            return null;
+        }
 
-        mTabHost.setup(getActivity(), getChildFragmentManager());
+        pagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), getContext(), this);
+        viewPager = view.findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+
+        final TabLayout tabLayout = view.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         final Bundle args = getArguments();
 
@@ -107,88 +106,9 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
         }
 
         final int startTab = args.getInt(BCVDialog.ARG_STARTING_TAB, BCV.BOOK.getValue());
-        final ArrayList<String> titles = new ArrayList<>();
-        if (startTab == BCV.BOOK.getValue()) {
-            mTabHost.addTab(mTabHost.newTabSpec("tabBook").setIndicator(getString(R.string.book)), Fragment.class, null);
-            titles.add(getString(R.string.book));
-        }
 
-        if (startTab <= BCV.CHAPTER.getValue()) {
-            mTabHost.addTab(mTabHost.newTabSpec("tabChapter").setIndicator(getString(R.string.chapter)), Fragment.class, null);
-            titles.add(getString(R.string.chapter));
-        }
-
-        mTabHost.addTab(mTabHost.newTabSpec("tabVerse").setIndicator(getString(R.string.verse)), Fragment.class, null);
-        titles.add(getString(R.string.verse));
-
-        final BCVPagerAdapter adapter = new BCVPagerAdapter(getChildFragmentManager(), getArguments());
-        final String[] arrTitles = new String[titles.size()];
-        titles.toArray(arrTitles);
-        adapter.setTitles(arrTitles);
-
-        viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(final int i, final float v, final int i2) {
-            }
-
-            @Override
-            public void onPageSelected(final int i) {
-                mTabHost.setCurrentTab(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(final int i) {
-
-            }
-        });
-
-        mTabHost.setOnTabChangedListener(s -> {
-            final int i = mTabHost.getCurrentTab();
-            viewPager.setCurrentItem(i);
-        });
-
-        selectionListener = this;
+        viewPager.setCurrentItem(startTab);
 
         return view;
-    }
-
-    private class BCVPagerAdapter extends FragmentPagerAdapter {
-        Bundle bundle;
-        String[] titles;
-
-        BCVPagerAdapter(final FragmentManager fm, final Bundle bundle) {
-            super(fm);
-            this.bundle = bundle;
-        }
-
-        @Override
-        public Fragment getItem(final int num) {
-            if (num == BCV.BOOK.getValue()) {
-                return BookSelectionFragment.newInstance(selectionListener);
-            } else if (num == BCV.CHAPTER.getValue()) {
-                return ChapterSelectionFragment.newInstance(selectionListener);
-            } else if (num == BCV.VERSE.getValue()) {
-                return VerseSelectionFragment.newInstance(selectionListener);
-            } else {
-                throw new IllegalStateException("Illegal fragment attempting to be displayed in the BCVDialog");
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return mTabHost.getTabWidget().getTabCount();
-        }
-
-        @Override
-        public CharSequence getPageTitle(final int position) {
-            return titles[position];
-        }
-
-        void setTitles(final String[] titles) {
-            this.titles = titles;
-        }
     }
 }
