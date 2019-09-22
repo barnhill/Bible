@@ -47,7 +47,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     private final BCVSelectionListener listener;
 
     public SectionsPagerAdapter(final FragmentManager fm, final Context context, final BCVSelectionListener listener) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         mContext = context;
         this.listener = listener;
@@ -69,7 +69,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return TAB_ORDER.values().length;
     }
 
     @Override

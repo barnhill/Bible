@@ -19,7 +19,6 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     private static final String ARG_STARTING_TAB = "STARTING_POINT";
-    private SectionsPagerAdapter pagerAdapter;
     private ViewPager viewPager;
     private NotifySelectionCompleted listener;
 
@@ -87,11 +86,7 @@ public class BCVDialog extends DialogFragment implements BCVSelectionListener {
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container);
 
-        if (getActivity() == null) {
-            return null;
-        }
-
-        pagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), getContext(), this);
+        final SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), getContext(), this);
         viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
 
