@@ -1,10 +1,6 @@
 package com.pnuema.android.bible.ui.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A fragment representing a list of books to pick from.
@@ -49,11 +50,6 @@ public class BookSelectionFragment extends Fragment implements Observer {
     private BookSelectionFragment setListener(final BCVSelectionListener listener) {
         mListener = listener;
         return this;
-    }
-
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -100,7 +96,7 @@ public class BookSelectionFragment extends Fragment implements Observer {
 
             if (CurrentSelected.getBook() != null && !mBooks.isEmpty()) {
                 for (final IBook book : mBooks) {
-                    if (book.getId() == CurrentSelected.getBook()) {
+                    if (book.getId() == CurrentSelected.getBook() && mRecyclerView != null && mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                         ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mBooks.indexOf(book), mRecyclerView.getHeight()/2);
                     }
                 }

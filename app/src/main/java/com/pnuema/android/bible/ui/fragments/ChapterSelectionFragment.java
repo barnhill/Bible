@@ -2,10 +2,6 @@ package com.pnuema.android.bible.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +18,11 @@ import com.pnuema.android.bible.ui.dialogs.NumberSelectionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * A fragment representing a list of chapter numbers to pick from.
  * <p/>
@@ -36,13 +37,20 @@ public class ChapterSelectionFragment extends Fragment implements Observer, Numb
      * fragment (e.g. upon screen orientation changes).
      */
     public ChapterSelectionFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public void setUserVisibleHint(final boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && CurrentSelected.getBook() != null) {
+    public void setMenuVisibility(final boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+
+        if (menuVisible && CurrentSelected.getBook() != null) {
+            mRetriever.addObserver(this);
             mRetriever.getChapters(String.valueOf(CurrentSelected.getBook()));
+        }
+
+        if (!menuVisible) {
+            mRetriever.deleteObservers();
         }
     }
 
@@ -57,27 +65,10 @@ public class ChapterSelectionFragment extends Fragment implements Observer, Numb
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_number_list, container, false);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         return mRecyclerView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mRetriever.addObserver(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mRetriever.deleteObservers();
     }
 
     @Override
@@ -95,7 +86,7 @@ public class ChapterSelectionFragment extends Fragment implements Observer, Numb
 
         if (o instanceof ChapterCount) {
             mRecyclerView.setAdapter(new NumberSelectionAdapter(((ChapterCount)o).getChapterCount(),
-                                                                CurrentSelected.getChapter() == null || CurrentSelected.getChapter() == null ? null : CurrentSelected.getChapter(),
+                                                                CurrentSelected.getChapter(),
                                                                 this));
         }
     }

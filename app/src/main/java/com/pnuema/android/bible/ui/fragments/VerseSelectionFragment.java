@@ -2,10 +2,6 @@ package com.pnuema.android.bible.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +18,11 @@ import com.pnuema.android.bible.ui.dialogs.NumberSelectionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * A fragment representing a list of verse numbers to pick from.
  * <p/>
@@ -31,25 +32,30 @@ public class VerseSelectionFragment extends Fragment implements Observer, Number
     private BaseRetriever mRetriever = new FireflyRetriever();
     private RecyclerView mGridView;
 
+    public static VerseSelectionFragment newInstance(final BCVSelectionListener listener) {
+        return new VerseSelectionFragment().setListener(listener);
+    }
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public VerseSelectionFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public void setUserVisibleHint(final boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        mRetriever.addObserver(this);
-        if (isVisibleToUser && CurrentSelected.getChapter() != null) {
+    public void setMenuVisibility(final boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+
+        if (menuVisible && CurrentSelected.getChapter() != null) {
+            mRetriever.addObserver(this);
             mRetriever.getVerseCount(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
         }
-    }
 
-    @SuppressWarnings("unused")
-    public static VerseSelectionFragment newInstance(final BCVSelectionListener listener) {
-        return new VerseSelectionFragment().setListener(listener);
+        if (!menuVisible) {
+            mRetriever.deleteObservers();
+        }
     }
 
     private VerseSelectionFragment setListener(final BCVSelectionListener listener) {
@@ -58,21 +64,10 @@ public class VerseSelectionFragment extends Fragment implements Observer, Number
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         mGridView = (RecyclerView) inflater.inflate(R.layout.fragment_number_list, container, false);
         mGridView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         return mGridView;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mRetriever.deleteObservers();
     }
 
     @Override

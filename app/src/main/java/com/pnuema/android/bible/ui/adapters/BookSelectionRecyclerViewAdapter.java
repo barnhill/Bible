@@ -1,9 +1,5 @@
 package com.pnuema.android.bible.ui.adapters;
 
-import android.graphics.Typeface;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,11 +7,13 @@ import android.widget.TextView;
 import com.pnuema.android.bible.R;
 import com.pnuema.android.bible.data.IBook;
 import com.pnuema.android.bible.data.firefly.Book;
-import com.pnuema.android.bible.statics.CurrentSelected;
 import com.pnuema.android.bible.ui.dialogs.BCVSelectionListener;
 import com.pnuema.android.bible.ui.viewholders.BookSelectionViewHolder;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Book} and makes a call to the
@@ -44,23 +42,7 @@ public class BookSelectionRecyclerViewAdapter extends RecyclerView.Adapter<BookS
             return;
         }
 
-        final IBook book = mValues.get(position);
-
-        holder.setItem(book);
-        contentView.setText(book.getName());
-
-        final boolean currentIsSelected = CurrentSelected.getBook() != null && book.getId() == CurrentSelected.getBook();
-
-        contentView.setTextColor(ContextCompat.getColor(contentView.getContext(), currentIsSelected ? R.color.primary : R.color.primary_text));
-        contentView.setTypeface(null, currentIsSelected ? Typeface.BOLD : Typeface.NORMAL);
-
-        holder.itemView.setOnClickListener(v -> {
-            if (mListener != null && holder.getItem() != null) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mListener.onBookSelected(holder.getItem().getId());
-            }
-        });
+        holder.bind(mValues.get(position), mListener);
     }
 
     @Override

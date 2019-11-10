@@ -5,10 +5,5 @@
     android:id="@+id/book"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/text_margin"
-    android:textSize="16sp"
-    android:clickable="true"
-    android:focusable="true"
-    android:textAppearance="?attr/textAppearanceListItem"
-    android:background="?attr/selectableItemBackground"
+    style="@style/BookChapterVerse.BookText"
     tools:text="Genesis"/>

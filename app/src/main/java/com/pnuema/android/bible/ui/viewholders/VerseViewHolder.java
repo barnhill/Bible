@@ -1,12 +1,13 @@
 package com.pnuema.android.bible.ui.viewholders;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pnuema.android.bible.R;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class VerseViewHolder extends RecyclerView.ViewHolder {
     private TextView verseText;
@@ -17,7 +18,7 @@ public class VerseViewHolder extends RecyclerView.ViewHolder {
         verseText = itemView.findViewById(R.id.verseText);
     }
 
-    public void setVerseText(final CharSequence text) {
+    public void bind(final CharSequence text) {
         verseText.setText(text);
     }
 

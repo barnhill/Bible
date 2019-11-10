@@ -1,7 +1,5 @@
 package com.pnuema.android.bible.ui.viewholders;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,16 +7,19 @@ import android.widget.TextView;
 import com.pnuema.android.bible.R;
 import com.pnuema.android.bible.statics.HtmlUtils;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class CopyrightViewHolder extends RecyclerView.ViewHolder {
     private TextView copyrightText;
 
-    public CopyrightViewHolder(@NonNull ViewGroup parent) {
+    public CopyrightViewHolder(@NonNull final ViewGroup parent) {
         super(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false));
 
         copyrightText = itemView.findViewById(R.id.copyrightText);
     }
 
-    public void setText(String text) {
+    public void bind(final String text) {
         copyrightText.setText(HtmlUtils.fromHtml(text));
     }
 

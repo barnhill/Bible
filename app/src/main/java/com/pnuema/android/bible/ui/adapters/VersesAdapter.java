@@ -1,7 +1,5 @@
 package com.pnuema.android.bible.ui.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.pnuema.android.bible.data.IVerse;
@@ -11,6 +9,9 @@ import com.pnuema.android.bible.ui.viewholders.VerseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class VersesAdapter extends RecyclerView.Adapter {
     private List<IVerse> mVerses = new ArrayList<>();
@@ -31,9 +32,9 @@ public class VersesAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof VerseViewHolder) {
-            ((VerseViewHolder) holder).setVerseText(HtmlUtils.fromHtml(mVerses.get(position).getText()));
+            ((VerseViewHolder) holder).bind(HtmlUtils.fromHtml(mVerses.get(position).getText()));
         } else if (holder instanceof CopyrightViewHolder) {
-            ((CopyrightViewHolder) holder).setText(copyrightText);
+            ((CopyrightViewHolder) holder).bind(copyrightText);
         }
     }
 

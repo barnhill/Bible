@@ -7,10 +7,10 @@ import com.pnuema.android.bible.retrievers.BaseRetriever;
 import com.pnuema.android.bible.retrievers.FireflyRetriever;
 
 public final class CurrentSelected {
-    private static String mVersion;
-    private static Integer mBook;
-    private static Integer mChapter;
-    private static Integer mVerse;
+    private static String mVersion = "kjv";
+    private static Integer mBook = 1;
+    private static Integer mChapter = 1;
+    private static Integer mVerse = 1;
     private static BaseRetriever mRetriever = new FireflyRetriever();
 
     private CurrentSelected() {
