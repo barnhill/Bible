@@ -5,21 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.android.bible.R
 import com.pnuema.android.bible.data.IVersion
 import com.pnuema.android.bible.data.firefly.Versions
-import com.pnuema.android.bible.retrievers.FireflyRetriever
 import com.pnuema.android.bible.statics.CurrentSelected
 import com.pnuema.android.bible.statics.LanguageUtils
 import com.pnuema.android.bible.ui.adapters.VersionSelectionRecyclerViewAdapter
 import java.util.*
 
 class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCompleted) : DialogFragment(), VersionSelectionListener {
-    private var mListener: NotifyVersionSelectionCompleted = notifySelectionCompleted
+    private lateinit var viewModel: VersionSelectionViewModel
     private lateinit var mAdapter: VersionSelectionRecyclerViewAdapter
+    private var mListener: NotifyVersionSelectionCompleted = notifySelectionCompleted
     private val mVersions = ArrayList<IVersion>()
-    private val mRetriever = FireflyRetriever()
 
     companion object {
         fun instantiate(notifySelectionCompleted: NotifyVersionSelectionCompleted): VersionSelectionDialog {
@@ -36,20 +36,13 @@ class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCom
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_version_picker, container)
 
-        mAdapter = VersionSelectionRecyclerViewAdapter(mVersions, this)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.versionRecyclerView)
-        recyclerView.adapter = mAdapter
-
-        return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mRetriever.getVersions().observe(viewLifecycleOwner, androidx.lifecycle.Observer { versions ->
+        viewModel = ViewModelProviders.of(this).get(VersionSelectionViewModel::class.java)
+        viewModel.versions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             mVersions.clear()
-            if (versions is Versions) {
+            mVersions.addAll(it.versions)
+            if (mVersions is Versions) {
                 val lang = LanguageUtils.getISOLanguage()
-                for (version in versions.versions) {
+                for (version in mVersions.versions) {
                     if (version.language.contains(lang)) {
                         mVersions.add(version)
                     }
@@ -57,5 +50,12 @@ class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCom
                 mAdapter.notifyDataSetChanged()
             }
         })
+        viewModel.loadVersions()
+
+        mAdapter = VersionSelectionRecyclerViewAdapter(mVersions, this)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.versionRecyclerView)
+        recyclerView.adapter = mAdapter
+
+        return view
     }
 }

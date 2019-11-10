@@ -32,6 +32,9 @@ public final class CurrentSelected {
     }
 
     public static Integer getChapter() {
+        if (mChapter == null) {
+            setChapter(1);
+        }
         return mChapter;
     }
 
@@ -44,6 +47,9 @@ public final class CurrentSelected {
     }
 
     public static Integer getBook() {
+        if (mBook == null) {
+            setBook(1);
+        }
         return mBook;
     }
 

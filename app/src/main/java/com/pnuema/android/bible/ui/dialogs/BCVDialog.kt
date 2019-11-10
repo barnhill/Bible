@@ -63,7 +63,7 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
         dismiss()
     }
 
-    enum class BCV private constructor(val value: Int) {
+    enum class BCV constructor(val value: Int) {
         BOOK(0), CHAPTER(1), VERSE(2)
     }
 

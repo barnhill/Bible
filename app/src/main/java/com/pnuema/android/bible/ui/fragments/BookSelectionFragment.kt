@@ -5,30 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.android.bible.R
-import com.pnuema.android.bible.data.IBook
-import com.pnuema.android.bible.data.IBookProvider
-import com.pnuema.android.bible.retrievers.FireflyRetriever
 import com.pnuema.android.bible.statics.CurrentSelected
 import com.pnuema.android.bible.ui.adapters.BookSelectionRecyclerViewAdapter
 import com.pnuema.android.bible.ui.dialogs.BCVSelectionListener
-import java.util.*
+import com.pnuema.android.bible.ui.fragments.viewModel.BooksViewModel
 
 /**
  * A fragment representing a list of books to pick from.
  */
-class BookSelectionFragment : Fragment(), Observer {
-    private lateinit var mListener: BCVSelectionListener
+class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: BookSelectionRecyclerViewAdapter
-    private val mBooks = ArrayList<IBook>()
-    private val mRetriever = FireflyRetriever()
+    private lateinit var viewModel: BooksViewModel
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): BookSelectionFragment {
-            return BookSelectionFragment().setListener(listener)
+            return BookSelectionFragment(listener)
         }
     }
 
@@ -40,18 +37,27 @@ class BookSelectionFragment : Fragment(), Observer {
         setHasOptionsMenu(true)
     }
 
-    private fun setListener(listener: BCVSelectionListener): BookSelectionFragment {
-        mListener = listener
-        return this
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_book_list, container, false)
 
-        mAdapter = BookSelectionRecyclerViewAdapter(mBooks, mListener)
-        mRecyclerView = view as RecyclerView
-        mRecyclerView.adapter = mAdapter
+        viewModel = ViewModelProviders.of(this).get(BooksViewModel::class.java)
+
+        viewModel.books.observe(viewLifecycleOwner, Observer { model ->
+            mAdapter = BookSelectionRecyclerViewAdapter(model.books, listener)
+            mRecyclerView = view as RecyclerView
+            mRecyclerView.adapter = mAdapter
+
+            mAdapter.notifyDataSetChanged()
+
+            if (CurrentSelected.getBook() != null && model.books.isNotEmpty()) {
+                for (book in model.books) {
+                    if (book.id == CurrentSelected.getBook() && mRecyclerView.layoutManager is LinearLayoutManager) {
+                        (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), mRecyclerView.height / 2)
+                    }
+                }
+            }
+        })
 
         return view
     }
@@ -59,32 +65,8 @@ class BookSelectionFragment : Fragment(), Observer {
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible && CurrentSelected.getBook() != null) {
-            mRetriever.addObserver(this)
-            mRetriever.getBooks()
-        } else {
-            mRetriever.deleteObservers()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mRetriever.deleteObservers()
-    }
-
-    override fun update(observable: Observable, o: Any) {
-        mBooks.clear()
-        if (o is IBookProvider) {
-            mBooks.addAll(o.books)
-            mAdapter.notifyDataSetChanged()
-
-            if (CurrentSelected.getBook() != null && mBooks.isNotEmpty()) {
-                for (book in mBooks) {
-                    if (book.id == CurrentSelected.getBook() && mRecyclerView.layoutManager is LinearLayoutManager) {
-                        (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(mBooks.indexOf(book), mRecyclerView.height / 2)
-                    }
-                }
-            }
+        if (isMenuVisible) {
+            viewModel.loadBooks()
         }
     }
 }

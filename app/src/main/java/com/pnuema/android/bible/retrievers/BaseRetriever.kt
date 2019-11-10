@@ -1,10 +1,13 @@
 package com.pnuema.android.bible.retrievers
 
 import androidx.lifecycle.LiveData
-import com.pnuema.android.bible.data.firefly.Versions
-import java.util.*
+import com.pnuema.android.bible.data.firefly.*
 
-abstract class BaseRetriever internal constructor() : Observable() {
+abstract class BaseRetriever internal constructor() {
+
+    companion object {
+        var instance: BaseRetriever? = null
+    }
 
     val tag: String
         get() = javaClass.simpleName
@@ -15,11 +18,11 @@ abstract class BaseRetriever internal constructor() : Observable() {
 
     abstract fun getVersions(): LiveData<Versions>
 
-    abstract fun getBooks()
+    abstract fun getBooks(): LiveData<Books>
 
-    abstract fun getChapters(book: String)
+    abstract fun getChapters(book: String): LiveData<ChapterCount>
 
-    abstract fun getVerseCount(version: String, book: String, chapter: String)
+    abstract fun getVerseCount(version: String, book: String, chapter: String): LiveData<VerseCount>
 
-    abstract fun getVerses(version: String, book: String, chapter: String)
+    abstract fun getVerses(version: String, book: String, chapter: String): LiveData<Verses>
 }

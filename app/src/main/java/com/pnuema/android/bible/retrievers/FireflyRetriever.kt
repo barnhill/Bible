@@ -18,6 +18,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FireflyRetriever : BaseRetriever() {
+    companion object {
+        fun get(): BaseRetriever {
+            if (instance == null) {
+                instance = FireflyRetriever()
+            }
+            return instance as BaseRetriever
+        }
+    }
     override fun savePrefs() {
         CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, Gson().toJson(CurrentSelected.getVersion()))
         CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, Gson().toJson(CurrentSelected.getBook()))
@@ -59,9 +67,11 @@ class FireflyRetriever : BaseRetriever() {
         return liveVersions
     }
 
-    override fun getChapters(book: String) {
+    override fun getChapters(book: String): LiveData<ChapterCount> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val call = api.getChapterCount(CurrentSelected.getBook(), CurrentSelected.getVersion())
+
+        val liveChapterCount = MutableLiveData<ChapterCount>()
         call.enqueue(object : Callback<ChapterCount> {
             override fun onResponse(call: Call<ChapterCount>, response: Response<ChapterCount>) {
                 val chapterCount = response.body()
@@ -70,32 +80,38 @@ class FireflyRetriever : BaseRetriever() {
                     return
                 }
 
-                setChanged()
-                notifyObservers(chapterCount)
+                liveChapterCount.value = chapterCount
             }
 
             override fun onFailure(call: Call<ChapterCount>, t: Throwable) {}
         })
+
+        return liveChapterCount
     }
 
-    override fun getVerseCount(version: String, book: String, chapter: String) {
+    override fun getVerseCount(version: String, book: String, chapter: String): LiveData<VerseCount> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val call = api.getVerseCount(book, chapter, version)
+
+        val liveVerseCount = MutableLiveData<VerseCount>()
         call.enqueue(object : Callback<VerseCount> {
             override fun onResponse(call: Call<VerseCount>, response: Response<VerseCount>) {
                 val verseCount = response.body() ?: return
 
-                setChanged()
-                notifyObservers(verseCount)
+                liveVerseCount.value = verseCount
             }
 
             override fun onFailure(call: Call<VerseCount>, t: Throwable) {}
         })
+
+        return liveVerseCount
     }
 
-    override fun getBooks() {
+    override fun getBooks(): LiveData<Books> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val call = api.getBooks(CurrentSelected.getVersion())
+
+        val liveBooks = MutableLiveData<Books>()
         call.enqueue(object : Callback<List<Book>> {
             override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {
                 val books = response.body()
@@ -103,26 +119,30 @@ class FireflyRetriever : BaseRetriever() {
                     return
                 }
 
-                setChanged()
-                notifyObservers(Books(ArrayList<IBook>(books)))
+                liveBooks.value = Books(ArrayList<IBook>(books))
             }
 
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
         })
+
+        return liveBooks
     }
 
-    override fun getVerses(version: String, book: String, chapter: String) {
+    override fun getVerses(version: String, book: String, chapter: String): LiveData<Verses> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val call = api.getChapterVerses(book, chapter, version)
+
+        val liveVerses = MutableLiveData<Verses>()
         call.enqueue(object : Callback<List<Verse>> {
             override fun onResponse(call: Call<List<Verse>>, response: Response<List<Verse>>) {
                 val verses = response.body() ?: return
 
-                setChanged()
-                notifyObservers(Verses(ArrayList<IVerse>(verses)))
+                liveVerses.value = Verses(ArrayList<IVerse>(verses))
             }
 
             override fun onFailure(call: Call<List<Verse>>, t: Throwable) {}
         })
+
+        return liveVerses
     }
 }
