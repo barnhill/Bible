@@ -1,5 +1,7 @@
 package com.pnuema.android.bible.retrievers
 
+import androidx.lifecycle.LiveData
+import com.pnuema.android.bible.data.firefly.Versions
 import java.util.*
 
 abstract class BaseRetriever internal constructor() : Observable() {
@@ -11,7 +13,7 @@ abstract class BaseRetriever internal constructor() : Observable() {
 
     abstract fun readPrefs()
 
-    abstract fun getVersions()
+    abstract fun getVersions(): LiveData<Versions>
 
     abstract fun getBooks()
 

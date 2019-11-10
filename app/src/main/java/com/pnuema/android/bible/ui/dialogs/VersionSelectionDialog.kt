@@ -15,23 +15,25 @@ import com.pnuema.android.bible.statics.LanguageUtils
 import com.pnuema.android.bible.ui.adapters.VersionSelectionRecyclerViewAdapter
 import java.util.*
 
-class VersionSelectionDialog : DialogFragment(), VersionSelectionListener, Observer {
-    private var mListener: NotifyVersionSelectionCompleted? = null
-    private var mAdapter: VersionSelectionRecyclerViewAdapter? = null
+class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCompleted) : DialogFragment(), VersionSelectionListener {
+    private var mListener: NotifyVersionSelectionCompleted = notifySelectionCompleted
+    private lateinit var mAdapter: VersionSelectionRecyclerViewAdapter
     private val mVersions = ArrayList<IVersion>()
     private val mRetriever = FireflyRetriever()
 
+    companion object {
+        fun instantiate(notifySelectionCompleted: NotifyVersionSelectionCompleted): VersionSelectionDialog {
+            return VersionSelectionDialog(notifySelectionCompleted)
+        }
+    }
+
     override fun onVersionSelected(version: String) {
         CurrentSelected.setVersion(version)
-        mListener?.onSelectionComplete(version)
+        mListener.onSelectionComplete(version)
         dismiss()
     }
 
-    private fun setListener(listener: NotifyVersionSelectionCompleted) {
-        mListener = listener
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_version_picker, container)
 
         mAdapter = VersionSelectionRecyclerViewAdapter(mVersions, this)
@@ -43,35 +45,17 @@ class VersionSelectionDialog : DialogFragment(), VersionSelectionListener, Obser
 
     override fun onResume() {
         super.onResume()
-        mRetriever.addObserver(this)
-        mRetriever.getVersions()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mRetriever.deleteObservers()
-    }
-
-    override fun update(observable: Observable, o: Any) {
-        mVersions.clear()
-        if (o is Versions) {
-            val lang = LanguageUtils.getISOLanguage()
-            for (version in o.versions) {
-                if (version.language.contains(lang)) {
-                    mVersions.add(version)
+        mRetriever.getVersions().observe(viewLifecycleOwner, androidx.lifecycle.Observer { versions ->
+            mVersions.clear()
+            if (versions is Versions) {
+                val lang = LanguageUtils.getISOLanguage()
+                for (version in versions.versions) {
+                    if (version.language.contains(lang)) {
+                        mVersions.add(version)
+                    }
                 }
+                mAdapter.notifyDataSetChanged()
             }
-            mAdapter!!.notifyDataSetChanged()
-        }
-    }
-
-    companion object {
-
-        fun instantiate(notifySelectionCompleted: NotifyVersionSelectionCompleted): VersionSelectionDialog {
-            val dialog = VersionSelectionDialog()
-            dialog.setListener(notifySelectionCompleted)
-
-            return dialog
-        }
+        })
     }
 }

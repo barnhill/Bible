@@ -1,6 +1,8 @@
 package com.pnuema.android.bible.retrievers
 
 import android.preference.PreferenceManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.pnuema.android.bible.data.IBook
 import com.pnuema.android.bible.data.IVerse
@@ -14,7 +16,6 @@ import com.pnuema.android.bible.statics.CurrentSelected
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class FireflyRetriever : BaseRetriever() {
     override fun savePrefs() {
@@ -33,9 +34,11 @@ class FireflyRetriever : BaseRetriever() {
         CurrentSelected.setVerse(Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, ""), Int::class.java))
     }
 
-    override fun getVersions() {
+    override fun getVersions(): LiveData<Versions> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val call = api.getVersions(null) //TODO select language
+
+        val liveVersions = MutableLiveData<Versions>()
         call.enqueue(object : Callback<List<Version>> {
             override fun onResponse(call: Call<List<Version>>, response: Response<List<Version>>) {
                 if (!response.isSuccessful) {
@@ -47,12 +50,13 @@ class FireflyRetriever : BaseRetriever() {
                     return
                 }
 
-                setChanged()
-                notifyObservers(Versions(ArrayList<IVersion>(versions)))
+                liveVersions.value = Versions(ArrayList<IVersion>(versions))
             }
 
             override fun onFailure(call: Call<List<Version>>, t: Throwable) {}
         })
+
+        return liveVersions
     }
 
     override fun getChapters(book: String) {

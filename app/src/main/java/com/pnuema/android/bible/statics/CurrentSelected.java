@@ -23,46 +23,40 @@ public final class CurrentSelected {
         return mVerse;
     }
 
-    public static void setVerse(final Integer mVerse) {
-        CurrentSelected.mVerse = mVerse;
+    public static void setVerse(final Integer verse) {
+        mVerse = verse;
     }
 
     public static void clearVerse() {
-        CurrentSelected.mVerse = null;
+        mVerse = null;
     }
 
     public static Integer getChapter() {
-        if (mVerse == null) {
-            setChapter(1);
-        }
         return mChapter;
     }
 
-    public static void setChapter(final Integer mChapter) {
-        CurrentSelected.mChapter = mChapter;
+    public static void setChapter(final Integer chapter) {
+        mChapter = chapter;
     }
 
     public static void clearChapter() {
-        CurrentSelected.mChapter = null;
+        mChapter = null;
     }
 
     public static Integer getBook() {
-        if (mVerse == null) {
-            setBook(1);
-        }
         return mBook;
     }
 
-    public static void setBook(final Integer mBook) {
-        CurrentSelected.mBook = mBook;
+    public static void setBook(final Integer book) {
+        mBook = book;
     }
 
     public static String getVersion() {
         return mVersion;
     }
 
-    public static void setVersion(final String mVersion) {
-        CurrentSelected.mVersion = mVersion;
+    public static void setVersion(final String version) {
+        mVersion = version;
     }
 
     public static void readPreferences() {

@@ -18,15 +18,19 @@ import java.util.*
 
 /**
  * A fragment representing a list of books to pick from.
- *
- *
  */
 class BookSelectionFragment : Fragment(), Observer {
     private lateinit var mListener: BCVSelectionListener
     private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: BookSelectionRecyclerViewAdapter
     private val mBooks = ArrayList<IBook>()
     private val mRetriever = FireflyRetriever()
-    private var mAdapter: BookSelectionRecyclerViewAdapter? = null
+
+    companion object {
+        fun newInstance(listener: BCVSelectionListener): BookSelectionFragment {
+            return BookSelectionFragment().setListener(listener)
+        }
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -34,19 +38,6 @@ class BookSelectionFragment : Fragment(), Observer {
      */
     init {
         setHasOptionsMenu(true)
-    }
-
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-
-        if (menuVisible && CurrentSelected.getBook() != null) {
-            mRetriever.addObserver(this)
-            mRetriever.getBooks()
-        }
-
-        if (!menuVisible) {
-            mRetriever.deleteObservers()
-        }
     }
 
     private fun setListener(listener: BCVSelectionListener): BookSelectionFragment {
@@ -65,6 +56,17 @@ class BookSelectionFragment : Fragment(), Observer {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (isMenuVisible && CurrentSelected.getBook() != null) {
+            mRetriever.addObserver(this)
+            mRetriever.getBooks()
+        } else {
+            mRetriever.deleteObservers()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         mRetriever.deleteObservers()
@@ -74,22 +76,15 @@ class BookSelectionFragment : Fragment(), Observer {
         mBooks.clear()
         if (o is IBookProvider) {
             mBooks.addAll(o.books)
-            mAdapter!!.notifyDataSetChanged()
+            mAdapter.notifyDataSetChanged()
 
             if (CurrentSelected.getBook() != null && mBooks.isNotEmpty()) {
                 for (book in mBooks) {
-                    if (book.id == CurrentSelected.getBook() && mRecyclerView!!.layoutManager is LinearLayoutManager) {
+                    if (book.id == CurrentSelected.getBook() && mRecyclerView.layoutManager is LinearLayoutManager) {
                         (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(mBooks.indexOf(book), mRecyclerView.height / 2)
                     }
                 }
             }
-        }
-    }
-
-    companion object {
-
-        fun newInstance(listener: BCVSelectionListener): BookSelectionFragment {
-            return BookSelectionFragment().setListener(listener)
         }
     }
 }
