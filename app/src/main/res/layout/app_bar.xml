@@ -17,8 +17,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:contentScrim="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:titleTextColor="@color/title_bar_foreground">
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

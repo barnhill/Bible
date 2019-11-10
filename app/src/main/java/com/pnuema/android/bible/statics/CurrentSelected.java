@@ -8,9 +8,9 @@ import com.pnuema.android.bible.retrievers.FireflyRetriever;
 
 public final class CurrentSelected {
     private static String mVersion = "kjv";
-    private static Integer mBook = 1;
-    private static Integer mChapter = 1;
-    private static Integer mVerse = 1;
+    private static Integer mBook;
+    private static Integer mChapter;
+    private static Integer mVerse;
     private static BaseRetriever mRetriever = new FireflyRetriever();
 
     private CurrentSelected() {
@@ -32,6 +32,9 @@ public final class CurrentSelected {
     }
 
     public static Integer getChapter() {
+        if (mVerse == null) {
+            setChapter(1);
+        }
         return mChapter;
     }
 
@@ -44,6 +47,9 @@ public final class CurrentSelected {
     }
 
     public static Integer getBook() {
+        if (mVerse == null) {
+            setBook(1);
+        }
         return mBook;
     }
 

@@ -17,7 +17,7 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="colorControlNormal">@color/title_bar_foreground</item>
+        <item name="colorControlNormal">@color/primary_text_inverted</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
@@ -31,7 +31,7 @@
     </style>
 
     <style name="BookChapterVerseButton">
-        <item name="android:textColor">@color/title_bar_foreground</item>
+        <item name="android:textColor">@color/primary_text_inverted</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>

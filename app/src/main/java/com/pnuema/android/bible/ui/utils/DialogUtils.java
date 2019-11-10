@@ -15,10 +15,10 @@ public final class DialogUtils {
     }
 
     public static void showBookChapterVersePicker(final FragmentActivity activity, final BCVDialog.BCV bcv, final NotifySelectionCompleted listener) {
-        BCVDialog.instantiate(bcv, listener).show(activity.getSupportFragmentManager(), BCVDialog.class.getSimpleName());
+        BCVDialog.Companion.instantiate(bcv, listener).show(activity.getSupportFragmentManager(), BCVDialog.class.getSimpleName());
     }
 
     public static void showVersionsPicker(final FragmentActivity activity, final NotifyVersionSelectionCompleted listener) {
-        VersionSelectionDialog.instantiate(listener).show(activity.getSupportFragmentManager(), VersionSelectionDialog.class.getSimpleName());
+        VersionSelectionDialog.Companion.instantiate(listener).show(activity.getSupportFragmentManager(), VersionSelectionDialog.class.getSimpleName());
     }
 }
