@@ -1,10 +1,11 @@
 package com.pnuema.android.bible.data.firefly;
 
-import androidx.core.content.ContextCompat;
-
 import com.pnuema.android.bible.R;
 import com.pnuema.android.bible.data.IVerse;
 import com.pnuema.android.bible.statics.App;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class Verse implements IVerse {
     private int book;
@@ -36,14 +37,11 @@ public class Verse implements IVerse {
         this.verse = verse;
     }
 
-    public String getVerseText() {
+    private String getVerseText() {
         return formatHtmlVerse();
     }
 
-    public void setVerseText(final String verseText) {
-        this.verseText = verseText;
-    }
-
+    @NonNull
     @Override
     public String getText() {
         return getVerseText();

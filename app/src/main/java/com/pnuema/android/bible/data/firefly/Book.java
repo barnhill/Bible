@@ -2,6 +2,8 @@ package com.pnuema.android.bible.data.firefly;
 
 import com.pnuema.android.bible.data.IBook;
 
+import androidx.annotation.NonNull;
+
 @SuppressWarnings ("unused")
 public class Book implements IBook {
     private int book_id;
@@ -13,6 +15,7 @@ public class Book implements IBook {
         return book_id;
     }
 
+    @NonNull
     @Override
     public String getName() {
         return title;
@@ -20,7 +23,7 @@ public class Book implements IBook {
 
     @Override
     public String getAbbreviation() {
-        return null; //TODO have it return the actual abbreviation from the API
+        return null; //TODO if API is modified to return abbreviation this is here to support that
     }
 
     public boolean isNewTestament() {

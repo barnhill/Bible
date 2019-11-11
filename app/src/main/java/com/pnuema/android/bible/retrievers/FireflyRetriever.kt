@@ -27,19 +27,19 @@ class FireflyRetriever : BaseRetriever() {
         }
     }
     override fun savePrefs() {
-        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, Gson().toJson(CurrentSelected.getVersion()))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, Gson().toJson(CurrentSelected.getBook()))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + tag, Gson().toJson(CurrentSelected.getChapter()))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + tag, Gson().toJson(CurrentSelected.getVerse()))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, Gson().toJson(CurrentSelected.version))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, Gson().toJson(CurrentSelected.book))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + tag, Gson().toJson(CurrentSelected.chapter))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + tag, Gson().toJson(CurrentSelected.verse))
     }
 
     override fun readPrefs() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
-        CurrentSelected.setVersion(Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + tag, ""), String::class.java))
-        CurrentSelected.setBook(Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + tag, ""), Int::class.java))
-        CurrentSelected.setChapter(Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + tag, ""), Int::class.java))
-        CurrentSelected.setVerse(Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, ""), Int::class.java))
+        CurrentSelected.version = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + tag, "kjv"), String::class.java)
+        CurrentSelected.book = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + tag, "1"), Int::class.java)
+        CurrentSelected.chapter = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + tag, "1"), Int::class.java)
+        CurrentSelected.verse = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, "1"), Int::class.java)
     }
 
     override fun getVersions(): LiveData<Versions> {
@@ -69,7 +69,7 @@ class FireflyRetriever : BaseRetriever() {
 
     override fun getChapters(book: String): LiveData<ChapterCount> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getChapterCount(CurrentSelected.getBook(), CurrentSelected.getVersion())
+        val call = api.getChapterCount(CurrentSelected.book, CurrentSelected.version)
 
         val liveChapterCount = MutableLiveData<ChapterCount>()
         call.enqueue(object : Callback<ChapterCount> {
@@ -109,7 +109,7 @@ class FireflyRetriever : BaseRetriever() {
 
     override fun getBooks(): LiveData<Books> {
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getBooks(CurrentSelected.getVersion())
+        val call = api.getBooks(CurrentSelected.version)
 
         val liveBooks = MutableLiveData<Books>()
         call.enqueue(object : Callback<List<Book>> {

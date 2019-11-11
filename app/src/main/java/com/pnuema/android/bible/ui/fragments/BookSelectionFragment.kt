@@ -50,9 +50,9 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
 
             mAdapter.notifyDataSetChanged()
 
-            if (CurrentSelected.getBook() != null && model.books.isNotEmpty()) {
+            if (CurrentSelected.book != null && model.books.isNotEmpty()) {
                 for (book in model.books) {
-                    if (book.id == CurrentSelected.getBook() && mRecyclerView.layoutManager is LinearLayoutManager) {
+                    if (book.id == CurrentSelected.book && mRecyclerView.layoutManager is LinearLayoutManager) {
                         (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), mRecyclerView.height / 2)
                     }
                 }

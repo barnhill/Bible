@@ -5,6 +5,8 @@ import com.pnuema.android.bible.data.IVersionProvider;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class Versions implements IVersionProvider {
     private List<IVersion> versions;
 
@@ -12,6 +14,7 @@ public class Versions implements IVersionProvider {
         this.versions = versions;
     }
 
+    @NonNull
     public List<IVersion> getVersions() {
         return versions;
     }

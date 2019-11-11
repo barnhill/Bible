@@ -2,6 +2,8 @@ package com.pnuema.android.bible.data.firefly;
 
 import com.pnuema.android.bible.data.IVersion;
 
+import androidx.annotation.NonNull;
+
 public class Version implements IVersion {
     private int id;
     private String abbreviation;
@@ -17,6 +19,7 @@ public class Version implements IVersion {
         return id;
     }
 
+    @NonNull
     @Override
     public String getDisplayText() {
         return getVersion();
@@ -26,6 +29,7 @@ public class Version implements IVersion {
         this.id = id;
     }
 
+    @NonNull
     @Override
     public String getAbbreviation() {
         return abbreviation;
@@ -35,6 +39,7 @@ public class Version implements IVersion {
         this.abbreviation = abbreviation;
     }
 
+    @NonNull
     @Override
     public String getLanguage() {
         return language;

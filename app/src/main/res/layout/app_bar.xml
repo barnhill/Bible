@@ -42,7 +42,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/selected_translation"
                 style="@style/BookChapterVerseButton"
-                android:layout_width="80dp"
+                android:layout_width="88dp"
                 android:layout_height="0dp"
                 android:drawableEnd="@drawable/book_open_page_variant"
                 android:maxLines="1"

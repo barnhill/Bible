@@ -22,6 +22,7 @@ import com.pnuema.android.bible.ui.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +39,6 @@ public class ReadFragment extends Fragment implements NotifySelectionCompleted {
     private TextView mBookChapterView;
     private TextView mTranslationView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.SmoothScroller mSmoothScroller;
     private List<IBook> books = new ArrayList<>();
     private ReadViewModel viewModel;
 
@@ -72,7 +72,7 @@ public class ReadFragment extends Fragment implements NotifySelectionCompleted {
         viewModel.getLiveVersions().observe(getViewLifecycleOwner(), iVersionProvider -> {
             final List<IVersion> versions = iVersionProvider.getVersions();
             for (final IVersion version : versions) {
-                if (version.getAbbreviation().equals(CurrentSelected.getVersion())) {
+                if (version.getAbbreviation().equals(CurrentSelected.INSTANCE.getVersion())) {
                     mTranslationView.setText(version.getAbbreviation().toUpperCase());
                     break;
                 }
@@ -88,19 +88,11 @@ public class ReadFragment extends Fragment implements NotifySelectionCompleted {
         viewModel.getLiveVerses().observe(getViewLifecycleOwner(), iVerseProvider -> {
             mAdapter.updateVerses(iVerseProvider.getVerses());
 
-            final Integer verse = CurrentSelected.getVerse();
-            if (verse != null) {
-                new Handler().post(() -> scrollToVerse(verse));
-            }
+            final Integer verse = CurrentSelected.INSTANCE.getVerse();
+            new Handler().post(() -> scrollToVerse(verse));
 
             setBookChapterText();
         });
-
-        mSmoothScroller = new LinearSmoothScroller(activity) {
-            @Override protected int getVerticalSnapPreference() {
-                return LinearSmoothScroller.SNAP_TO_START;
-            }
-        };
 
         mBookChapterView = activity.findViewById(R.id.selected_book);
         mTranslationView = activity.findViewById(R.id.selected_translation);
@@ -123,24 +115,27 @@ public class ReadFragment extends Fragment implements NotifySelectionCompleted {
 
     @Override
     public void onSelectionPreloadChapter(final int book, final int chapter) {
-        if (CurrentSelected.getChapter() != null) {
-            FireflyRetriever.Companion.get().getVerses(CurrentSelected.getVersion(), String.valueOf(CurrentSelected.getBook()), String.valueOf(CurrentSelected.getChapter()));
-        }
+        FireflyRetriever.Companion.get().getVerses(CurrentSelected.INSTANCE.getVersion(), String.valueOf(CurrentSelected.INSTANCE.getBook()), String.valueOf(CurrentSelected.INSTANCE.getChapter()));
     }
 
     @Override
     public void onSelectionComplete(final int book, final int chapter, final int verse) {
-        if (CurrentSelected.getChapter() != null) {
-            viewModel.load();
-        }
+        viewModel.load();
     }
 
     private void scrollToVerse(@Nullable final Integer verse) {
         if (verse == null) {
             return;
         }
-        mSmoothScroller.setTargetPosition(verse - 1);
-        mLayoutManager.startSmoothScroll(mSmoothScroller);
+
+        final RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(Objects.requireNonNull(getActivity())) {
+            @Override protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
+
+        smoothScroller.setTargetPosition(verse - 1);
+        mLayoutManager.startSmoothScroll(smoothScroller);
     }
 
     private void setAppBarDisplay() {
@@ -149,19 +144,19 @@ public class ReadFragment extends Fragment implements NotifySelectionCompleted {
         }
         if (mBookChapterView != null) {
             setBookChapterText();
-            mBookChapterView.setOnClickListener(view -> DialogUtils.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this));
+            mBookChapterView.setOnClickListener(view -> DialogUtils.INSTANCE.showBookChapterVersePicker(getActivity(), BCVDialog.BCV.BOOK, ReadFragment.this));
         }
 
         if (mTranslationView != null) {
-            mTranslationView.setOnClickListener(view -> DialogUtils.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity()));
+            mTranslationView.setOnClickListener(view -> DialogUtils.INSTANCE.showVersionsPicker(getActivity(), (NotifyVersionSelectionCompleted) getActivity()));
         }
     }
 
     private void setBookChapterText() {
-        if (mBookChapterView != null && CurrentSelected.getBook() != null && CurrentSelected.getChapter() != null) {
+        if (mBookChapterView != null) {
             for (final IBook book : books) {
-                if (book.getId() == CurrentSelected.getBook()) {
-                    mBookChapterView.setText(getString(R.string.book_chapter_header_format, book.getName(), CurrentSelected.getChapter()));
+                if (CurrentSelected.INSTANCE.getBook() != null && book.getId() == CurrentSelected.INSTANCE.getBook()) {
+                    mBookChapterView.setText(getString(R.string.book_chapter_header_format, book.getName(), CurrentSelected.INSTANCE.getChapter()));
                 }
             }
         }

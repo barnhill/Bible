@@ -15,11 +15,15 @@ import com.pnuema.android.bible.statics.LanguageUtils
 import com.pnuema.android.bible.ui.adapters.VersionSelectionRecyclerViewAdapter
 import java.util.*
 
-class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCompleted) : DialogFragment(), VersionSelectionListener {
+class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var viewModel: VersionSelectionViewModel
     private lateinit var mAdapter: VersionSelectionRecyclerViewAdapter
-    private var mListener: NotifyVersionSelectionCompleted = notifySelectionCompleted
+    private lateinit var mListener: NotifyVersionSelectionCompleted
     private val mVersions = ArrayList<IVersion>()
+
+    constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
+        mListener = notifySelectionCompleted
+    }
 
     companion object {
         fun instantiate(notifySelectionCompleted: NotifyVersionSelectionCompleted): VersionSelectionDialog {
@@ -28,7 +32,7 @@ class VersionSelectionDialog(notifySelectionCompleted: NotifyVersionSelectionCom
     }
 
     override fun onVersionSelected(version: String) {
-        CurrentSelected.setVersion(version)
+        CurrentSelected.version = version
         mListener.onSelectionComplete(version)
         dismiss()
     }

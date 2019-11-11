@@ -48,7 +48,7 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
             }
 
             mRecyclerView.adapter = NumberSelectionAdapter(chapterCount.chapterCount,
-                    CurrentSelected.getChapter(), this)
+                    CurrentSelected.chapter, this)
         })
 
         return mRecyclerView
@@ -57,8 +57,8 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible && CurrentSelected.getBook() != null) {
-            viewModel.loadChapters(CurrentSelected.getBook().toString())
+        if (isMenuVisible && CurrentSelected.book != null) {
+            viewModel.loadChapters(CurrentSelected.book.toString())
         }
     }
 

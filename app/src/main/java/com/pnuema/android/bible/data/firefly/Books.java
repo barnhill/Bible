@@ -5,6 +5,8 @@ import com.pnuema.android.bible.data.IBookProvider;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class Books implements IBookProvider {
     private List<IBook> books;
 
@@ -12,6 +14,7 @@ public class Books implements IBookProvider {
         this.books = books;
     }
 
+    @NonNull
     @Override
     public List<IBook> getBooks() {
         return books;

@@ -86,7 +86,7 @@ public final class FireflyAPI {
         return chain -> {
             Request request = chain.request();
 
-            if (!ConnectionUtils.isConnected(context)) {
+            if (!ConnectionUtils.INSTANCE.isConnected(context)) {
                 final CacheControl cacheControl = new CacheControl.Builder()
                         .maxStale(CACHE_OFFLINE_DAYS, TimeUnit.DAYS)
                         .build();

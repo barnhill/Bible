@@ -5,6 +5,8 @@ import com.pnuema.android.bible.data.IVerseProvider;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class Verses implements IVerseProvider {
     private List<IVerse> verses;
 
@@ -12,6 +14,7 @@ public class Verses implements IVerseProvider {
         this.verses = verses;
     }
 
+    @NonNull
     public List<IVerse> getVerses() {
         return verses;
     }

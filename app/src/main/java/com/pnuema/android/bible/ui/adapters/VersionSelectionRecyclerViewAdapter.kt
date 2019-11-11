@@ -30,7 +30,7 @@ class VersionSelectionRecyclerViewAdapter(private val mValues: List<IVersion>, p
         holder.item = mValues[position]
         contentView.text = mValues[position].displayText
 
-        val currentIsSelected = CurrentSelected.getVersion() != null && !TextUtils.isEmpty(CurrentSelected.getVersion()) && CurrentSelected.getVersion() == mValues[position].abbreviation
+        val currentIsSelected = !TextUtils.isEmpty(CurrentSelected.version) && CurrentSelected.version == mValues[position].abbreviation
 
         contentView.setTextColor(ContextCompat.getColor(contentView.context, if (currentIsSelected) R.color.primary else R.color.primary_text))
         contentView.setTypeface(null, if (currentIsSelected) Typeface.BOLD else Typeface.NORMAL)

@@ -9,14 +9,14 @@ import com.pnuema.android.bible.statics.CurrentSelected
 import com.pnuema.android.bible.ui.dialogs.BCVSelectionListener
 
 class BookSelectionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val contentView: TextView? = view.findViewById(R.id.book)
+    private val contentView: TextView? = view.findViewById(R.id.book)
 
     override fun toString(): String {
         return super.toString() + " '" + contentView!!.text + "'"
     }
 
     fun bind(book: IBook, listener: BCVSelectionListener) {
-        val isSelected = CurrentSelected.getBook() != null && book.id == CurrentSelected.getBook()
+        val isSelected = CurrentSelected.book != null && book.id == CurrentSelected.book
 
         contentView!!.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)
 

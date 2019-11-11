@@ -33,20 +33,20 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
     }
 
     override fun onBookSelected(book: Int) {
-        CurrentSelected.setBook(book)
+        CurrentSelected.book = book
         CurrentSelected.clearChapter()
         CurrentSelected.clearVerse()
         gotoTab(BCV.CHAPTER)
     }
 
     override fun onChapterSelected(chapter: Int) {
-        CurrentSelected.setChapter(chapter)
+        CurrentSelected.chapter = chapter
         CurrentSelected.clearVerse()
         gotoTab(BCV.VERSE)
     }
 
     override fun onVerseSelected(verse: Int) {
-        CurrentSelected.setVerse(verse)
+        CurrentSelected.verse = verse
         refresh()
     }
 
@@ -58,7 +58,7 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
 
     override fun refresh() {
         if (listener != null) {
-            listener!!.onSelectionComplete(CurrentSelected.getBook()!!, CurrentSelected.getChapter()!!, CurrentSelected.getVerse()!!)
+            listener!!.onSelectionComplete(CurrentSelected.book!!, CurrentSelected.chapter!!, CurrentSelected.verse!!)
         }
         dismiss()
     }

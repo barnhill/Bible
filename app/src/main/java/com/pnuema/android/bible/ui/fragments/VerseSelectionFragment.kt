@@ -52,7 +52,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
             }
 
             if (verseCount is VerseCount) {
-                mGridView.adapter = NumberSelectionAdapter(verseCount.verseCount, CurrentSelected.getVerse(), this)
+                mGridView.adapter = NumberSelectionAdapter(verseCount.verseCount, CurrentSelected.verse, this)
             }
         })
 
@@ -62,8 +62,8 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible && CurrentSelected.getChapter() != null) {
-            viewModel.loadVerses(CurrentSelected.getVersion(), CurrentSelected.getBook().toString(), CurrentSelected.getChapter().toString())
+        if (isMenuVisible && CurrentSelected.chapter != null) {
+            viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
         }
     }
 

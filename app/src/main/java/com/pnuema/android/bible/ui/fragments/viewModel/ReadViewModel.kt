@@ -15,19 +15,17 @@ class ReadViewModel: ViewModel() {
     val liveBook: LiveData<IBookProvider> = MutableLiveData()
 
     fun load() {
-        if (CurrentSelected.getChapter() != null) {
-            FireflyRetriever.get().getVerses(CurrentSelected.getVersion(), CurrentSelected.getBook().toString(), CurrentSelected.getChapter().toString()).observeForever {
+        if (CurrentSelected.chapter != null) {
+            FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()).observeForever {
                 (liveVerses as MutableLiveData<IVerseProvider>).value = it
             }
         }
 
-        if (CurrentSelected.getVersion() != null) {
-            FireflyRetriever.get().getVersions().observeForever {
-                (liveVersions as MutableLiveData<IVersionProvider>).value = it
-            }
+        FireflyRetriever.get().getVersions().observeForever {
+            (liveVersions as MutableLiveData<IVersionProvider>).value = it
         }
 
-        if (CurrentSelected.getBook() != null) {
+        if (CurrentSelected.book != null) {
             FireflyRetriever.get().getBooks().observeForever {
                 (liveBook as MutableLiveData<IBookProvider>).value = it
             }
