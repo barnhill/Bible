@@ -1,39 +1,45 @@
 {
   "project_info": {
-    "project_number": "1052769235470",
-    "firebase_url": "https://simple-bible-67ae1.firebaseio.com",
-    "project_id": "simple-bible-67ae1",
-    "storage_bucket": "simple-bible-67ae1.appspot.com"
+    "project_number": "502741197718",
+    "firebase_url": "https://fireflyapp-fe9f5.firebaseio.com",
+    "project_id": "fireflyapp-fe9f5",
+    "storage_bucket": "fireflyapp-fe9f5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1052769235470:android:b90a82d59de955d2",
+        "mobilesdk_app_id": "1:502741197718:android:fbbfd7738626218cb133b7",
         "android_client_info": {
-          "package_name": "com.pnuema.android.bible"
+          "package_name": "com.pnuema.bible.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1052769235470-q30q6r5a2ptp05g52urgmpbpct9a5pho.apps.googleusercontent.com",
+          "client_id": "502741197718-0d2jge4084qhqfmqeis81brv59c1k3g9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pnuema.bible.android",
+            "certificate_hash": "4e83e0f4a81e8728f30e8fa4f00a050ba2f5f83d"
+          }
+        },
+        {
+          "client_id": "502741197718-473d1vgh9iihepoprgk4a69ol90m9bh2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBLvHMv2HKvKHOib71-iDk_kBuh5x8PCjg"
+          "current_key": "AIzaSyAx3psYNordbZdD5xUdl2JXxIBgXlBMiMM"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502741197718-473d1vgh9iihepoprgk4a69ol90m9bh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
