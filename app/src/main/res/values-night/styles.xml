@@ -1,0 +1,75 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorControlHighlight">@color/primary</item>
+        <item name="android:textColorPrimary">@android:color/primary_text_dark</item>
+        <item name="android:textColorSecondary">@android:color/secondary_text_dark</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorControlNormal">@color/primary_text_inverted</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="backgroundLight">
+        <item name="android:background">@color/background_light</item>
+    </style>
+
+    <style name="backgroundDark">
+        <item name="android:background">@color/background_dark</item>
+    </style>
+
+    <style name="BookChapterVerseButton">
+        <item name="android:textColor">@color/primary_text_inverted</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:drawablePadding">10dp</item>
+    </style>
+
+    <style name="BookChapterVerse">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+    </style>
+
+    <style name="BookChapterVerse.BookText">
+        <item name="android:padding">@dimen/text_margin</item>
+    </style>
+
+    <style name="BookChapterVerse.NumberText">
+        <item name="android:padding">@dimen/text_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
+        <item name="android:minWidth">?android:attr/listPreferredItemHeightSmall</item>
+        <item name="android:background">@drawable/selectable_background_rounded</item>
+    </style>
+
+    <style name="BookChapterVerse.BookText.Selected">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary_dark</item>
+    </style>
+
+    <style name="BookChapterVerse.NumberText.Selected">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary_text_inverted</item>
+    </style>
+
+</resources>

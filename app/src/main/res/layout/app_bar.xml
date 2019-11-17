@@ -15,43 +15,44 @@
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
         app:contentScrim="?attr/colorPrimary"
-        app:titleTextColor="@color/title_bar_foreground"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/selected_book"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textAllCaps="true"
-                android:drawableEnd="@drawable/arrow_down_drop_circle_outline"
                 style="@style/BookChapterVerseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:drawableEnd="@drawable/arrow_down_drop_circle_outline"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAllCaps="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/selected_translation"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Song of Solomon   2" />
 
-            <androidx.legacy.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/selected_translation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/BookChapterVerseButton"
+                android:layout_width="88dp"
+                android:layout_height="0dp"
+                android:drawableEnd="@drawable/book_open_page_variant"
                 android:maxLines="1"
                 android:textAlignment="center"
-                android:drawableEnd="@drawable/book_open_page_variant"
-                style="@style/BookChapterVerseButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="KJV" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 

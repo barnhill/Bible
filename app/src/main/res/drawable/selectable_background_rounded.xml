@@ -17,6 +17,6 @@
 
     </item>
 
-    <item android:drawable="@color/background_light" />
+    <item android:drawable="@android:color/transparent" />
 
 </ripple>

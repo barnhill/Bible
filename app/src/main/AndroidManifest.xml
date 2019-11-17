@@ -2,12 +2,12 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pnuema.android.bible">
+    package="com.pnuema.bible.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".statics.App"
+        android:name="com.pnuema.bible.android.statics.App"
         android:allowBackup="true"
         android:icon="@drawable/launcher"
         android:roundIcon="@mipmap/ic_launcher_round"

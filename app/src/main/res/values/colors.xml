@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#00AA8D</color>
-    <color name="primary_dark">#008975</color>
-    <color name="primary_light">#E8F5E9</color>
-    <color name="accent">@color/primary</color>
+    <color name="primary">#8BC34A</color>
+    <color name="primary_dark">#689F38</color>
+    <color name="primary_light">#DCEDC8</color>
+    <color name="accent">@color/primary_dark</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
-    <color name="icons">#ffffff</color>
-    <color name="divider">#bdbdbd</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#BDBDBD</color>
 
-    <color name="title_bar_foreground">@color/primary_light</color>
+    <color name="primary_text_inverted">#FEFEFE</color>
 
     <color name="background_light">@color/lightgrey</color>
     <color name="background_light_selected">#efefef</color>
@@ -19,9 +19,6 @@
     <drawable name="background_selected">@color/primary</drawable>
 
     <!-- color codes only -->
-    <color name="darkgrey">#212121</color>
-    <color name="mediumgrey">#dcdcdc</color>
     <color name="lightgrey">#fcfefd</color>
-    <color name="ghosttext">#909090</color>
     <color name="white">#ffffff</color>
 </resources>

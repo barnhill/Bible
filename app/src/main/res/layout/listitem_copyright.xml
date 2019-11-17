@@ -27,7 +27,6 @@
         android:lineSpacingExtra="2dp"
         android:fontFamily="sans-serif"
         android:textSize="12sp"
-        android:background="@color/background_light"
         tools:text="This is the copyright text as it will be seen at the bottom of the screen below the other verses"/>
 
 </LinearLayout>
