@@ -21,6 +21,7 @@ import com.pnuema.bible.android.ui.fragments.ReadFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted, NotifyVersionSelectionCompleted {
+    private lateinit var readFragment: ReadFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DeepLinks.handleDeepLinks(intent)
@@ -40,6 +41,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.addDrawerListener(toggle)
         toggle.isDrawerIndicatorEnabled = true
         toggle.syncState()
+
+        readFragment = supportFragmentManager.findFragmentById(R.id.read_fragment) as ReadFragment
     }
 
     override fun onPause() {
@@ -89,18 +92,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
-        read_fragment.refresh()
+        readFragment.refresh()
     }
 
     override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        read_fragment.refresh()
+        readFragment.refresh()
     }
 
     override fun onSelectionComplete(version: String) {
         CurrentSelected.version = version
-        read_fragment.refresh()
+        readFragment.refresh()
     }
 }
