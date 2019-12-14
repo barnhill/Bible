@@ -16,8 +16,9 @@
 
         <include layout="@layout/app_bar"/>
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <fragment
+            class="com.pnuema.bible.android.ui.fragments.ReadFragment"
+            android:id="@+id/read_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

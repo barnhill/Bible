@@ -3,11 +3,13 @@ package com.pnuema.bible.android.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
@@ -16,10 +18,9 @@ import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
 import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.fragments.ReadFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted, NotifyVersionSelectionCompleted {
-    private var readFragment: ReadFragment? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DeepLinks.handleDeepLinks(intent)
@@ -55,8 +56,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         CurrentSelected.readPreferences()
         super.onResume()
-
-        gotoRead()
     }
 
     override fun onBackPressed() {
@@ -87,32 +86,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    private fun gotoRead() {
-        if (readFragment == null) {
-            readFragment = ReadFragment.newInstance()
-            val ft = supportFragmentManager.beginTransaction()
-            ft.add(R.id.fragment_container, readFragment!!, ReadFragment::class.java.simpleName)
-            ft.commit()
-        } else {
-            readFragment!!.refresh()
-        }
-    }
-
     override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
-        gotoRead()
+        read_fragment.refresh()
     }
 
     override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        gotoRead()
+        read_fragment.refresh()
     }
 
     override fun onSelectionComplete(version: String) {
         CurrentSelected.version = version
-        gotoRead()
+        read_fragment.refresh()
     }
 }
