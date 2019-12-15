@@ -16,16 +16,16 @@ class BookSelectionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun bind(book: IBook, listener: BCVSelectionListener) {
-        val isSelected = CurrentSelected.book != null && book.id == CurrentSelected.book
+        val isSelected = CurrentSelected.book != null && book.getId() == CurrentSelected.book
 
         contentView!!.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)
 
-        contentView.text = book.name
+        contentView.text = book.getName()
 
-        itemView.setOnClickListener { v ->
+        itemView.setOnClickListener {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            listener.onBookSelected(book.id)
+            listener.onBookSelected(book.getId())
         }
     }
 }

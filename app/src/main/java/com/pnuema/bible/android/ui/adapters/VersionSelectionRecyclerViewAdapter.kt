@@ -40,7 +40,7 @@ class VersionSelectionRecyclerViewAdapter(private var mValues: List<IVersion>, p
         contentView.setTextColor(ContextCompat.getColor(contentView.context, if (currentIsSelected) R.color.primary else R.color.primary_text))
         contentView.setTypeface(null, if (currentIsSelected) Typeface.BOLD else Typeface.NORMAL)
 
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             if (mListener != null && holder.item != null) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.

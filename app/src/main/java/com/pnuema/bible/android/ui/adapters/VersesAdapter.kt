@@ -24,7 +24,7 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is VerseViewHolder) {
-            holder.bind(HtmlUtils.fromHtml(mVerses[position].text))
+            holder.bind(HtmlUtils.fromHtml(mVerses[position].getText()))
         } else if (holder is CopyrightViewHolder) {
             holder.bind(copyrightText!!)
         }

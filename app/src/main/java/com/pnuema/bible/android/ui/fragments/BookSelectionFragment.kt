@@ -52,7 +52,7 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
 
             if (CurrentSelected.book != null && model.books.isNotEmpty()) {
                 for (book in model.books) {
-                    if (book.id == CurrentSelected.book && mRecyclerView.layoutManager is LinearLayoutManager) {
+                    if (book.getId() == CurrentSelected.book && mRecyclerView.layoutManager is LinearLayoutManager) {
                         (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), mRecyclerView.height / 2)
                     }
                 }
