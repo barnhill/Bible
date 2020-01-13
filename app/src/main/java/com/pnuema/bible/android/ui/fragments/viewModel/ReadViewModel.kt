@@ -3,11 +3,14 @@ package com.pnuema.bible.android.ui.fragments.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.data.IBookProvider
 import com.pnuema.bible.android.data.IVerseProvider
 import com.pnuema.bible.android.data.IVersionProvider
 import com.pnuema.bible.android.retrievers.FireflyRetriever
 import com.pnuema.bible.android.statics.CurrentSelected
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ReadViewModel: ViewModel() {
     val liveVersions: LiveData<IVersionProvider> = MutableLiveData()
@@ -15,19 +18,15 @@ class ReadViewModel: ViewModel() {
     val liveBook: LiveData<IBookProvider> = MutableLiveData()
 
     fun load() {
-        if (CurrentSelected.chapter != null) {
-            FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()).observeForever {
-                (liveVerses as MutableLiveData<IVerseProvider>).value = it
+        viewModelScope.launch(Dispatchers.IO) {
+            if (CurrentSelected.chapter != null) {
+                (liveVerses as MutableLiveData<IVerseProvider>).postValue(FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
             }
-        }
 
-        FireflyRetriever.get().getVersions().observeForever {
-            (liveVersions as MutableLiveData<IVersionProvider>).value = it
-        }
+            (liveVersions as MutableLiveData<IVersionProvider>).postValue(FireflyRetriever.get().getVersions())
 
-        if (CurrentSelected.book != null) {
-            FireflyRetriever.get().getBooks().observeForever {
-                (liveBook as MutableLiveData<IBookProvider>).value = it
+            if (CurrentSelected.book != null) {
+                (liveBook as MutableLiveData<IBookProvider>).postValue(FireflyRetriever.get().getBooks())
             }
         }
     }

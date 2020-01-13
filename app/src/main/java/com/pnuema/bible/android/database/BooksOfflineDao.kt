@@ -1,15 +1,14 @@
 package com.pnuema.bible.android.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface BooksOfflineDao {
-    @Query("select * from offlineBooks order by book_id")
-    fun getBooks(): List<BooksOffline>
+    @Transaction
+    @Query("select * from offlineBooks where version = :version order by book_id")
+    suspend fun getBooks(version: String): List<BookOffline>
 
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun putBooks(books: List<BooksOffline>)
+    suspend fun putBooks(books: List<BookOffline>)
 }

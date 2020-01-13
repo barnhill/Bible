@@ -6,5 +6,5 @@ import androidx.room.Query
 @Dao
 interface VerseOfflineDao {
     @Query("select * from offlineVerses where book = :book and chapter = :chapter order by verse")
-    fun getVerses(book: Int, chapter: Int): List<VerseOffline>
+    suspend fun getVerses(book: Int, chapter: Int): List<VerseOffline>
 }

@@ -1,6 +1,5 @@
 package com.pnuema.bible.android.retrievers
 
-import androidx.lifecycle.LiveData
 import com.pnuema.bible.android.data.firefly.*
 
 abstract class BaseRetriever internal constructor() {
@@ -16,13 +15,13 @@ abstract class BaseRetriever internal constructor() {
 
     abstract fun readPrefs()
 
-    abstract fun getVersions(): LiveData<Versions>
+    abstract suspend fun getVersions(): Versions
 
-    abstract fun getBooks(): LiveData<Books>
+    abstract suspend fun getBooks(): Books
 
-    abstract fun getChapters(book: String): LiveData<ChapterCount>
+    abstract suspend fun getChapters(book: String): ChapterCount
 
-    abstract fun getVerseCount(version: String, book: String, chapter: String): LiveData<VerseCount>
+    abstract suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount
 
-    abstract fun getVerses(version: String, book: String, chapter: String): LiveData<Verses>
+    abstract suspend fun getVerses(version: String, book: String, chapter: String): Verses
 }
