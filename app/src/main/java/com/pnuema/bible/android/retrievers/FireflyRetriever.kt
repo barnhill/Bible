@@ -74,7 +74,16 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
+        //TODO: only get offline version if current selected version is marked as offline ready
+        val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.book!!, CurrentSelected.chapter!!)
+        if (offlineVerses.isNotEmpty()) {
+            return Verses(offlineVerses.map { it.convertToVerse() })
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        return Verses(ArrayList<IVerse>(api.getChapterVerses(book, chapter, version)))
+        val verses = api.getChapterVerses(book, chapter, version)
+        FireflyDatabase.getInstance().verseDao().putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
+
+        return Verses(ArrayList<IVerse>(verses))
     }
 }
