@@ -1,6 +1,7 @@
 package com.pnuema.bible.android.data.firefly
 
 import com.pnuema.bible.android.data.IVersion
+import com.pnuema.bible.android.database.VersionOffline
 
 data class Version(
         var version: String,
@@ -16,4 +17,7 @@ data class Version(
     override fun getDisplayText(): String {
         return version
     }
+
+    override fun convertToOfflineModel(): VersionOffline
+            = VersionOffline(version = version, url = url, publisher = publisher, copyright = copyright, copyright_info = copyright_info, language = language, abbreviation = abbreviation, id = id)
 }

@@ -40,15 +40,23 @@ class FireflyRetriever : BaseRetriever() {
         CurrentSelected.verse = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, "1"), Int::class.java)
     }
 
-    override suspend fun getVersions(): Versions {
+    override suspend fun getVersions(): Versions = withContext(Dispatchers.IO) {
+        //TODO: only get offline version if not connected
+        val offlineVersions = FireflyDatabase.getInstance().versionDao().getVersions()
+        if (offlineVersions.isNotEmpty()) {
+            return@withContext Versions(offlineVersions.map { it.convertToVersion() })
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val versions = api.getVersions(null) //TODO select language
 
-        return Versions(ArrayList<IVersion>(versions))
+        FireflyDatabase.getInstance().versionDao().putVersions(versions.map { it.convertToOfflineModel() })
+
+        return@withContext Versions(ArrayList<IVersion>(versions))
     }
 
     override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
-        //TODO: only get offline version if current selected version is marked as offline ready
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
         val currentBook = CurrentSelected.book!!
         val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao().getChapterCount(CurrentSelected.version, currentBook)
         if (offlineChapterCount != null && offlineChapterCount.chapterCount <= 0) {
@@ -63,7 +71,7 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount = withContext(Dispatchers.IO) {
-        //TODO: only get offline version if current selected version is marked as offline ready
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
         val currentBook = CurrentSelected.book!!
         val currentChapter = CurrentSelected.chapter!!
         val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao().getVerseCount(CurrentSelected.version, currentBook, currentChapter)
@@ -80,7 +88,7 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override suspend fun getBooks(): Books {
-        //TODO: only get offline version if current selected version is marked as offline ready
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
         val offlineBooks = FireflyDatabase.getInstance().booksDao().getBooks(CurrentSelected.version)
         if (offlineBooks.isNotEmpty()) {
             return Books(offlineBooks.map { it.convertToBook() })
@@ -95,7 +103,7 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
-        //TODO: only get offline version if current selected version is marked as offline ready
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
         val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.book!!, CurrentSelected.chapter!!)
         if (offlineVerses.isNotEmpty()) {
             return Verses(offlineVerses.map { it.convertToVerse() })
