@@ -9,6 +9,6 @@ data class ChapterCountOffline (
     var version: String,
     val chapterCount: Int = 0
 ) {
-    fun convertToChapterCount(): ChapterCount = ChapterCount()
+    fun convertToChapterCount(): ChapterCount = ChapterCount(chapterCount)
 }
 

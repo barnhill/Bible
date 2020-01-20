@@ -5,11 +5,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.pnuema.bible.android.statics.App
 
-@Database(entities = [VerseOffline::class,BookOffline::class,ChapterCountOffline::class], version = 1)
+@Database(entities = [VerseOffline::class,BookOffline::class,ChapterCountOffline::class,VerseCountOffline::class], version = 1)
 abstract class FireflyDatabase : RoomDatabase() {
     abstract fun verseDao(): VerseOfflineDao
     abstract fun booksDao(): BooksOfflineDao
     abstract fun chapterCountDao(): ChapterCountOfflineDao
+    abstract fun verseCountDao(): VerseCountOfflineDao
 
     companion object {
         private lateinit var INSTANCE: FireflyDatabase
