@@ -48,16 +48,25 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
-            FireflyAPI.getInstance(App.getContext())
-                .create(IFireflyAPI::class.java)
-                .getChapterCount(CurrentSelected.book, CurrentSelected.version)
+        val currentBook = CurrentSelected.book!!
+        val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao().getChapterCount(CurrentSelected.version, currentBook)
+        if (offlineChapterCount != null && offlineChapterCount.chapterCount <= 0) {
+            return@withContext ChapterCount(offlineChapterCount.chapterCount)
         }
+
+        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val chapterCount = api.getChapterCount(currentBook, CurrentSelected.version)
+        FireflyDatabase.getInstance().chapterCountDao().putChapterCount(chapterCount.convertToOfflineModel(CurrentSelected.version, currentBook))
+
+        return@withContext chapterCount
+    }
 
     override suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount = withContext(Dispatchers.IO) {
         FireflyAPI.getInstance(App.getContext())
             .create(IFireflyAPI::class.java)
             .getVerseCount(book, chapter, version)
         }
+
     override suspend fun getBooks(): Books {
         //TODO: only get offline version if current selected version is marked as offline ready
         val offlineBooks = FireflyDatabase.getInstance().booksDao().getBooks(CurrentSelected.version)
