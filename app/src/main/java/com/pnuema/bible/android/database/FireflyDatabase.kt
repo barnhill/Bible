@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.pnuema.bible.android.statics.App
 
-@Database(entities = [VerseOffline::class,BookOffline::class,ChapterCountOffline::class,VerseCountOffline::class,VersionOffline::class], version = 1)
+@Database(entities = [VerseOffline::class,BookOffline::class,ChapterCountOffline::class,VerseCountOffline::class,VersionOffline::class], version = 1, exportSchema = false)
 abstract class FireflyDatabase : RoomDatabase() {
     abstract fun verseDao(): VerseOfflineDao
     abstract fun booksDao(): BooksOfflineDao
