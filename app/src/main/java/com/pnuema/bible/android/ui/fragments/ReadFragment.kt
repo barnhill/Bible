@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
@@ -69,7 +69,7 @@ class ReadFragment : Fragment(), NotifySelectionCompleted {
         val activity = activity ?: return
         bookChapterView = activity.findViewById(R.id.selected_book)
         translationView = activity.findViewById(R.id.selected_translation)
-        viewModel = ViewModelProviders.of(this).get(ReadViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ReadViewModel::class.java)
         viewModel.liveVersions.observe(viewLifecycleOwner, Observer { iVersionProvider: IVersionProvider ->
             val versions = iVersionProvider.versions
             for (version in versions) {

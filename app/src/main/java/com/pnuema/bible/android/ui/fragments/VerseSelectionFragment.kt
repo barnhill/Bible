@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
@@ -44,7 +44,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
         mGridView = inflater.inflate(R.layout.fragment_number_list, container, false) as RecyclerView
         mGridView.layoutManager = GridLayoutManager(context, 3)
 
-        viewModel = ViewModelProviders.of(this).get(VersesViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(VersesViewModel::class.java)
         viewModel.verses.observe(viewLifecycleOwner, Observer { verseCount ->
             val context = context
             if (context == null || activity == null || activity!!.isFinishing) {

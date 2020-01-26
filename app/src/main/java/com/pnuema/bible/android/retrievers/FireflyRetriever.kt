@@ -1,5 +1,7 @@
 package com.pnuema.bible.android.retrievers
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.preference.PreferenceManager
 import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.data.IVerse
@@ -16,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FireflyRetriever : BaseRetriever() {
+    private val connMgr = App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
     companion object {
         fun get(): BaseRetriever {
             if (instance == null) {
@@ -24,6 +28,11 @@ class FireflyRetriever : BaseRetriever() {
             return instance as BaseRetriever
         }
     }
+
+    private fun isNetworkConnected(): Boolean {
+        return connMgr.activeNetworkInfo?.isConnected ?: false
+    }
+
     override fun savePrefs() {
         CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, GsonProvider.get().toJson(CurrentSelected.version))
         CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, GsonProvider.get().toJson(CurrentSelected.book))
@@ -47,6 +56,10 @@ class FireflyRetriever : BaseRetriever() {
             return@withContext Versions(offlineVersions.map { it.convertToVersion() })
         }
 
+        if (!isNetworkConnected()) {
+            return@withContext Versions(ArrayList())
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val versions = api.getVersions(null) //TODO select language
 
@@ -59,8 +72,12 @@ class FireflyRetriever : BaseRetriever() {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
         val currentBook = CurrentSelected.book!!
         val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao().getChapterCount(CurrentSelected.version, currentBook)
-        if (offlineChapterCount != null && offlineChapterCount.chapterCount <= 0) {
+        if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
             return@withContext ChapterCount(offlineChapterCount.chapterCount)
+        }
+
+        if (!isNetworkConnected()) {
+            return@withContext ChapterCount()
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
@@ -75,8 +92,12 @@ class FireflyRetriever : BaseRetriever() {
         val currentBook = CurrentSelected.book!!
         val currentChapter = CurrentSelected.chapter!!
         val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao().getVerseCount(CurrentSelected.version, currentBook, currentChapter)
-        if (offlineVerseCount != null && offlineVerseCount.verseCount <= 0) {
+        if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
             return@withContext VerseCount(offlineVerseCount.verseCount)
+        }
+
+        if (!isNetworkConnected()) {
+            return@withContext VerseCount()
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
@@ -94,6 +115,10 @@ class FireflyRetriever : BaseRetriever() {
             return Books(offlineBooks.map { it.convertToBook() })
         }
 
+        if (!isNetworkConnected()) {
+            return Books(ArrayList())
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val books = api.getBooks(CurrentSelected.version)
 
@@ -107,6 +132,10 @@ class FireflyRetriever : BaseRetriever() {
         val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.book!!, CurrentSelected.chapter!!)
         if (offlineVerses.isNotEmpty()) {
             return Verses(offlineVerses.map { it.convertToVerse() })
+        }
+
+        if (!isNetworkConnected()) {
+            return Verses(ArrayList())
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
