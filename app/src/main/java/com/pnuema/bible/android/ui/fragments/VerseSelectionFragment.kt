@@ -62,7 +62,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible && CurrentSelected.chapter != null) {
+        if (isVisible && CurrentSelected.chapter != null) {
             viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
         }
     }

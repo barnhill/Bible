@@ -65,7 +65,7 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible) {
+        if (isVisible) {
             viewModel.loadBooks()
         }
     }
