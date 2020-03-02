@@ -10,8 +10,9 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
 
 public class CircleImageView extends androidx.appcompat.widget.AppCompatImageView {
     public CircleImageView(final Context context ) {
@@ -30,11 +31,11 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
     protected void onDraw( @NonNull final Canvas canvas ) {
         final Drawable drawable = getDrawable( );
 
-        if ( drawable == null ) {
+        if (null == drawable) {
             return;
         }
 
-        if ( getWidth( ) == 0 || getHeight( ) == 0 ) {
+        if (0 == getWidth() || 0 == getHeight()) {
             return;
         }
         final Bitmap b = ( (BitmapDrawable) drawable ).getBitmap();

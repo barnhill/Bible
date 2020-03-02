@@ -3,24 +3,20 @@ package com.pnuema.bible.android.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.fragments.ReadFragment
-import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted, NotifyVersionSelectionCompleted {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
     private lateinit var readFragment: ReadFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,11 +95,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        readFragment.refresh()
-    }
-
-    override fun onSelectionComplete(version: String) {
-        CurrentSelected.version = version
         readFragment.refresh()
     }
 }

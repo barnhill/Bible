@@ -4,36 +4,19 @@ import android.preference.PreferenceManager
 import com.pnuema.bible.android.retrievers.FireflyRetriever
 
 object CurrentSelected {
+    const val DEFAULT_VALUE = 0
     var version = "kjv"
-    var book: Int? = null
-        get() {
-            if (field == null) {
-                book = 1
-            }
-            return field
-        }
-    var chapter: Int? = null
-        get() {
-            if (field == null) {
-                chapter = 1
-            }
-            return field
-        }
-    var verse: Int? = null
-        get() {
-            if (field == null) {
-                verse = 1
-            }
-            return field
-        }
+    var book: Int = DEFAULT_VALUE
+    var chapter: Int = DEFAULT_VALUE
+    var verse: Int = DEFAULT_VALUE
     private val mRetriever = FireflyRetriever()
 
     fun clearVerse() {
-        verse = null
+        verse = DEFAULT_VALUE
     }
 
     fun clearChapter() {
-        chapter = null
+        chapter = DEFAULT_VALUE
     }
 
     fun readPreferences() {

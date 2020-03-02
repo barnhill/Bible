@@ -13,20 +13,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ReadViewModel: ViewModel() {
-    val liveVersions: LiveData<IVersionProvider> = MutableLiveData()
-    val liveVerses: LiveData<IVerseProvider> = MutableLiveData()
-    val liveBook: LiveData<IBookProvider> = MutableLiveData()
+    private val _liveVersions: MutableLiveData<IVersionProvider> = MutableLiveData()
+    val liveVersions: LiveData<IVersionProvider>
+        get() = _liveVersions
+
+    private val _liveVerses: MutableLiveData<IVerseProvider> = MutableLiveData()
+    val liveVerses: LiveData<IVerseProvider>
+        get() = _liveVerses
+
+    private val _liveBook: MutableLiveData<IBookProvider> = MutableLiveData()
+    val liveBook: LiveData<IBookProvider>
+        get() = _liveBook
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (CurrentSelected.chapter != null) {
-                (liveVerses as MutableLiveData<IVerseProvider>).postValue(FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
+            if (CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
+                _liveVerses.postValue(FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
             }
 
-            (liveVersions as MutableLiveData<IVersionProvider>).postValue(FireflyRetriever.get().getVersions())
+            _liveVersions.postValue(FireflyRetriever.get().getVersions())
 
-            if (CurrentSelected.book != null) {
-                (liveBook as MutableLiveData<IBookProvider>).postValue(FireflyRetriever.get().getBooks())
+            if (CurrentSelected.book != CurrentSelected.DEFAULT_VALUE) {
+                _liveBook.postValue(FireflyRetriever.get().getBooks())
             }
         }
     }

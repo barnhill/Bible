@@ -46,8 +46,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
 
         viewModel = ViewModelProvider(this).get(VersesViewModel::class.java)
         viewModel.verses.observe(viewLifecycleOwner, Observer { verseCount ->
-            val context = context
-            if (context == null || activity == null || activity!!.isFinishing) {
+            if (activity == null || activity?.isFinishing != false) {
                 return@Observer
             }
 
@@ -62,7 +61,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
     override fun onResume() {
         super.onResume()
 
-        if (isVisible && CurrentSelected.chapter != null) {
+        if (isVisible && CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
             viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
         }
     }

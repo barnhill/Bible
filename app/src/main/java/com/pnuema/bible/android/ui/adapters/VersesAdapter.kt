@@ -10,7 +10,7 @@ import java.util.*
 
 class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val mVerses = ArrayList<IVerse>()
-    private val copyrightText: String? = null
+    private lateinit var copyrightText: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VerseViewHolder.type) {
@@ -26,7 +26,7 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (holder is VerseViewHolder) {
             holder.bind(HtmlUtils.fromHtml(mVerses[position].getText()))
         } else if (holder is CopyrightViewHolder) {
-            holder.bind(copyrightText!!)
+            holder.bind(copyrightText)
         }
     }
 
@@ -41,9 +41,10 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return mVerses.size + if (copyrightText == null) 0 else 1 //account for the copyright item
+        return mVerses.size + if (!::copyrightText.isInitialized) 0 else 1 //account for the copyright item
     }
 
+    //TODO use DiffUtils
     fun updateVerses(verses: List<IVerse>) {
         mVerses.clear()
         mVerses.addAll(verses)

@@ -57,7 +57,7 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
     override fun onResume() {
         super.onResume()
 
-        if (isVisible && CurrentSelected.book != null) {
+        if (isVisible && CurrentSelected.book != 0) {
             viewModel.loadChapters(CurrentSelected.book.toString())
         }
     }

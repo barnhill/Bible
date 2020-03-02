@@ -11,7 +11,7 @@ import com.pnuema.bible.android.ui.viewholders.VersionSelectionViewHolder
  * [RecyclerView.Adapter] that can display a [IVersion] and makes a call to the
  * specified [BCVSelectionListener].
  */
-class VersionSelectionRecyclerViewAdapter(private var versions: List<IVersion>, private val listener: VersionSelectionListener?) : RecyclerView.Adapter<VersionSelectionViewHolder>() {
+class VersionSelectionRecyclerViewAdapter(private var versions: List<IVersion>, private val listener: VersionSelectionListener) : RecyclerView.Adapter<VersionSelectionViewHolder>() {
 
     fun setVersions(versions: List<IVersion>) {
         this.versions = versions
