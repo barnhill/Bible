@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class VersionSelectionViewModel: ViewModel() {
-    val versions: LiveData<Versions> = MutableLiveData<Versions>()
+    val versions: LiveData<Versions> = MutableLiveData()
 
     fun loadVersions() {
         viewModelScope.launch(Dispatchers.IO) {
