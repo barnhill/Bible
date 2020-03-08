@@ -57,9 +57,7 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
     }
 
     override fun refresh() {
-        if (listener != null) {
-            listener!!.onSelectionComplete(CurrentSelected.book!!, CurrentSelected.chapter!!, CurrentSelected.verse!!)
-        }
+        listener?.onSelectionComplete(CurrentSelected.book, CurrentSelected.chapter, CurrentSelected.verse)
         dismiss()
     }
 
@@ -74,7 +72,7 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container)
 
-        val pagerAdapter = SectionsPagerAdapter(childFragmentManager, context!!, this)
+        val pagerAdapter = SectionsPagerAdapter(childFragmentManager, view.context, this)
         viewPager = view.findViewById(R.id.pager)
         viewPager.adapter = pagerAdapter
 

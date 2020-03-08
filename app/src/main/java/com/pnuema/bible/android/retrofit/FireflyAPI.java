@@ -38,12 +38,14 @@ public final class FireflyAPI {
 
     @SuppressLint("AuthLeak")
     public static Retrofit getInstance(final Context context) {
-        if (httpClient == null) {
+        if (null == httpClient) {
             httpClient = new OkHttpClient.Builder();
         }
-        if (retrofit == null) {
+        if (null == retrofit) {
+            final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
             httpClient.addNetworkInterceptor(new StethoInterceptor())
-                      .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                      .addInterceptor(httpLoggingInterceptor)
                       .addInterceptor(provideOfflineCacheInterceptor(context))
                       .addNetworkInterceptor(provideCacheInterceptor())
                       .cache(provideCache(context));

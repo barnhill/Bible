@@ -15,7 +15,7 @@ class NumberSelectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         textView.setTextAppearance(if (isSelected) R.style.BookChapterVerse_NumberText_Selected else R.style.BookChapterVerse_NumberText)
         textView.background = textView.context.getDrawable(if (isSelected) R.drawable.selected_background_rounded else R.drawable.selectable_background_rounded)
 
-        itemView.setOnClickListener { v -> onClickListener.numberSelected(position) }
-        textView.setOnClickListener { v -> onClickListener.numberSelected(position) }
+        itemView.setOnClickListener { onClickListener.numberSelected(position) }
+        textView.setOnClickListener { onClickListener.numberSelected(position) }
     }
 }

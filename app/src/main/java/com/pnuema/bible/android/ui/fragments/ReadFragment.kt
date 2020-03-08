@@ -19,6 +19,7 @@ import com.pnuema.bible.android.data.IVerseProvider
 import com.pnuema.bible.android.data.IVersionProvider
 import com.pnuema.bible.android.retrievers.FireflyRetriever.Companion.get
 import com.pnuema.bible.android.statics.CurrentSelected
+import com.pnuema.bible.android.statics.CurrentSelected.DEFAULT_VALUE
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
 import com.pnuema.bible.android.statics.CurrentSelected.version
@@ -29,21 +30,27 @@ import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.fragments.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * The reading pane fragment
  */
-class ReadFragment : Fragment(), NotifySelectionCompleted {
+class ReadFragment : Fragment(), CoroutineScope {
     private lateinit var viewModel: ReadViewModel
     private lateinit var bookChapterView: TextView
     private lateinit var translationView: TextView
-    private var adapter: VersesAdapter? = null
-    private var layoutManager: RecyclerView.LayoutManager? = null
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var adapter: VersesAdapter
     private val books: MutableList<IBook> = ArrayList()
+
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.IO
 
     companion object {
         /**
@@ -58,7 +65,7 @@ class ReadFragment : Fragment(), NotifySelectionCompleted {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_read, container)
         val recyclerView: RecyclerView = view.findViewById(R.id.versesRecyclerView)
-        layoutManager = recyclerView.layoutManager
+        layoutManager = recyclerView.layoutManager?:throw IllegalStateException("LayoutManager is required to be set on the RecyclerView in the layout XML")
         adapter = VersesAdapter()
         recyclerView.adapter = adapter
         return view
@@ -85,11 +92,11 @@ class ReadFragment : Fragment(), NotifySelectionCompleted {
             setBookChapterText()
         })
         viewModel.liveVerses.observe(viewLifecycleOwner, Observer { iVerseProvider: IVerseProvider ->
-            adapter!!.updateVerses(iVerseProvider.verses)
-            val verse = verse
+            adapter.updateVerses(iVerseProvider.verses)
             Handler().post { scrollToVerse(verse) }
             setBookChapterText()
         })
+
         setAppBarDisplay()
     }
 
@@ -102,41 +109,46 @@ class ReadFragment : Fragment(), NotifySelectionCompleted {
         viewModel.load()
     }
 
-    override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
-            get().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
-        }
-    }
-
-    override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
-        viewModel.load()
-    }
-
-    private fun scrollToVerse(verse: Int?) {
-        if (verse == null) {
-            return
-        }
+    private fun scrollToVerse(verse: Int) {
         val smoothScroller: SmoothScroller = object : LinearSmoothScroller(Objects.requireNonNull(activity)) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
         }
         smoothScroller.targetPosition = verse - 1
-        layoutManager!!.startSmoothScroll(smoothScroller)
+        layoutManager.startSmoothScroll(smoothScroller)
     }
 
     private fun setAppBarDisplay() {
-        if (!isAdded || activity == null) {
+        val fragmentActivity = activity
+        if (!isAdded || fragmentActivity == null) {
             return
         }
         setBookChapterText()
-        bookChapterView.setOnClickListener { showBookChapterVersePicker(activity!!, BCVDialog.BCV.BOOK, this@ReadFragment) }
-        translationView.setOnClickListener { showVersionsPicker(activity!!, (activity as NotifyVersionSelectionCompleted?)!!) }
+        bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
+                override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
+                    launch {
+                        get().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
+                    }
+                }
+
+                override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
+                    refresh()
+                }
+            })
+        }
+        translationView.setOnClickListener { showVersionsPicker(fragmentActivity, object : NotifyVersionSelectionCompleted {
+                override fun onSelectionComplete(version: String) {
+                    CurrentSelected.version = version
+                    refresh()
+                }
+            })
+        }
     }
 
     private fun setBookChapterText() {
         for (book in books) {
-            if (CurrentSelected.book != null && book.getId() == CurrentSelected.book) {
+            if (CurrentSelected.book != DEFAULT_VALUE && book.getId() == CurrentSelected.book) {
                 bookChapterView.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
             }
         }

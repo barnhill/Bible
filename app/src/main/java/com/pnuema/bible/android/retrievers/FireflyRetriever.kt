@@ -70,7 +70,7 @@ class FireflyRetriever : BaseRetriever() {
 
     override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val currentBook = CurrentSelected.book!!
+        val currentBook = CurrentSelected.book
         val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao().getChapterCount(CurrentSelected.version, currentBook)
         if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
             return@withContext ChapterCount(offlineChapterCount.chapterCount)
@@ -89,8 +89,8 @@ class FireflyRetriever : BaseRetriever() {
 
     override suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount = withContext(Dispatchers.IO) {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val currentBook = CurrentSelected.book!!
-        val currentChapter = CurrentSelected.chapter!!
+        val currentBook = CurrentSelected.book
+        val currentChapter = CurrentSelected.chapter
         val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao().getVerseCount(CurrentSelected.version, currentBook, currentChapter)
         if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
             return@withContext VerseCount(offlineVerseCount.verseCount)
@@ -129,7 +129,7 @@ class FireflyRetriever : BaseRetriever() {
 
     override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.book!!, CurrentSelected.chapter!!)
+        val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
         if (offlineVerses.isNotEmpty()) {
             return Verses(offlineVerses.map { it.convertToVerse() })
         }

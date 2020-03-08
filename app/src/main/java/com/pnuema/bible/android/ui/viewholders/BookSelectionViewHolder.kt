@@ -12,13 +12,14 @@ class BookSelectionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val contentView: TextView? = view.findViewById(R.id.book)
 
     override fun toString(): String {
-        return super.toString() + " '" + contentView!!.text + "'"
+        return super.toString() + " '" + contentView?.text + "'"
     }
 
     fun bind(book: IBook, listener: BCVSelectionListener) {
-        val isSelected = CurrentSelected.book != null && book.getId() == CurrentSelected.book
+        contentView?:return
+        val isSelected = CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && book.getId() == CurrentSelected.book
 
-        contentView!!.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)
+        contentView.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)
 
         contentView.text = book.getName()
 
