@@ -6,48 +6,41 @@ import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.statics.HtmlUtils
 import com.pnuema.bible.android.ui.viewholders.CopyrightViewHolder
 import com.pnuema.bible.android.ui.viewholders.VerseViewHolder
-import java.util.*
 
 class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val mVerses = ArrayList<IVerse>()
+    private val verses = ArrayList<IVerse>()
     private lateinit var copyrightText: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == VerseViewHolder.type) {
-            return VerseViewHolder(parent)
-        } else if (viewType == CopyrightViewHolder.type) {
-            return CopyrightViewHolder(parent)
+        return when (viewType) {
+            VerseViewHolder.type -> VerseViewHolder(parent)
+            CopyrightViewHolder.type -> CopyrightViewHolder(parent)
+            else -> throw IllegalArgumentException("No viewholder that matches the requested type")
         }
-
-        throw IllegalArgumentException("No viewholder that matches the requested type")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is VerseViewHolder) {
-            holder.bind(HtmlUtils.fromHtml(mVerses[position].getText()))
-        } else if (holder is CopyrightViewHolder) {
-            holder.bind(copyrightText)
+        when (holder) {
+            is VerseViewHolder -> holder.bind(HtmlUtils.fromHtml(verses[position].getText()))
+            is CopyrightViewHolder -> holder.bind(copyrightText)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position < mVerses.size) {
-            return VerseViewHolder.type
-        } else if (position == mVerses.size) {
-            return CopyrightViewHolder.type
+        return when {
+            position < verses.size -> VerseViewHolder.type
+            position == verses.size -> CopyrightViewHolder.type
+            else -> -1
         }
-
-        return -1
     }
 
     override fun getItemCount(): Int {
-        return mVerses.size + if (!::copyrightText.isInitialized) 0 else 1 //account for the copyright item
+        return verses.size + if (!::copyrightText.isInitialized) 0 else 1 //account for the copyright item
     }
 
-    //TODO use DiffUtils
     fun updateVerses(verses: List<IVerse>) {
-        mVerses.clear()
-        mVerses.addAll(verses)
+        this.verses.clear()
+        this.verses.addAll(verses)
 
         /* if (!verses.isEmpty()) {
             copyrightText = verses.get(0).getCopyright();
