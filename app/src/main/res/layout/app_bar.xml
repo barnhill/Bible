@@ -21,7 +21,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/selected_book"
@@ -47,9 +48,9 @@
                 android:drawableEnd="@drawable/book_open_page_variant"
                 android:maxLines="1"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/selected_book"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/selected_book"
                 tools:text="KJV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

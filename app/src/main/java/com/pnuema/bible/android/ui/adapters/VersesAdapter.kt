@@ -3,7 +3,6 @@ package com.pnuema.bible.android.ui.adapters
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.data.IVerse
-import com.pnuema.bible.android.statics.HtmlUtils
 import com.pnuema.bible.android.ui.viewholders.CopyrightViewHolder
 import com.pnuema.bible.android.ui.viewholders.VerseViewHolder
 
@@ -15,13 +14,13 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when (viewType) {
             VerseViewHolder.type -> VerseViewHolder(parent)
             CopyrightViewHolder.type -> CopyrightViewHolder(parent)
-            else -> throw IllegalArgumentException("No viewholder that matches the requested type")
+            else -> throw IllegalArgumentException("No view holder that matches the requested type")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is VerseViewHolder -> holder.bind(HtmlUtils.fromHtml(verses[position].getText()))
+            is VerseViewHolder -> holder.bind(verses[position])
             is CopyrightViewHolder -> holder.bind(copyrightText)
         }
     }
@@ -43,9 +42,10 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.verses.addAll(verses)
 
         /* if (!verses.isEmpty()) {
-            copyrightText = verses.get(0).getCopyright();
-        }*/ //TODO show copyright text
+            //TODO show copyright text
+        }*/
 
+        //diffutils doesnt work here because every list shown is a new list so the animations look weird
         notifyDataSetChanged()
     }
 }

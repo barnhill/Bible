@@ -39,6 +39,7 @@
         <item name="android:paddingEnd">10dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:drawablePadding">10dp</item>
+        <item name="android:background">@drawable/spinner_ripple_rounded_background</item>
     </style>
 
     <style name="BookChapterVerse">

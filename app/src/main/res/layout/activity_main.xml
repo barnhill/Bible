@@ -23,6 +23,20 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+        <TextView
+            android:id="@+id/verses_bottom_panel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/read_pane_bottom_reminder_height"
+            android:textAlignment="center"
+            android:elevation="2dp"
+            android:padding="1dp"
+            android:textSize="@dimen/read_pane_bottom_reminder_text_size"
+            android:background="@color/background_dark"
+            app:layout_anchor="@id/read_fragment"
+            app:layout_anchorGravity="bottom"
+            app:layout_behavior=".ui.behavior.BottomNavigationViewBehavior"
+            tools:ignore="SpUsage" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <include layout="@layout/drawer" />

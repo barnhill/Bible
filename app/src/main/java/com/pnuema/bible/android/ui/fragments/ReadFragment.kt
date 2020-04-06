@@ -44,6 +44,7 @@ class ReadFragment : Fragment(), CoroutineScope {
     private lateinit var viewModel: ReadViewModel
     private lateinit var bookChapterView: TextView
     private lateinit var translationView: TextView
+    private lateinit var verseBottomPanel: TextView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: VersesAdapter
     private val books: MutableList<IBook> = ArrayList()
@@ -64,7 +65,7 @@ class ReadFragment : Fragment(), CoroutineScope {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_read, container)
-        val recyclerView: RecyclerView = view.findViewById(R.id.versesRecyclerView)
+        val recyclerView: RecyclerView = view.findViewById(R.id.verses_recycler_view)
         layoutManager = recyclerView.layoutManager?:throw IllegalStateException("LayoutManager is required to be set on the RecyclerView in the layout XML")
         adapter = VersesAdapter()
         recyclerView.adapter = adapter
@@ -76,6 +77,7 @@ class ReadFragment : Fragment(), CoroutineScope {
         val activity = activity ?: return
         bookChapterView = activity.findViewById(R.id.selected_book)
         translationView = activity.findViewById(R.id.selected_translation)
+        verseBottomPanel = activity.findViewById(R.id.verses_bottom_panel)
         viewModel = ViewModelProvider(this).get(ReadViewModel::class.java)
         viewModel.liveVersions.observe(viewLifecycleOwner, Observer { iVersionProvider: IVersionProvider ->
             val versions = iVersionProvider.versions
@@ -150,6 +152,7 @@ class ReadFragment : Fragment(), CoroutineScope {
         for (book in books) {
             if (CurrentSelected.book != DEFAULT_VALUE && book.getId() == CurrentSelected.book) {
                 bookChapterView.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
+                verseBottomPanel.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
             }
         }
     }
