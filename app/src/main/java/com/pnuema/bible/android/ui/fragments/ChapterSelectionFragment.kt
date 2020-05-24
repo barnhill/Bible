@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
@@ -55,6 +56,8 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
 
     override fun onResume() {
         super.onResume()
+
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("ChapterSelectionFragment", null)
 
         if (isVisible && CurrentSelected.book != 0) {
             viewModel.loadChapters(CurrentSelected.book.toString())

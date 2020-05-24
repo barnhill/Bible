@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.data.IBookProvider
@@ -97,6 +98,11 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("ReadFragment", Bundle().apply {
+            putInt(BCVDialog.BCV.BOOK.toString(), CurrentSelected.book)
+            putInt(BCVDialog.BCV.CHAPTER.toString(), chapter)
+            putInt(BCVDialog.BCV.VERSE.toString(), verse)
+        })
         refresh()
     }
 

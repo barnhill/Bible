@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.firefly.VerseCount
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -19,8 +20,6 @@ import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
 
 /**
  * A fragment representing a list of verse numbers to pick from.
- *
- *
  */
 class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
     private lateinit var viewModel: VersesViewModel
@@ -59,6 +58,8 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
 
     override fun onResume() {
         super.onResume()
+
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("VerseSelectionFragment", null)
 
         if (isVisible && CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
             viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())

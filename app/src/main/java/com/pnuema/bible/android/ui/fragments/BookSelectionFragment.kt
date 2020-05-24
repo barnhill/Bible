@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.BookSelectionRecyclerViewAdapter
@@ -59,6 +60,8 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
 
     override fun onResume() {
         super.onResume()
+
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("BookSelectionFragment", null)
 
         if (isVisible) {
             viewModel.loadBooks()
