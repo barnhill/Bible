@@ -18,9 +18,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.BooksViewModel
 /**
  * A fragment representing a list of books to pick from.
  */
-class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment() {
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: BookSelectionRecyclerViewAdapter
+class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_book_list) {
     private lateinit var viewModel: BooksViewModel
 
     companion object {
@@ -37,29 +35,26 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_book_list, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(BooksViewModel::class.java)
 
         viewModel.books.observe(viewLifecycleOwner, Observer { model ->
-            mAdapter = BookSelectionRecyclerViewAdapter(model.books, listener)
-            mRecyclerView = view as RecyclerView
-            mRecyclerView.adapter = mAdapter
+            val adapter = BookSelectionRecyclerViewAdapter(model.books, listener)
+            val recyclerView = view as RecyclerView
+            recyclerView.adapter = adapter
 
-            mAdapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
 
             if (CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && model.books.isNotEmpty()) {
                 for (book in model.books) {
-                    if (book.getId() == CurrentSelected.book && mRecyclerView.layoutManager is LinearLayoutManager) {
-                        (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), mRecyclerView.height / 2)
+                    if (book.getId() == CurrentSelected.book && recyclerView.layoutManager is LinearLayoutManager) {
+                        (recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), recyclerView.height / 2)
                     }
                 }
             }
         })
-
-        return view
     }
 
     override fun onResume() {

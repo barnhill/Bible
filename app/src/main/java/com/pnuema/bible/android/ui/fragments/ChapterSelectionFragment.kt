@@ -18,8 +18,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.ChaptersViewModel
 /**
  * A fragment representing a list of chapter numbers to pick from.
  */
-class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(), NumberSelectionListener {
-    private lateinit var mRecyclerView: RecyclerView
+class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
     private lateinit var viewModel: ChaptersViewModel
 
     companion object {
@@ -36,9 +35,11 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRecyclerView = inflater.inflate(R.layout.fragment_number_list, container, false) as RecyclerView
-        mRecyclerView.layoutManager = GridLayoutManager(context, 3)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = view as RecyclerView
+        recyclerView.layoutManager = GridLayoutManager(context, 3)
 
         viewModel = ViewModelProvider(this).get(ChaptersViewModel::class.java)
         viewModel.chapters.observe(viewLifecycleOwner, androidx.lifecycle.Observer { chapterCount ->
@@ -47,11 +48,9 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
                 return@Observer
             }
 
-            mRecyclerView.adapter = NumberSelectionAdapter(chapterCount.chapterCount,
+            recyclerView.adapter = NumberSelectionAdapter(chapterCount.chapterCount,
                     CurrentSelected.chapter, this)
         })
-
-        return mRecyclerView
     }
 
     override fun onResume() {

@@ -8,11 +8,12 @@
     tools:openDrawer="start"
     tools:context=".ui.activities.MainActivity">
 
-        <fragment
-            class="com.pnuema.bible.android.ui.fragments.ReadFragment"
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/read_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:name="com.pnuema.bible.android.ui.fragments.ReadFragment"
+            android:tag="ReadFragment"/>
 
     <include layout="@layout/drawer" />
 

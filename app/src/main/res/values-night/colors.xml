@@ -11,7 +11,7 @@
 
     <color name="primary_text_inverted">#FEFEFE</color>
 
-    <color name="background_light">@color/lightgrey</color>
+    <color name="background_light">#1e1e1e</color>
     <color name="background_light_selected">#efefef</color>
     <color name="background_dark">#1e1e1e</color>
 

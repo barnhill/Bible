@@ -36,8 +36,7 @@
             android:id="@+id/verses_bottom_panel"
             android:layout_width="match_parent"
             android:layout_height="@dimen/read_pane_bottom_reminder_height"
-            android:background="@color/background_light"
-            android:elevation="2dp"
+            android:elevation="8dp"
             android:padding="1dp"
             android:textAlignment="center"
             android:textSize="@dimen/read_pane_bottom_reminder_text_size"
@@ -45,6 +44,8 @@
             app:layout_anchor="@id/verses_recycler_view"
             app:layout_anchorGravity="bottom"
             app:layout_behavior=".ui.behavior.BottomNavigationViewBehavior"
+            style="@style/backgroundLight"
+            tools:text="1 Samuel 2"
             tools:ignore="SpUsage" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

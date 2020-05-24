@@ -38,7 +38,7 @@ import java.util.*
  * A [FragmentStatePagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(fm: FragmentManager, private val mContext: Context, private val listener: BCVSelectionListener) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionsPagerAdapter(fm: FragmentManager, private val context: Context, private val listener: BCVSelectionListener) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     companion object {
         private const val BOOKS = 0
@@ -61,9 +61,9 @@ class SectionsPagerAdapter(fm: FragmentManager, private val mContext: Context, p
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position) {
-            BOOKS -> mContext.getString(R.string.book).toUpperCase(Locale.getDefault())
-            CHAPTERS -> mContext.getString(R.string.chapter).toUpperCase(Locale.getDefault())
-            VERSES -> mContext.getString(R.string.verse).toUpperCase(Locale.getDefault())
+            BOOKS -> context.getString(R.string.book).toUpperCase(Locale.getDefault())
+            CHAPTERS -> context.getString(R.string.chapter).toUpperCase(Locale.getDefault())
+            VERSES -> context.getString(R.string.verse).toUpperCase(Locale.getDefault())
             else -> null
         }
     }

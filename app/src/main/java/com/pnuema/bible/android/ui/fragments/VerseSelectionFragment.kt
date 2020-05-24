@@ -22,8 +22,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
  *
  *
  */
-class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(), NumberSelectionListener {
-    private lateinit var mGridView: RecyclerView
+class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
     private lateinit var viewModel: VersesViewModel
 
     companion object {
@@ -40,9 +39,11 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mGridView = inflater.inflate(R.layout.fragment_number_list, container, false) as RecyclerView
-        mGridView.layoutManager = GridLayoutManager(context, 3)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val gridView = view as RecyclerView
+        gridView.layoutManager = GridLayoutManager(context, 3)
 
         viewModel = ViewModelProvider(this).get(VersesViewModel::class.java)
         viewModel.verses.observe(viewLifecycleOwner, Observer { verseCount ->
@@ -51,11 +52,9 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
             }
 
             if (verseCount is VerseCount) {
-                mGridView.adapter = NumberSelectionAdapter(verseCount.verseCount, CurrentSelected.verse, this)
+                gridView.adapter = NumberSelectionAdapter(verseCount.verseCount, CurrentSelected.verse, this)
             }
         })
-
-        return mGridView
     }
 
     override fun onResume() {
