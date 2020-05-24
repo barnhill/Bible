@@ -23,20 +23,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         DeepLinks.handleDeepLinks(intent)
 
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.bringToFront()
         navigationView.requestLayout()
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.addDrawerListener(toggle)
-        toggle.isDrawerIndicatorEnabled = true
-        toggle.syncState()
 
         readFragment = supportFragmentManager.findFragmentById(R.id.read_fragment) as ReadFragment
     }

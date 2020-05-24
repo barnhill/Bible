@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,13 +42,8 @@ import kotlin.coroutines.CoroutineContext
 /**
  * The reading pane fragment
  */
-class ReadFragment : Fragment(), CoroutineScope {
+class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
     private lateinit var viewModel: ReadViewModel
-    private lateinit var bookChapterView: TextView
-    private lateinit var translationView: TextView
-    private lateinit var verseBottomPanel: TextView
-    private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var adapter: VersesAdapter
     private val books: MutableList<IBook> = ArrayList()
 
     private val job = SupervisorJob()
@@ -63,25 +60,21 @@ class ReadFragment : Fragment(), CoroutineScope {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_read, container)
-        val recyclerView: RecyclerView = view.findViewById(R.id.verses_recycler_view)
-        layoutManager = recyclerView.layoutManager?:throw IllegalStateException("LayoutManager is required to be set on the RecyclerView in the layout XML")
-        adapter = VersesAdapter()
-        recyclerView.adapter = adapter
-        return view
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val activity = activity ?: return
-        bookChapterView = activity.findViewById(R.id.selected_book)
-        translationView = activity.findViewById(R.id.selected_translation)
-        verseBottomPanel = activity.findViewById(R.id.verses_bottom_panel)
+        val recyclerView: RecyclerView = view.findViewById(R.id.verses_recycler_view)
+        val layoutManager = recyclerView.layoutManager ?: throw IllegalStateException("LayoutManager is required to be set on the RecyclerView in the layout XML")
+        recyclerView.adapter = VersesAdapter()
+
+        (activity as? AppCompatActivity ?: return).setSupportActionBar(view.findViewById(R.id.app_bar_layout))
+
+        val bookChapterView = view.findViewById<TextView>(R.id.selected_book)
+        val translationView = view.findViewById<TextView>(R.id.selected_translation)
+        val verseBottomPanel = view.findViewById<TextView>(R.id.verses_bottom_panel)
         viewModel = ViewModelProvider(this).get(ReadViewModel::class.java)
         viewModel.liveVersions.observe(viewLifecycleOwner, Observer { iVersionProvider: IVersionProvider ->
-            val versions = iVersionProvider.versions
-            for (version in versions) {
+            for (version in iVersionProvider.versions) {
                 if (version.abbreviation == CurrentSelected.version) {
                     translationView.text = version.abbreviation.toUpperCase(Locale.getDefault())
                     break
@@ -91,15 +84,15 @@ class ReadFragment : Fragment(), CoroutineScope {
         viewModel.liveBook.observe(viewLifecycleOwner, Observer { iBookProvider: IBookProvider ->
             books.clear()
             books.addAll(iBookProvider.books)
-            setBookChapterText()
+            setBookChapterText(bookChapterView, verseBottomPanel)
         })
         viewModel.liveVerses.observe(viewLifecycleOwner, Observer { iVerseProvider: IVerseProvider ->
-            adapter.updateVerses(iVerseProvider.verses)
-            Handler().post { scrollToVerse(verse) }
-            setBookChapterText()
+            (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
+            Handler().post { scrollToVerse(verse, layoutManager) }
+            setBookChapterText(bookChapterView, verseBottomPanel)
         })
 
-        setAppBarDisplay()
+        setAppBarDisplay(bookChapterView, translationView, verseBottomPanel)
     }
 
     override fun onResume() {
@@ -111,7 +104,7 @@ class ReadFragment : Fragment(), CoroutineScope {
         viewModel.load()
     }
 
-    private fun scrollToVerse(verse: Int) {
+    private fun scrollToVerse(verse: Int, layoutManager: RecyclerView.LayoutManager) {
         val smoothScroller: SmoothScroller = object : LinearSmoothScroller(Objects.requireNonNull(activity)) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
@@ -121,12 +114,12 @@ class ReadFragment : Fragment(), CoroutineScope {
         layoutManager.startSmoothScroll(smoothScroller)
     }
 
-    private fun setAppBarDisplay() {
+    private fun setAppBarDisplay(bookChapterView: TextView, translationView: TextView, verseBottomPanel: TextView) {
         val fragmentActivity = activity
         if (!isAdded || fragmentActivity == null) {
             return
         }
-        setBookChapterText()
+        setBookChapterText(bookChapterView, verseBottomPanel)
         bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
                     launch {
@@ -148,7 +141,7 @@ class ReadFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun setBookChapterText() {
+    private fun setBookChapterText(bookChapterView: TextView, verseBottomPanel: TextView) {
         for (book in books) {
             if (CurrentSelected.book != DEFAULT_VALUE && book.getId() == CurrentSelected.book) {
                 bookChapterView.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)

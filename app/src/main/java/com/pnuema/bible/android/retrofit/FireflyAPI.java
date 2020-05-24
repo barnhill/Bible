@@ -44,7 +44,11 @@ public final class FireflyAPI {
         if (null == retrofit) {
             final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
-            httpClient.addNetworkInterceptor(new StethoInterceptor())
+            httpClient.callTimeout(60, TimeUnit.SECONDS)
+                      .connectTimeout(20, TimeUnit.SECONDS)
+                      .readTimeout(30, TimeUnit.SECONDS)
+                      .writeTimeout(30, TimeUnit.SECONDS)
+                      .addNetworkInterceptor(new StethoInterceptor())
                       .addInterceptor(httpLoggingInterceptor)
                       .addInterceptor(provideOfflineCacheInterceptor(context))
                       .addNetworkInterceptor(provideCacheInterceptor())

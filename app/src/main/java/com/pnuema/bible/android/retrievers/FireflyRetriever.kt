@@ -57,7 +57,7 @@ class FireflyRetriever : BaseRetriever() {
         }
 
         if (!isNetworkConnected()) {
-            return@withContext Versions(ArrayList())
+            return@withContext Versions(listOf())
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
@@ -65,7 +65,7 @@ class FireflyRetriever : BaseRetriever() {
 
         FireflyDatabase.getInstance().versionDao().putVersions(versions.map { it.convertToOfflineModel() })
 
-        return@withContext Versions(ArrayList<IVersion>(versions))
+        return@withContext Versions(versions)
     }
 
     override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
@@ -105,7 +105,6 @@ class FireflyRetriever : BaseRetriever() {
         FireflyDatabase.getInstance().verseCountDao().putVerseCount(verseCount.convertToOfflineModel(version, currentBook, currentChapter))
 
         return@withContext verseCount
-
     }
 
     override suspend fun getBooks(): Books {
@@ -116,7 +115,7 @@ class FireflyRetriever : BaseRetriever() {
         }
 
         if (!isNetworkConnected()) {
-            return Books(ArrayList())
+            return Books(listOf())
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
@@ -124,7 +123,7 @@ class FireflyRetriever : BaseRetriever() {
 
         FireflyDatabase.getInstance().booksDao().putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
 
-        return Books(ArrayList<IBook>(books))
+        return Books(books)
     }
 
     override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
@@ -135,13 +134,13 @@ class FireflyRetriever : BaseRetriever() {
         }
 
         if (!isNetworkConnected()) {
-            return Verses(ArrayList())
+            return Verses(listOf())
         }
 
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
         val verses = api.getChapterVerses(book, chapter, version)
         FireflyDatabase.getInstance().verseDao().putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
 
-        return Verses(ArrayList<IVerse>(verses))
+        return Verses(verses)
     }
 }

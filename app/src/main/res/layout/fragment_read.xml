@@ -1,12 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/verses_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/read_pane_bottom_reminder_height"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".ui.fragments.ReadFragment"
-    tools:listitem="@layout/listitem_verse"/>
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/verses_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingBottom="@dimen/read_pane_bottom_reminder_height"
+            android:clipToPadding="false"
+            tools:context=".ui.fragments.ReadFragment"
+            tools:listitem="@layout/listitem_verse"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <TextView
+            android:id="@+id/verses_bottom_panel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/read_pane_bottom_reminder_height"
+            android:background="@color/background_light"
+            android:elevation="2dp"
+            android:padding="1dp"
+            android:textAlignment="center"
+            android:textSize="@dimen/read_pane_bottom_reminder_text_size"
+            android:textColor="@color/primary_text"
+            app:layout_anchor="@id/verses_recycler_view"
+            app:layout_anchorGravity="bottom"
+            app:layout_behavior=".ui.behavior.BottomNavigationViewBehavior"
+            tools:ignore="SpUsage" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

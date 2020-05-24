@@ -14,16 +14,13 @@ import kotlinx.coroutines.launch
 
 class ReadViewModel: ViewModel() {
     private val _liveVersions: MutableLiveData<IVersionProvider> = MutableLiveData()
-    val liveVersions: LiveData<IVersionProvider>
-        get() = _liveVersions
+    val liveVersions: LiveData<IVersionProvider> get() = _liveVersions
 
     private val _liveVerses: MutableLiveData<IVerseProvider> = MutableLiveData()
-    val liveVerses: LiveData<IVerseProvider>
-        get() = _liveVerses
+    val liveVerses: LiveData<IVerseProvider> get() = _liveVerses
 
     private val _liveBook: MutableLiveData<IBookProvider> = MutableLiveData()
-    val liveBook: LiveData<IBookProvider>
-        get() = _liveBook
+    val liveBook: LiveData<IBookProvider> get() = _liveBook
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
