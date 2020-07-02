@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.retrofit;
+package com.pnuema.bible.android.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.retrofit
+package com.pnuema.bible.android.api
 
 import com.pnuema.bible.android.data.firefly.*
 import retrofit2.http.GET

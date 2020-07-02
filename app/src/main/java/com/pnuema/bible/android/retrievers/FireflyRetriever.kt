@@ -3,13 +3,10 @@ package com.pnuema.bible.android.retrievers
 import android.content.Context
 import android.net.ConnectivityManager
 import android.preference.PreferenceManager
-import com.pnuema.bible.android.data.IBook
-import com.pnuema.bible.android.data.IVerse
-import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.data.firefly.*
 import com.pnuema.bible.android.database.FireflyDatabase
-import com.pnuema.bible.android.retrofit.FireflyAPI
-import com.pnuema.bible.android.retrofit.IFireflyAPI
+import com.pnuema.bible.android.api.FireflyAPI
+import com.pnuema.bible.android.api.IFireflyAPI
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.Constants
 import com.pnuema.bible.android.statics.CurrentSelected
