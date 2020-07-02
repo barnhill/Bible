@@ -1,23 +1,22 @@
 package com.pnuema.bible.android.retrievers
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.preference.PreferenceManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import com.pnuema.bible.android.data.IBook
-import com.pnuema.bible.android.data.IVerse
-import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.data.firefly.*
-import com.pnuema.bible.android.retrofit.FireflyAPI
-import com.pnuema.bible.android.retrofit.IFireflyAPI
+import com.pnuema.bible.android.database.FireflyDatabase
+import com.pnuema.bible.android.api.FireflyAPI
+import com.pnuema.bible.android.api.IFireflyAPI
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.Constants
 import com.pnuema.bible.android.statics.CurrentSelected
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.pnuema.bible.android.statics.GsonProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FireflyRetriever : BaseRetriever() {
+    private val connMgr = App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
     companion object {
         fun get(): BaseRetriever {
             if (instance == null) {
@@ -26,123 +25,119 @@ class FireflyRetriever : BaseRetriever() {
             return instance as BaseRetriever
         }
     }
+
+    private fun isNetworkConnected(): Boolean {
+        return connMgr.activeNetworkInfo?.isConnected ?: false
+    }
+
     override fun savePrefs() {
-        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, Gson().toJson(CurrentSelected.version))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, Gson().toJson(CurrentSelected.book))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + tag, Gson().toJson(CurrentSelected.chapter))
-        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + tag, Gson().toJson(CurrentSelected.verse))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSION + tag, GsonProvider.get().toJson(CurrentSelected.version))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_BOOK + tag, GsonProvider.get().toJson(CurrentSelected.book))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_CHAPTER + tag, GsonProvider.get().toJson(CurrentSelected.chapter))
+        CurrentSelected.savePref(Constants.KEY_SELECTED_VERSE + tag, GsonProvider.get().toJson(CurrentSelected.verse))
     }
 
     override fun readPrefs() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
-        CurrentSelected.version = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + tag, "kjv"), String::class.java)
-        CurrentSelected.book = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + tag, "1"), Int::class.java)
-        CurrentSelected.chapter = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + tag, "1"), Int::class.java)
-        CurrentSelected.verse = Gson().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, "1"), Int::class.java)
+        CurrentSelected.version = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + tag, "kjv"), String::class.java)
+        CurrentSelected.book = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + tag, "1"), Int::class.java)
+        CurrentSelected.chapter = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_CHAPTER + tag, "1"), Int::class.java)
+        CurrentSelected.verse = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSE + tag, "1"), Int::class.java)
     }
 
-    override fun getVersions(): LiveData<Versions> {
+    override suspend fun getVersions(): Versions = withContext(Dispatchers.IO) {
+        //TODO: only get offline version if not connected
+        val offlineVersions = FireflyDatabase.getInstance().versionDao().getVersions()
+        if (offlineVersions.isNotEmpty()) {
+            return@withContext Versions(offlineVersions.map { it.convertToVersion() })
+        }
+
+        if (!isNetworkConnected()) {
+            return@withContext Versions(listOf())
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getVersions(null) //TODO select language
+        val versions = api.getVersions(null) //TODO select language
 
-        val liveVersions = MutableLiveData<Versions>()
-        call.enqueue(object : Callback<List<Version>> {
-            override fun onResponse(call: Call<List<Version>>, response: Response<List<Version>>) {
-                if (!response.isSuccessful) {
-                    return
-                }
+        FireflyDatabase.getInstance().versionDao().putVersions(versions.map { it.convertToOfflineModel() })
 
-                val versions = response.body()
-                if (versions == null || versions.isEmpty()) {
-                    return
-                }
-
-                liveVersions.value = Versions(ArrayList<IVersion>(versions))
-            }
-
-            override fun onFailure(call: Call<List<Version>>, t: Throwable) {}
-        })
-
-        return liveVersions
+        return@withContext Versions(versions)
     }
 
-    override fun getChapters(book: String): LiveData<ChapterCount> {
+    override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
+        val currentBook = CurrentSelected.book
+        val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao().getChapterCount(CurrentSelected.version, currentBook)
+        if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
+            return@withContext ChapterCount(offlineChapterCount.chapterCount)
+        }
+
+        if (!isNetworkConnected()) {
+            return@withContext ChapterCount()
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getChapterCount(CurrentSelected.book, CurrentSelected.version)
+        val chapterCount = api.getChapterCount(currentBook, CurrentSelected.version)
+        FireflyDatabase.getInstance().chapterCountDao().putChapterCount(chapterCount.convertToOfflineModel(CurrentSelected.version, currentBook))
 
-        val liveChapterCount = MutableLiveData<ChapterCount>()
-        call.enqueue(object : Callback<ChapterCount> {
-            override fun onResponse(call: Call<ChapterCount>, response: Response<ChapterCount>) {
-                val chapterCount = response.body()
-
-                if (chapterCount == null || !response.isSuccessful) {
-                    return
-                }
-
-                liveChapterCount.value = chapterCount
-            }
-
-            override fun onFailure(call: Call<ChapterCount>, t: Throwable) {}
-        })
-
-        return liveChapterCount
+        return@withContext chapterCount
     }
 
-    override fun getVerseCount(version: String, book: String, chapter: String): LiveData<VerseCount> {
+    override suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount = withContext(Dispatchers.IO) {
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
+        val currentBook = CurrentSelected.book
+        val currentChapter = CurrentSelected.chapter
+        val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao().getVerseCount(CurrentSelected.version, currentBook, currentChapter)
+        if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
+            return@withContext VerseCount(offlineVerseCount.verseCount)
+        }
+
+        if (!isNetworkConnected()) {
+            return@withContext VerseCount()
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getVerseCount(book, chapter, version)
+        val verseCount = api.getVerseCount(book, chapter, version)
+        FireflyDatabase.getInstance().verseCountDao().putVerseCount(verseCount.convertToOfflineModel(version, currentBook, currentChapter))
 
-        val liveVerseCount = MutableLiveData<VerseCount>()
-        call.enqueue(object : Callback<VerseCount> {
-            override fun onResponse(call: Call<VerseCount>, response: Response<VerseCount>) {
-                val verseCount = response.body() ?: return
-
-                liveVerseCount.value = verseCount
-            }
-
-            override fun onFailure(call: Call<VerseCount>, t: Throwable) {}
-        })
-
-        return liveVerseCount
+        return@withContext verseCount
     }
 
-    override fun getBooks(): LiveData<Books> {
+    override suspend fun getBooks(): Books {
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
+        val offlineBooks = FireflyDatabase.getInstance().booksDao().getBooks(CurrentSelected.version)
+        if (offlineBooks.isNotEmpty()) {
+            return Books(offlineBooks.map { it.convertToBook() })
+        }
+
+        if (!isNetworkConnected()) {
+            return Books(listOf())
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getBooks(CurrentSelected.version)
+        val books = api.getBooks(CurrentSelected.version)
 
-        val liveBooks = MutableLiveData<Books>()
-        call.enqueue(object : Callback<List<Book>> {
-            override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {
-                val books = response.body()
-                if (books == null || books.isEmpty() || !response.isSuccessful) {
-                    return
-                }
+        FireflyDatabase.getInstance().booksDao().putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
 
-                liveBooks.value = Books(ArrayList<IBook>(books))
-            }
-
-            override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
-        })
-
-        return liveBooks
+        return Books(books)
     }
 
-    override fun getVerses(version: String, book: String, chapter: String): LiveData<Verses> {
+    override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
+        //TODO: only get offline version if current selected version is marked as offline ready or offline
+        val offlineVerses = FireflyDatabase.getInstance().verseDao().getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
+        if (offlineVerses.isNotEmpty()) {
+            return Verses(offlineVerses.map { it.convertToVerse() })
+        }
+
+        if (!isNetworkConnected()) {
+            return Verses(listOf())
+        }
+
         val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
-        val call = api.getChapterVerses(book, chapter, version)
+        val verses = api.getChapterVerses(book, chapter, version)
+        FireflyDatabase.getInstance().verseDao().putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
 
-        val liveVerses = MutableLiveData<Verses>()
-        call.enqueue(object : Callback<List<Verse>> {
-            override fun onResponse(call: Call<List<Verse>>, response: Response<List<Verse>>) {
-                val verses = response.body() ?: return
-
-                liveVerses.value = Verses(ArrayList<IVerse>(verses))
-            }
-
-            override fun onFailure(call: Call<List<Verse>>, t: Throwable) {}
-        })
-
-        return liveVerses
+        return Verses(verses)
     }
 }

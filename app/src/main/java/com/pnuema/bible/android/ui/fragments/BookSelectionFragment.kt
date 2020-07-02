@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.BookSelectionRecyclerViewAdapter
@@ -18,10 +20,8 @@ import com.pnuema.bible.android.ui.fragments.viewModel.BooksViewModel
 /**
  * A fragment representing a list of books to pick from.
  */
-class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment() {
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: BookSelectionRecyclerViewAdapter
-    private lateinit var viewModel: BooksViewModel
+class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_book_list) {
+    private val viewModel by viewModels<BooksViewModel>()
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): BookSelectionFragment {
@@ -37,35 +37,32 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_book_list, container, false)
-
-        viewModel = ViewModelProviders.of(this).get(BooksViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel.books.observe(viewLifecycleOwner, Observer { model ->
-            mAdapter = BookSelectionRecyclerViewAdapter(model.books, listener)
-            mRecyclerView = view as RecyclerView
-            mRecyclerView.adapter = mAdapter
+            val adapter = BookSelectionRecyclerViewAdapter(model.books, listener)
+            val recyclerView = view as RecyclerView
+            recyclerView.adapter = adapter
 
-            mAdapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
 
-            if (CurrentSelected.book != null && model.books.isNotEmpty()) {
+            if (CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && model.books.isNotEmpty()) {
                 for (book in model.books) {
-                    if (book.id == CurrentSelected.book && mRecyclerView.layoutManager is LinearLayoutManager) {
-                        (mRecyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), mRecyclerView.height / 2)
+                    if (book.getId() == CurrentSelected.book && recyclerView.layoutManager is LinearLayoutManager) {
+                        (recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(model.books.indexOf(book), recyclerView.height / 2)
                     }
                 }
             }
         })
-
-        return view
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible) {
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("BookSelectionFragment", null)
+
+        if (isVisible) {
             viewModel.loadBooks()
         }
     }

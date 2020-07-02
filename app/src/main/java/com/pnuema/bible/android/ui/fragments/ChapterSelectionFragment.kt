@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
@@ -18,9 +20,8 @@ import com.pnuema.bible.android.ui.fragments.viewModel.ChaptersViewModel
 /**
  * A fragment representing a list of chapter numbers to pick from.
  */
-class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(), NumberSelectionListener {
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var viewModel: ChaptersViewModel
+class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
+    private val viewModel by viewModels<ChaptersViewModel>()
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): ChapterSelectionFragment {
@@ -36,28 +37,29 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRecyclerView = inflater.inflate(R.layout.fragment_number_list, container, false) as RecyclerView
-        mRecyclerView.layoutManager = GridLayoutManager(context, 3)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
+        val recyclerView = view as RecyclerView
+        recyclerView.layoutManager = GridLayoutManager(context, 3)
+
         viewModel.chapters.observe(viewLifecycleOwner, androidx.lifecycle.Observer { chapterCount ->
             val activity = activity
             if (activity == null || activity.isFinishing) {
                 return@Observer
             }
 
-            mRecyclerView.adapter = NumberSelectionAdapter(chapterCount.chapterCount,
+            recyclerView.adapter = NumberSelectionAdapter(chapterCount.chapterCount,
                     CurrentSelected.chapter, this)
         })
-
-        return mRecyclerView
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (isMenuVisible && CurrentSelected.book != null) {
+        FirebaseAnalytics.getInstance(requireContext()).logEvent("ChapterSelectionFragment", null)
+
+        if (isVisible && CurrentSelected.book != 0) {
             viewModel.loadChapters(CurrentSelected.book.toString())
         }
     }

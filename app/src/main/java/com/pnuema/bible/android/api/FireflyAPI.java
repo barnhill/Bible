@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.retrofit;
+package com.pnuema.bible.android.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -38,12 +38,18 @@ public final class FireflyAPI {
 
     @SuppressLint("AuthLeak")
     public static Retrofit getInstance(final Context context) {
-        if (httpClient == null) {
+        if (null == httpClient) {
             httpClient = new OkHttpClient.Builder();
         }
-        if (retrofit == null) {
-            httpClient.addNetworkInterceptor(new StethoInterceptor())
-                      .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        if (null == retrofit) {
+            final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
+            httpClient.callTimeout(60, TimeUnit.SECONDS)
+                      .connectTimeout(20, TimeUnit.SECONDS)
+                      .readTimeout(30, TimeUnit.SECONDS)
+                      .writeTimeout(30, TimeUnit.SECONDS)
+                      .addNetworkInterceptor(new StethoInterceptor())
+                      .addInterceptor(httpLoggingInterceptor)
                       .addInterceptor(provideOfflineCacheInterceptor(context))
                       .addNetworkInterceptor(provideCacheInterceptor())
                       .cache(provideCache(context));
