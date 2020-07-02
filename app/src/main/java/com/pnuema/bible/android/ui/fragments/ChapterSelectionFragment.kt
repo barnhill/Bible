@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.ChaptersViewModel
  * A fragment representing a list of chapter numbers to pick from.
  */
 class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
-    private lateinit var viewModel: ChaptersViewModel
+    private val viewModel by viewModels<ChaptersViewModel>()
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): ChapterSelectionFragment {
@@ -42,7 +43,6 @@ class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fra
         val recyclerView = view as RecyclerView
         recyclerView.layoutManager = GridLayoutManager(context, 3)
 
-        viewModel = ViewModelProvider(this).get(ChaptersViewModel::class.java)
         viewModel.chapters.observe(viewLifecycleOwner, androidx.lifecycle.Observer { chapterCount ->
             val activity = activity
             if (activity == null || activity.isFinishing) {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +21,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.BooksViewModel
  * A fragment representing a list of books to pick from.
  */
 class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_book_list) {
-    private lateinit var viewModel: BooksViewModel
+    private val viewModel by viewModels<BooksViewModel>()
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): BookSelectionFragment {
@@ -38,8 +39,6 @@ class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(BooksViewModel::class.java)
 
         viewModel.books.observe(viewLifecycleOwner, Observer { model ->
             val adapter = BookSelectionRecyclerViewAdapter(model.books, listener)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +23,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
  * A fragment representing a list of verse numbers to pick from.
  */
 class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
-    private lateinit var viewModel: VersesViewModel
+    private val viewModel by viewModels<VersesViewModel>()
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): VerseSelectionFragment {
@@ -44,7 +45,6 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
         val gridView = view as RecyclerView
         gridView.layoutManager = GridLayoutManager(context, 3)
 
-        viewModel = ViewModelProvider(this).get(VersesViewModel::class.java)
         viewModel.verses.observe(viewLifecycleOwner, Observer { verseCount ->
             if (activity == null || activity?.isFinishing != false) {
                 return@Observer

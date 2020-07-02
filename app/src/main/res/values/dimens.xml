@@ -7,6 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="nav_header_rounded_button_corner_radius">8dp</dimen>
-    <dimen name="read_pane_bottom_reminder_height">22dp</dimen>
+    <dimen name="read_pane_bottom_reminder_height">24dp</dimen>
     <dimen name="read_pane_bottom_reminder_text_size">16dp</dimen>
 </resources>

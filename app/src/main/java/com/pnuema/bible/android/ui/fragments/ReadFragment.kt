@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -44,7 +45,7 @@ import kotlin.coroutines.CoroutineContext
  * The reading pane fragment
  */
 class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
-    private lateinit var viewModel: ReadViewModel
+    private val viewModel by viewModels<ReadViewModel>()
     private val books: MutableList<IBook> = ArrayList()
 
     private val job = SupervisorJob()
@@ -73,7 +74,6 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
         val bookChapterView = view.findViewById<TextView>(R.id.selected_book)
         val translationView = view.findViewById<TextView>(R.id.selected_translation)
         val verseBottomPanel = view.findViewById<TextView>(R.id.verses_bottom_panel)
-        viewModel = ViewModelProvider(this).get(ReadViewModel::class.java)
         viewModel.liveVersions.observe(viewLifecycleOwner, Observer { iVersionProvider: IVersionProvider ->
             for (version in iVersionProvider.versions) {
                 if (version.abbreviation == CurrentSelected.version) {
@@ -111,7 +111,7 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
     }
 
     private fun scrollToVerse(verse: Int, layoutManager: RecyclerView.LayoutManager) {
-        val smoothScroller: SmoothScroller = object : LinearSmoothScroller(Objects.requireNonNull(activity)) {
+        val smoothScroller: SmoothScroller = object : LinearSmoothScroller(requireActivity()) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
