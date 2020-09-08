@@ -111,12 +111,15 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
     }
 
     private fun scrollToVerse(verse: Int, layoutManager: RecyclerView.LayoutManager) {
+        if (verse <= 0) return //prevents scrolling offline which would crash
         val smoothScroller: SmoothScroller = object : LinearSmoothScroller(requireActivity()) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
+        }.apply {
+            targetPosition = verse - 1
         }
-        smoothScroller.targetPosition = verse - 1
+
         layoutManager.startSmoothScroll(smoothScroller)
     }
 
