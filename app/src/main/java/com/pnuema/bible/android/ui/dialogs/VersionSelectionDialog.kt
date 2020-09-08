@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVersion
@@ -15,9 +15,9 @@ import com.pnuema.bible.android.ui.adapters.VersionSelectionRecyclerViewAdapter
 import java.util.*
 
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
-    private lateinit var viewModel: VersionSelectionViewModel
     private lateinit var adapter: VersionSelectionRecyclerViewAdapter
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
+    private val viewModel: VersionSelectionViewModel by viewModels()
     private val versions = ArrayList<IVersion>()
 
     constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
@@ -43,7 +43,6 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.versionRecyclerView)
         recyclerView.adapter = adapter
 
-        viewModel = ViewModelProvider(this).get(VersionSelectionViewModel::class.java)
         viewModel.versions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             versions.clear()
             val lang = LanguageUtils.getISOLanguage()
