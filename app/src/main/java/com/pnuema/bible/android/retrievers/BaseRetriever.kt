@@ -1,6 +1,10 @@
 package com.pnuema.bible.android.retrievers
 
-import com.pnuema.bible.android.data.firefly.*
+import com.pnuema.bible.android.data.firefly.Books
+import com.pnuema.bible.android.data.firefly.ChapterCount
+import com.pnuema.bible.android.data.firefly.VerseCount
+import com.pnuema.bible.android.data.firefly.Verses
+import com.pnuema.bible.android.data.firefly.Versions
 
 abstract class BaseRetriever internal constructor() {
 
