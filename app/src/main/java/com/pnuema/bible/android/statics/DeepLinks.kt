@@ -6,10 +6,9 @@ import java.util.*
 
 object DeepLinks {
     fun handleDeepLinks(intent: Intent) {
-        val data = intent.data
+        val data = intent.data ?: return
 
-        if (data == null
-                || TextUtils.isEmpty(data.getQueryParameter("book")) && TextUtils.isEmpty(data.getQueryParameter("bookid"))
+        if (TextUtils.isEmpty(data.getQueryParameter("book")) && TextUtils.isEmpty(data.getQueryParameter("bookid"))
                 || TextUtils.isEmpty(data.getQueryParameter("chapter"))
                 || TextUtils.isEmpty(data.getQueryParameter("verse"))) {
             return
