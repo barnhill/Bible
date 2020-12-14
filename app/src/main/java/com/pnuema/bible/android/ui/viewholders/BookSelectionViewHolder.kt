@@ -14,7 +14,7 @@ class BookSelectionViewHolder(view: View) : RecyclerView.ViewHolder(view), Layou
         return super.toString() + " '" + itemView.book.text + "'"
     }
 
-    override val containerView: View?
+    override val containerView: View
         get() = itemView
 
     fun bind(book: IBook, listener: BCVSelectionListener) {
