@@ -1,15 +1,16 @@
 package com.pnuema.bible.android.ui.viewholders
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
+import com.pnuema.bible.android.databinding.ListitemCopyrightBinding
 import com.pnuema.bible.android.statics.HtmlUtils
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.listitem_copyright.view.*
 
-class CopyrightViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(layout, parent, false)), LayoutContainer {
+class CopyrightViewHolder(
+        parent: ViewGroup,
+        private val binding: ListitemCopyrightBinding = ListitemCopyrightBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+) : RecyclerView.ViewHolder(binding.root) {
     companion object {
 
         val type: Int
@@ -19,10 +20,7 @@ class CopyrightViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInf
             get() = R.layout.listitem_copyright
     }
 
-    override val containerView: View?
-        get() = itemView
-
     fun bind(text: String) {
-        itemView.copyrightText.text = HtmlUtils.fromHtml(text)
+        binding.copyrightText.text = HtmlUtils.fromHtml(text)
     }
 }

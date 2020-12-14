@@ -10,8 +10,7 @@ import com.pnuema.bible.android.ui.viewholders.NumberSelectionViewHolder
 class NumberSelectionAdapter(private val mMaxNumber: Int, private val mCurrentSelected: Int?, private val mOnClickListener: NumberSelectionListener) : RecyclerView.Adapter<NumberSelectionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumberSelectionViewHolder {
-        return NumberSelectionViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.listitem_number, parent, false))
+        return NumberSelectionViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: NumberSelectionViewHolder, position: Int) {

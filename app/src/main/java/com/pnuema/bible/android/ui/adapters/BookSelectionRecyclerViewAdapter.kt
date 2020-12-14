@@ -16,8 +16,7 @@ import com.pnuema.bible.android.ui.viewholders.BookSelectionViewHolder
 class BookSelectionRecyclerViewAdapter(private val mValues: List<IBook>, private val mListener: BCVSelectionListener) : RecyclerView.Adapter<BookSelectionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSelectionViewHolder {
-        return BookSelectionViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.listitem_book, parent, false))
+        return BookSelectionViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: BookSelectionViewHolder, position: Int) {
