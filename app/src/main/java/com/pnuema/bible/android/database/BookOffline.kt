@@ -10,5 +10,5 @@ data class BookOffline(var book_id: Int,
                        var newTestament: Boolean
                        )
 {
-    fun convertToBook(): Book = Book(book_id, title, newTestament)
+    fun convertToBook(): Book = Book(book_id, title, newTestament.compareTo(false))
 }
