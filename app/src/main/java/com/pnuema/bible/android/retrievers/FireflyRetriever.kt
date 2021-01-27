@@ -57,7 +57,7 @@ class FireflyRetriever : BaseRetriever() {
             return@withContext Versions(listOf())
         }
 
-        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val api = FireflyAPI.create<IFireflyAPI>()
         val versions = api.getVersions(null) //TODO select language
 
         FireflyDatabase.getInstance().versionDao().putVersions(versions.map { it.convertToOfflineModel() })
@@ -77,7 +77,7 @@ class FireflyRetriever : BaseRetriever() {
             return@withContext ChapterCount()
         }
 
-        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val api = FireflyAPI.create<IFireflyAPI>()
         val chapterCount = api.getChapterCount(currentBook, CurrentSelected.version)
         FireflyDatabase.getInstance().chapterCountDao().putChapterCount(chapterCount.convertToOfflineModel(CurrentSelected.version, currentBook))
 
@@ -97,7 +97,7 @@ class FireflyRetriever : BaseRetriever() {
             return@withContext VerseCount()
         }
 
-        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val api = FireflyAPI.create<IFireflyAPI>()
         val verseCount = api.getVerseCount(book, chapter, version)
         FireflyDatabase.getInstance().verseCountDao().putVerseCount(verseCount.convertToOfflineModel(version, currentBook, currentChapter))
 
@@ -115,7 +115,7 @@ class FireflyRetriever : BaseRetriever() {
             return Books(listOf())
         }
 
-        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val api = FireflyAPI.create<IFireflyAPI>()
         val books = api.getBooks(CurrentSelected.version)
 
         FireflyDatabase.getInstance().booksDao().putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
@@ -134,7 +134,7 @@ class FireflyRetriever : BaseRetriever() {
             return Verses(listOf())
         }
 
-        val api = FireflyAPI.getInstance(App.getContext()).create(IFireflyAPI::class.java)
+        val api = FireflyAPI.create<IFireflyAPI>()
         val verses = api.getChapterVerses(book, chapter, version)
         FireflyDatabase.getInstance().verseDao().putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
 
