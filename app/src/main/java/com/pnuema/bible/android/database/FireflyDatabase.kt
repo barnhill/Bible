@@ -20,7 +20,7 @@ abstract class FireflyDatabase : RoomDatabase() {
         fun getInstance(): FireflyDatabase {
             if (!::INSTANCE.isInitialized) {
                 synchronized(FireflyDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(App.getContext(),
+                    INSTANCE = Room.databaseBuilder(App.context,
                             FireflyDatabase::class.java, FILENAME)
                             .build()
                 }

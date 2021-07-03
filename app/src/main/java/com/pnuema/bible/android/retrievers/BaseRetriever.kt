@@ -12,8 +12,7 @@ abstract class BaseRetriever internal constructor() {
         var instance: BaseRetriever? = null
     }
 
-    val tag: String
-        get() = javaClass.simpleName
+    val tag: String get() = javaClass.simpleName
 
     abstract fun savePrefs()
 

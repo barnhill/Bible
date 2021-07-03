@@ -9,7 +9,6 @@ interface ChapterCountOfflineDao {
     @Query("select * from offlineChapterCount where version = :version AND book_id = :bookId")
     suspend fun getChapterCount(version: String, bookId: Int): ChapterCount?
 
-    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun putChapterCount(chapterCount: ChapterCountOffline)
 }

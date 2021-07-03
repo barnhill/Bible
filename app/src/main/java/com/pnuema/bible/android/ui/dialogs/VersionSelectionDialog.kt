@@ -45,7 +45,7 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
 
         viewModel.versions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             versions.clear()
-            val lang = LanguageUtils.getISOLanguage()
+            val lang = LanguageUtils.iSOLanguage
             for (version in it.versions) {
                 if (version.language.contains(lang)) {
                     versions.add(version)

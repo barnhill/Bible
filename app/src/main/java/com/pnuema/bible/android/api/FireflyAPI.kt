@@ -48,7 +48,7 @@ object FireflyAPI {
 
     private fun provideCache(): Cache? {
         try {
-            return Cache(File(App.getContext().cacheDir, CACHE_FOLDER), 10 * 1024 * 1024) // 10 MB
+            return Cache(File(App.context.cacheDir, CACHE_FOLDER), 10 * 1024 * 1024) // 10 MB
         } catch (ignored: Exception) {
         }
         return null
@@ -68,7 +68,7 @@ object FireflyAPI {
 
     private fun provideOfflineCacheInterceptor(): Interceptor = Interceptor { chain: Interceptor.Chain ->
         var request = chain.request()
-        if (!isConnected(App.getContext())) {
+        if (!isConnected(App.context)) {
             val cacheControl: CacheControl = CacheControl.Builder()
                     .maxStale(CACHE_OFFLINE_DAYS, TimeUnit.DAYS)
                     .build()

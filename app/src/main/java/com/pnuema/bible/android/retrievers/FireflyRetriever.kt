@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FireflyRetriever : BaseRetriever() {
-    private val connMgr = App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connMgr = App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     companion object {
         fun get(): BaseRetriever {
@@ -38,7 +38,7 @@ class FireflyRetriever : BaseRetriever() {
     }
 
     override fun readPrefs() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext())
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.context)
 
         CurrentSelected.version = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_VERSION + tag, "kjv"), String::class.java)
         CurrentSelected.book = GsonProvider.get().fromJson(sharedPref.getString(Constants.KEY_SELECTED_BOOK + tag, "1"), Int::class.java)

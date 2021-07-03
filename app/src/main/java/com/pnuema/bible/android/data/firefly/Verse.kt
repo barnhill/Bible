@@ -14,7 +14,7 @@ data class Verse(
 ) : IVerse {
     override fun getText(): String {
         verseText = verseText.replace("¶", "")
-        return "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(App.getContext(), R.color.secondary_text) and 0xffffff) + "\"><small>" + verse + "&nbsp;&nbsp;</small></font>" + verseText
+        return "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(App.context, R.color.secondary_text) and 0xffffff) + "\"><small>" + verse + "&nbsp;&nbsp;</small></font>" + verseText
     }
 
     override fun convertToOfflineModel(version: String) = VerseOffline(version = version, book = book, chapter = chapter, verse = verse, verseText = verseText)
