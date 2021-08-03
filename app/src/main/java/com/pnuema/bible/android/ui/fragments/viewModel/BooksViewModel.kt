@@ -10,11 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BooksViewModel: ViewModel() {
-    val books: LiveData<Books> = MutableLiveData<Books>()
+    private val _books: MutableLiveData<Books> = MutableLiveData<Books>()
+    val books: LiveData<Books> = _books
 
     fun loadBooks() {
         viewModelScope.launch(Dispatchers.IO) {
-            (books as MutableLiveData<Books>).postValue(FireflyRetriever.get().getBooks())
+            _books.postValue(FireflyRetriever.get().getBooks())
         }
     }
 }

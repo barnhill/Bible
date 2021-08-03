@@ -28,7 +28,7 @@ object CurrentSelected {
     }
 
     fun savePref(prefName: String, prefValue: String) {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext())
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(App.context)
         val editor = sharedPref.edit()
         editor.putString(prefName, prefValue)
         editor.apply()

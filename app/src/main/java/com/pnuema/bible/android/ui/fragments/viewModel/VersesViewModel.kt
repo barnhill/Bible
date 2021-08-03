@@ -10,11 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class VersesViewModel: ViewModel() {
-    val verses: LiveData<VerseCount> = MutableLiveData<VerseCount>()
+    private val _verses: MutableLiveData<VerseCount> = MutableLiveData()
+    val verses: LiveData<VerseCount> = _verses
 
     fun loadVerses(version: String, book: String, chapter: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            (verses as MutableLiveData<VerseCount>).postValue(FireflyRetriever.get().getVerseCount(version, book, chapter))
+            _verses.postValue(FireflyRetriever.get().getVerseCount(version, book, chapter))
         }
     }
 }

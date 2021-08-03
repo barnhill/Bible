@@ -10,11 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ChaptersViewModel: ViewModel() {
-    val chapters: LiveData<ChapterCount> = MutableLiveData<ChapterCount>()
+    private val _chapters: MutableLiveData<ChapterCount> = MutableLiveData()
+    val chapters: LiveData<ChapterCount> = _chapters
 
     fun loadChapters(book: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            (chapters as MutableLiveData<ChapterCount>).postValue(FireflyRetriever.get().getChapters(book))
+            _chapters.postValue(FireflyRetriever.get().getChapters(book))
         }
     }
 }
