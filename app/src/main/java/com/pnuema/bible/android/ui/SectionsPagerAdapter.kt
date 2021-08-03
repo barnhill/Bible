@@ -25,8 +25,7 @@ package com.pnuema.bible.android.ui
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
 import com.pnuema.bible.android.ui.fragments.BookSelectionFragment
@@ -35,10 +34,10 @@ import com.pnuema.bible.android.ui.fragments.VerseSelectionFragment
 import java.util.*
 
 /**
- * A [FragmentStatePagerAdapter] that returns a fragment corresponding to
+ * A [FragmentStateAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(fm: FragmentManager, private val context: Context, private val listener: BCVSelectionListener) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionsPagerAdapter(fragment: Fragment, private val context: Context, private val listener: BCVSelectionListener) : FragmentStateAdapter(fragment) {
 
     companion object {
         private const val BOOKS = 0
@@ -46,25 +45,23 @@ class SectionsPagerAdapter(fm: FragmentManager, private val context: Context, pr
         private const val VERSES = 2
     }
 
-    override fun getItem(position: Int): Fragment {
+    fun getPageTitle(position: Int): CharSequence? {
+        return when (position) {
+            BOOKS -> context.getString(R.string.book).uppercase(Locale.getDefault())
+            CHAPTERS -> context.getString(R.string.chapter).uppercase(Locale.getDefault())
+            VERSES -> context.getString(R.string.verse).uppercase(Locale.getDefault())
+            else -> null
+        }
+    }
+
+    override fun getItemCount(): Int = 3
+
+    override fun createFragment(position: Int): Fragment {
         return when (position) {
             BOOKS -> BookSelectionFragment.newInstance(listener)
             CHAPTERS -> ChapterSelectionFragment.newInstance(listener)
             VERSES -> VerseSelectionFragment.newInstance(listener)
             else -> throw IllegalArgumentException("Invalid tab index selected")
-        }
-    }
-
-    override fun getCount(): Int {
-        return 3
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            BOOKS -> context.getString(R.string.book).toUpperCase(Locale.getDefault())
-            CHAPTERS -> context.getString(R.string.chapter).toUpperCase(Locale.getDefault())
-            VERSES -> context.getString(R.string.verse).toUpperCase(Locale.getDefault())
-            else -> null
         }
     }
 }

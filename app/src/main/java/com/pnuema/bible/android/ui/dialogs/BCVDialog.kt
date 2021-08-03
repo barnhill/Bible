@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.SectionsPagerAdapter
@@ -14,8 +18,8 @@ import com.pnuema.bible.android.ui.SectionsPagerAdapter
 /**
  * Book/Chapter/Verse selection dialog
  */
-class BCVDialog : DialogFragment(), BCVSelectionListener {
-    private lateinit var viewPager: ViewPager
+class BCVDialog : Fragment(), BCVSelectionListener {
+    private lateinit var viewPager: ViewPager2
     private var listener: NotifySelectionCompleted? = null
 
     companion object {
@@ -30,6 +34,10 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
 
             return dialog
         }
+    }
+
+    enum class BCV constructor(val value: Int) {
+        BOOK(0), CHAPTER(1), VERSE(2)
     }
 
     override fun onBookSelected(book: Int) {
@@ -58,11 +66,7 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
 
     override fun refresh() {
         listener?.onSelectionComplete(CurrentSelected.book, CurrentSelected.chapter, CurrentSelected.verse)
-        dismiss()
-    }
-
-    enum class BCV constructor(val value: Int) {
-        BOOK(0), CHAPTER(1), VERSE(2)
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     private fun setListener(listener: NotifySelectionCompleted) {
@@ -70,14 +74,16 @@ class BCVDialog : DialogFragment(), BCVSelectionListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container)
+        val view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container, false)
 
-        val pagerAdapter = SectionsPagerAdapter(childFragmentManager, view.context, this)
+        val pagerAdapter = SectionsPagerAdapter(this, view.context, this)
         viewPager = view.findViewById(R.id.pager)
         viewPager.adapter = pagerAdapter
 
         val tabLayout = view.findViewById<TabLayout>(R.id.tabs)
-        tabLayout.setupWithViewPager(viewPager)
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = pagerAdapter.getPageTitle(position)
+        }.attach()
 
         val args = arguments
                 ?: //TODO log message about arguments being null

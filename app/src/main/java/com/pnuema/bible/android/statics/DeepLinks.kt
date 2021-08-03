@@ -14,7 +14,7 @@ object DeepLinks {
             return
         }
 
-        val bookAbb = data.getQueryParameter("book")
+        //val bookAbb = data.getQueryParameter("book")
         //TODO look up book if it was provided to get the book id
         val bookid = Integer.valueOf(Objects.requireNonNull<String>(data.getQueryParameter("bookid")))
         val chapter = Integer.valueOf(Objects.requireNonNull<String>(data.getQueryParameter("chapter")))

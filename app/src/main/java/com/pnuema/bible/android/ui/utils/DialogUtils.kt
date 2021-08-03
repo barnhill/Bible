@@ -3,6 +3,8 @@ package com.pnuema.bible.android.ui.utils
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
+import com.pnuema.bible.android.R
 
 import com.pnuema.bible.android.ui.dialogs.BCVDialog
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
@@ -16,7 +18,11 @@ object DialogUtils {
 
     fun showBookChapterVersePicker(activity: FragmentActivity, bcv: BCVDialog.BCV, listener: NotifySelectionCompleted) {
         closeDialogs<VersionSelectionDialog>(activity.supportFragmentManager)
-        BCVDialog.instantiate(bcv, listener).show(activity.supportFragmentManager, BCVDialog::class.java.simpleName)
+        activity.supportFragmentManager.commit {
+            setCustomAnimations(R.anim.slide_in_bottom, 0, 0, 0)
+            addToBackStack(BCVDialog::class.java.simpleName)
+            replace(R.id.read_fragment, BCVDialog.instantiate(bcv, listener), BCVDialog::class.java.simpleName)
+        }
     }
 
     fun showVersionsPicker(activity: FragmentActivity, listener: NotifyVersionSelectionCompleted) {

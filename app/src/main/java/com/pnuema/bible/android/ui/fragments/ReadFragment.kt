@@ -74,20 +74,20 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
         val bookChapterView = view.findViewById<TextView>(R.id.selected_book)
         val translationView = view.findViewById<TextView>(R.id.selected_translation)
         val verseBottomPanel = view.findViewById<TextView>(R.id.verses_bottom_panel)
-        viewModel.liveVersions.observe(viewLifecycleOwner, Observer { iVersionProvider: IVersionProvider ->
+        viewModel.liveVersions.observe(viewLifecycleOwner, { iVersionProvider: IVersionProvider ->
             for (version in iVersionProvider.versions) {
                 if (version.abbreviation == CurrentSelected.version) {
-                    translationView.text = version.abbreviation.toUpperCase(Locale.getDefault())
+                    translationView.text = version.abbreviation.uppercase(Locale.getDefault())
                     break
                 }
             }
         })
-        viewModel.liveBook.observe(viewLifecycleOwner, Observer { iBookProvider: IBookProvider ->
+        viewModel.liveBook.observe(viewLifecycleOwner, { iBookProvider: IBookProvider ->
             books.clear()
             books.addAll(iBookProvider.books)
             setBookChapterText(bookChapterView, verseBottomPanel)
         })
-        viewModel.liveVerses.observe(viewLifecycleOwner, Observer { iVerseProvider: IVerseProvider ->
+        viewModel.liveVerses.observe(viewLifecycleOwner, { iVerseProvider: IVerseProvider ->
             (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
             Handler().post { scrollToVerse(verse, layoutManager) }
             setBookChapterText(bookChapterView, verseBottomPanel)

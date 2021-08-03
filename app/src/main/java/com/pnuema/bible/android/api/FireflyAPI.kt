@@ -48,7 +48,7 @@ object FireflyAPI {
 
     private fun provideCache(): Cache? {
         try {
-            return Cache(File(App.context.cacheDir, CACHE_FOLDER), 10 * 1024 * 1024) // 10 MB
+            return Cache(File(App.context.cacheDir, CACHE_FOLDER), 10 * 1024 * 1024L) // 10 MB
         } catch (ignored: Exception) {
         }
         return null
