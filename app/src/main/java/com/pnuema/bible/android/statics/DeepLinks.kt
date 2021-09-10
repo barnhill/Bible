@@ -2,6 +2,7 @@ package com.pnuema.bible.android.statics
 
 import android.content.Intent
 import android.text.TextUtils
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 object DeepLinks {
@@ -23,6 +24,9 @@ object DeepLinks {
         CurrentSelected.book = bookid
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        CurrentSelected.savePreferences()
+
+        runBlocking {
+            CurrentSelected.savePreferences()
+        }
     }
 }

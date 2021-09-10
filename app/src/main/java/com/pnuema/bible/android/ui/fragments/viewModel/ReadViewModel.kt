@@ -24,15 +24,9 @@ class ReadViewModel: ViewModel() {
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
-                _liveVerses.postValue(FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
-            }
-
+            _liveVerses.postValue(FireflyRetriever.get().getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
             _liveVersions.postValue(FireflyRetriever.get().getVersions())
-
-            if (CurrentSelected.book != CurrentSelected.DEFAULT_VALUE) {
-                _liveBook.postValue(FireflyRetriever.get().getBooks())
-            }
+            _liveBook.postValue(FireflyRetriever.get().getBooks())
         }
     }
 }

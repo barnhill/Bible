@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
@@ -15,6 +16,8 @@ import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
 import com.pnuema.bible.android.ui.fragments.ReadFragment
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
     private lateinit var readFragment: ReadFragment
@@ -33,8 +36,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onPause() {
-        CurrentSelected.savePreferences()
         super.onPause()
+        lifecycleScope.launch {
+            CurrentSelected.savePreferences()
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -44,7 +49,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onResume() {
-        CurrentSelected.readPreferences()
+        runBlocking {
+            CurrentSelected.readPreferences()
+        }
         super.onResume()
     }
 

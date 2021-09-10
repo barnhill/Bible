@@ -30,12 +30,12 @@
                 style="@style/BookChapterVerseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:drawableEnd="@drawable/arrow_down_drop_circle_outline"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:textAllCaps="true"
+                app:drawableEndCompat="@drawable/arrow_down_drop_circle_outline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/selected_translation"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -48,14 +48,14 @@
                 style="@style/BookChapterVerseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:drawableEnd="@drawable/book_open_page_variant"
                 android:maxLines="1"
                 android:textAlignment="center"
+                app:drawableEndCompat="@drawable/book_open_page_variant"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/selected_book"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="KJV" />
+                tools:text="KJV"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

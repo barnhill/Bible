@@ -14,10 +14,6 @@ abstract class BaseRetriever internal constructor() {
 
     val tag: String get() = javaClass.simpleName
 
-    abstract fun savePrefs()
-
-    abstract fun readPrefs()
-
     abstract suspend fun getVersions(): Versions
 
     abstract suspend fun getBooks(): Books

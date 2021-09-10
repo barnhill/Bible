@@ -4,5 +4,5 @@ import java.util.Locale
 
 object LanguageUtils {
     val iSOLanguage: String
-        get() = Locale.getDefault().isO3Language.toLowerCase(Locale.getDefault())
+        get() = Locale.getDefault().isO3Language.lowercase(Locale.getDefault())
 }

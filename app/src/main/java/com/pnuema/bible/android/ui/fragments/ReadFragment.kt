@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
@@ -44,29 +45,15 @@ import kotlin.coroutines.CoroutineContext
 /**
  * The reading pane fragment
  */
-class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
+class ReadFragment : Fragment(R.layout.fragment_read) {
     private val viewModel by viewModels<ReadViewModel>()
     private val books: MutableList<IBook> = ArrayList()
-
-    private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
-
-    companion object {
-        /**
-         * Factory method to create the fragment
-         * @return A new instance of fragment ReadFragment.
-         */
-        fun newInstance(): ReadFragment {
-            return ReadFragment()
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.verses_recycler_view)
-        val layoutManager = recyclerView.layoutManager ?: throw IllegalStateException("LayoutManager is required to be set on the RecyclerView in the layout XML")
+        val layoutManager = recyclerView.layoutManager ?: error("LayoutManager is required to be set on the RecyclerView in the layout XML")
         recyclerView.adapter = VersesAdapter()
 
         (activity as? AppCompatActivity ?: return).setSupportActionBar(view.findViewById(R.id.app_bar_layout))
@@ -89,7 +76,7 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
         })
         viewModel.liveVerses.observe(viewLifecycleOwner, { iVerseProvider: IVerseProvider ->
             (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
-            Handler().post { scrollToVerse(verse, layoutManager) }
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) { scrollToVerse(verse, layoutManager) }
             setBookChapterText(bookChapterView, verseBottomPanel)
         })
 
@@ -131,7 +118,7 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
         setBookChapterText(bookChapterView, verseBottomPanel)
         bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
-                    launch {
+                    viewLifecycleOwner.lifecycleScope.launch {
                         get().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
                     }
                 }
@@ -151,8 +138,8 @@ class ReadFragment : Fragment(R.layout.fragment_read), CoroutineScope {
     }
 
     private fun setBookChapterText(bookChapterView: TextView, verseBottomPanel: TextView) {
-        for (book in books) {
-            if (CurrentSelected.book != DEFAULT_VALUE && book.getId() == CurrentSelected.book) {
+        books.forEach { book ->
+            if (book.getId() == CurrentSelected.book) {
                 bookChapterView.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
                 verseBottomPanel.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
             }
