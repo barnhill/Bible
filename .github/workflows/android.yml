@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: set up JDK ${{ matrix.java }}
+    - name: Setup JDK ${{ matrix.java }}
       uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
