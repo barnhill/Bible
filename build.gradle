@@ -1,5 +1,5 @@
 wrapper {
-    gradleVersion = '7.4'
+    gradleVersion = '7.4.1'
     distributionType = Wrapper.DistributionType.BIN
 }
 
@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
