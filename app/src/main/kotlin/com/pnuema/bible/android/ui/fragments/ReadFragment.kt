@@ -1,17 +1,11 @@
 package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +16,9 @@ import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.data.IBookProvider
 import com.pnuema.bible.android.data.IVerseProvider
 import com.pnuema.bible.android.data.IVersionProvider
+import com.pnuema.bible.android.databinding.FragmentReadBinding
 import com.pnuema.bible.android.retrievers.FireflyRetriever.Companion.get
 import com.pnuema.bible.android.statics.CurrentSelected
-import com.pnuema.bible.android.statics.CurrentSelected.DEFAULT_VALUE
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
 import com.pnuema.bible.android.statics.CurrentSelected.version
@@ -35,12 +29,9 @@ import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.fragments.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 /**
  * The reading pane fragment
@@ -49,36 +40,54 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
     private val viewModel by viewModels<ReadViewModel>()
     private val books: MutableList<IBook> = ArrayList()
 
+    private var _binding: FragmentReadBinding? = null
+    private val binding get() = _binding!!
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.verses_recycler_view)
+        _binding = FragmentReadBinding.bind(view)
+
+        val recyclerView: RecyclerView = binding.versesRecyclerView
         val layoutManager = recyclerView.layoutManager ?: error("LayoutManager is required to be set on the RecyclerView in the layout XML")
-        recyclerView.adapter = VersesAdapter()
 
-        (activity as? AppCompatActivity ?: return).setSupportActionBar(view.findViewById(R.id.app_bar_layout))
+        (activity as? AppCompatActivity ?: return).setSupportActionBar(binding.appBar.toolbar)
 
-        val bookChapterView = view.findViewById<TextView>(R.id.selected_book)
-        val translationView = view.findViewById<TextView>(R.id.selected_translation)
-        val verseBottomPanel = view.findViewById<TextView>(R.id.verses_bottom_panel)
-        viewModel.liveVersions.observe(viewLifecycleOwner, { iVersionProvider: IVersionProvider ->
+        val bookChapterView = binding.appBar.selectedBook
+        val translationView = binding.appBar.selectedTranslation
+        val verseBottomPanel = binding.versesBottomPanel
+        viewModel.liveVersions.observe(viewLifecycleOwner) { iVersionProvider: IVersionProvider ->
             for (version in iVersionProvider.versions) {
                 if (version.abbreviation == CurrentSelected.version) {
                     translationView.text = version.abbreviation.uppercase(Locale.getDefault())
                     break
                 }
             }
-        })
-        viewModel.liveBook.observe(viewLifecycleOwner, { iBookProvider: IBookProvider ->
+        }
+        viewModel.liveBook.observe(viewLifecycleOwner) { iBookProvider: IBookProvider ->
             books.clear()
             books.addAll(iBookProvider.books)
             setBookChapterText(bookChapterView, verseBottomPanel)
-        })
-        viewModel.liveVerses.observe(viewLifecycleOwner, { iVerseProvider: IVerseProvider ->
-            (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) { scrollToVerse(verse, layoutManager) }
+        }
+        viewModel.liveVerses.observe(viewLifecycleOwner) { iVerseProvider: IVerseProvider ->
+            if (recyclerView.adapter == null) {
+                recyclerView.adapter = VersesAdapter().apply {
+                    stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                    initVerses(iVerseProvider.verses)
+                }
+            } else {
+                (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                scrollToVerse(
+                    verse,
+                    layoutManager
+                )
+            }
+
             setBookChapterText(bookChapterView, verseBottomPanel)
-        })
+        }
 
         setAppBarDisplay(bookChapterView, translationView, verseBottomPanel)
     }
@@ -91,6 +100,11 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
             putInt(BCVDialog.BCV.VERSE.toString(), verse)
         })
         refresh()
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     fun refresh() {

@@ -25,12 +25,12 @@
             android:id="@+id/verses_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingBottom="@dimen/read_pane_bottom_reminder_height"
             android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:context=".ui.fragments.ReadFragment"
-            tools:listitem="@layout/listitem_verse"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            tools:listitem="@layout/listitem_verse"/>
 
         <TextView
             android:id="@+id/verses_bottom_panel"

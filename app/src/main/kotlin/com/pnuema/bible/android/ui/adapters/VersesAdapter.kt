@@ -37,9 +37,13 @@ class VersesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return verses.size + if (!::copyrightText.isInitialized) 0 else 1 //account for the copyright item
     }
 
-    fun updateVerses(verses: List<IVerse>) {
+    fun initVerses(verses: List<IVerse>) {
         this.verses.clear()
         this.verses.addAll(verses)
+    }
+
+    fun updateVerses(verses: List<IVerse>) {
+        initVerses(verses)
 
         /* if (!verses.isEmpty()) {
             //TODO show copyright text
