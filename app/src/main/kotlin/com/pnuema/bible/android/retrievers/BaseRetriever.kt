@@ -5,6 +5,8 @@ import com.pnuema.bible.android.data.firefly.ChapterCount
 import com.pnuema.bible.android.data.firefly.VerseCount
 import com.pnuema.bible.android.data.firefly.Verses
 import com.pnuema.bible.android.data.firefly.Versions
+import com.pnuema.bible.android.database.VerseOffline
+import kotlinx.coroutines.flow.Flow
 
 abstract class BaseRetriever internal constructor() {
 
@@ -23,4 +25,6 @@ abstract class BaseRetriever internal constructor() {
     abstract suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount
 
     abstract suspend fun getVerses(version: String, book: String, chapter: String): Verses
+
+    abstract suspend fun searchVerses(query: String): Verses
 }

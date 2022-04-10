@@ -1,6 +1,7 @@
 package com.pnuema.bible.android.database
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VerseOfflineDao {
@@ -10,4 +11,12 @@ interface VerseOfflineDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun putVerses(books: List<VerseOffline>)
+
+    @Transaction
+    @Query("""
+            SELECT o.* FROM offlineVerses o
+            JOIN offlineVerses_fts fts ON o.version = fts.version AND o.book = fts.book AND o.chapter = fts.chapter AND o.verse = fts.verse 
+            WHERE offlineVerses_fts MATCH :query
+    """)
+    suspend fun searchVerses(query: String): List<VerseOffline>
 }

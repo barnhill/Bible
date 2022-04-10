@@ -29,4 +29,10 @@ class ReadViewModel: ViewModel() {
             _liveBook.postValue(FireflyRetriever.get().getBooks())
         }
     }
+
+    suspend fun search(query: String) {
+        /*FireflyRetriever.get().searchVerses(query = query).verses.forEach {
+            Log.w("Brad", "" + it)
+        }*/
+    }
 }
