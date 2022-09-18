@@ -83,12 +83,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
-        CurrentSelected.book = book
-        CurrentSelected.chapter = chapter
-        readFragment.refresh()
-    }
-
     override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter

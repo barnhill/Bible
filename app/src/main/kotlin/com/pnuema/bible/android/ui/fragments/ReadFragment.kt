@@ -43,6 +43,7 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
 
     private var _binding: FragmentReadBinding? = null
     private val binding get() = _binding!!
+    val adapter: VersesAdapter get() = binding.versesRecyclerView.adapter as VersesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,13 +73,10 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         }
         viewModel.liveVerses.observe(viewLifecycleOwner) { iVerseProvider: IVerseProvider ->
             if (recyclerView.adapter == null) {
-                recyclerView.adapter = VersesAdapter().apply {
-                    stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                    initVerses(iVerseProvider.verses)
-                }
-            } else {
-                (recyclerView.adapter as VersesAdapter).updateVerses(iVerseProvider.verses)
+                recyclerView.adapter = VersesAdapter()
             }
+
+            adapter.submitList(iVerseProvider.verses)
 
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 scrollToVerse(
@@ -132,14 +130,6 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         }
         setBookChapterText(bookChapterView, verseBottomPanel)
         bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
-                override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        FireflyRepository().getVerses(version, CurrentSelected.book, CurrentSelected.chapter).collect {
-                            //do nothing but prefetch the chapter
-                        }
-                    }
-                }
-
                 override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
                     refresh()
                 }
