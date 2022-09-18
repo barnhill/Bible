@@ -1,6 +1,5 @@
 package com.pnuema.bible.android.api
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.pnuema.bible.android.BuildConfig
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.ConnectionUtils.isConnected
