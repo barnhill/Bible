@@ -5,17 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.data.firefly.ChapterCount
-import com.pnuema.bible.android.retrievers.FireflyRetriever
+import com.pnuema.bible.android.repository.FireflyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ChaptersViewModel: ViewModel() {
+class ChaptersViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
     private val _chapters: MutableLiveData<ChapterCount> = MutableLiveData()
     val chapters: LiveData<ChapterCount> = _chapters
 
     fun loadChapters(book: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _chapters.postValue(FireflyRetriever.get().getChapters(book))
+            _chapters.postValue(fireflyRepository.getChapters(book))
         }
     }
 }

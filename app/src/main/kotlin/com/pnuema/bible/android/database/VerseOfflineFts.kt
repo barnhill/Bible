@@ -10,13 +10,13 @@ import com.pnuema.bible.android.database.VerseOffline.Companion.TABLE_NAME_FTS
 @Fts4(contentEntity = VerseOffline::class, tokenizer = FtsOptions.TOKENIZER_PORTER)
 class VerseOfflineFts (
     @ColumnInfo(name = "version")
-    var version: String,
+    val version: String,
     @ColumnInfo(name = "book")
-    var book: String,
+    val book: String,
     @ColumnInfo(name = "chapter")
-    var chapter: String,
+    val chapter: String,
     @ColumnInfo(name = "verse")
-    var verse: String,
+    val verse: String,
     @ColumnInfo(name = "verseText")
-    var verseText: String,
+    val verseText: String,
 )

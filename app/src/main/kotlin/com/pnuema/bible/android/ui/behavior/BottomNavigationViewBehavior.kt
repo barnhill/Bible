@@ -27,11 +27,17 @@ class BottomNavigationViewBehavior(context: Context?, attrs: AttributeSet?) : Co
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
-    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: TextView,
-                                target: View, dxConsumed: Int, dyConsumed: Int,
-                                dxUnconsumed: Int, dyUnconsumed: Int,
-                                @NestedScrollType type: Int) {
-
+    override fun onNestedScroll(
+        coordinatorLayout: CoordinatorLayout,
+        child: TextView,
+        target: View,
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        type: Int,
+        consumed: IntArray
+    ) {
         if (dyConsumed > 0) {
             scrollSum = max(scrollSum - abs(dyConsumed), 0f)
         } else if (dyConsumed < 0) {

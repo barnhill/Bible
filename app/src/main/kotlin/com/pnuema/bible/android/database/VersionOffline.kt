@@ -7,17 +7,15 @@ import com.pnuema.bible.android.data.firefly.Version
 @Entity(tableName = "offlineVersion")
 data class VersionOffline(
     @PrimaryKey var version: String,
-    var url: String,
-    var publisher: String,
-    var copyright: String,
-    var copyright_info: String,
-    var language: String,
-    var abbreviation: String,
+    val url: String,
+    val publisher: String,
+    val copyright: String,
+    val copyright_info: String,
+    val language: String,
+    val abbreviation: String,
     val id: Int
 ) {
-    fun getDisplayText(): String {
-        return version
-    }
+    fun getDisplayText(): String = version
 
     fun convertToVersion() = Version(
         version = version,

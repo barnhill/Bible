@@ -1,13 +1,13 @@
 package com.pnuema.bible.android.data.firefly
 
-import com.google.gson.annotations.SerializedName
 import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.database.BookOffline
+import com.squareup.moshi.Json
 
 data class Book(
     val book_id: Int,
     val title: String,
-    @SerializedName("newtestament")
+    @Json(name = "newtestament")
     val isNewTestament: Int
 ) : IBook {
     override fun getId() = book_id

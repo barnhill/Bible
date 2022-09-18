@@ -17,7 +17,7 @@ import com.pnuema.bible.android.data.IBookProvider
 import com.pnuema.bible.android.data.IVerseProvider
 import com.pnuema.bible.android.data.IVersionProvider
 import com.pnuema.bible.android.databinding.FragmentReadBinding
-import com.pnuema.bible.android.retrievers.FireflyRetriever.Companion.get
+import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
@@ -133,7 +133,7 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
                     viewLifecycleOwner.lifecycleScope.launch {
-                        get().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
+                        FireflyRepository().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
                     }
                 }
 

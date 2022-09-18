@@ -1,17 +1,15 @@
-package com.pnuema.bible.android.retrievers
+package com.pnuema.bible.android.repository
 
 import com.pnuema.bible.android.data.firefly.Books
 import com.pnuema.bible.android.data.firefly.ChapterCount
 import com.pnuema.bible.android.data.firefly.VerseCount
 import com.pnuema.bible.android.data.firefly.Verses
 import com.pnuema.bible.android.data.firefly.Versions
-import com.pnuema.bible.android.database.VerseOffline
-import kotlinx.coroutines.flow.Flow
 
-abstract class BaseRetriever internal constructor() {
+abstract class BaseRepository internal constructor() {
 
     companion object {
-        var instance: BaseRetriever? = null
+        var instance: BaseRepository? = null
     }
 
     val tag: String get() = javaClass.simpleName

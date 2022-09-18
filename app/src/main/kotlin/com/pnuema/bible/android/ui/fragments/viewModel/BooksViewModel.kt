@@ -5,17 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.data.firefly.Books
-import com.pnuema.bible.android.retrievers.FireflyRetriever
+import com.pnuema.bible.android.repository.FireflyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BooksViewModel: ViewModel() {
+class BooksViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
     private val _books: MutableLiveData<Books> = MutableLiveData<Books>()
     val books: LiveData<Books> = _books
 
     fun loadBooks() {
         viewModelScope.launch(Dispatchers.IO) {
-            _books.postValue(FireflyRetriever.get().getBooks())
+            _books.postValue(fireflyRepository.getBooks())
         }
     }
 }

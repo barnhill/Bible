@@ -5,10 +5,10 @@ import com.pnuema.bible.android.data.firefly.Book
 
 @Entity(tableName = "offlineBooks", primaryKeys = ["book_id", "version"])
 data class BookOffline(
-    var book_id: Int,
-    var version: String,
-    var title: String,
-    var newTestament: Boolean
+    val book_id: Int,
+    val version: String,
+    val title: String,
+    val newTestament: Boolean
 ) {
     fun convertToBook(): Book = Book(book_id, title, newTestament.compareTo(false))
 }

@@ -6,11 +6,11 @@ import com.pnuema.bible.android.database.VerseOffline.Companion.TABLE_NAME
 
 @Entity(tableName = TABLE_NAME, primaryKeys = ["version", "book", "chapter", "verse"])
 data class VerseOffline(
-    var version: String,
-    var book: Int,
-    var chapter: Int,
-    var verse: Int,
-    var verseText: String
+    val version: String,
+    val book: Int,
+    val chapter: Int,
+    val verse: Int,
+    val verseText: String
 ) {
     companion object {
         const val TABLE_NAME = "offlineVerses"

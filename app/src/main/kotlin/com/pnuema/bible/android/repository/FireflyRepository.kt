@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.retrievers
+package com.pnuema.bible.android.repository
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -11,17 +11,8 @@ import com.pnuema.bible.android.statics.CurrentSelected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FireflyRetriever : BaseRetriever() {
+class FireflyRepository : BaseRepository() {
     private val connMgr = App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    companion object {
-        fun get(): BaseRetriever {
-            if (instance == null) {
-                instance = FireflyRetriever()
-            }
-            return instance as BaseRetriever
-        }
-    }
 
     private fun isNetworkConnected(): Boolean {
         return connMgr.activeNetworkInfo?.isConnected ?: false

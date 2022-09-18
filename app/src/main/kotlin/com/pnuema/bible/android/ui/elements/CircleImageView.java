@@ -70,8 +70,8 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         paint.setDither( true );
         canvas.drawARGB( 0, 0, 0, 0 );
         paint.setColor( Color.parseColor( "#BAB399" ) );
-        canvas.drawCircle( radius / 2 + 0.7f,
-                radius / 2 + 0.7f, radius / 2 + 0.1f, paint );
+        canvas.drawCircle( radius / 2f + 0.7f,
+                radius / 2f + 0.7f, radius / 2f + 0.1f, paint );
         paint.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.SRC_IN ) );
         canvas.drawBitmap( bitmap, rect, rect, paint );
 
