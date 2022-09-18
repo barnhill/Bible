@@ -30,6 +30,7 @@ import com.pnuema.bible.android.ui.fragments.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -133,7 +134,9 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionPreloadChapter(book: Int, chapter: Int) {
                     viewLifecycleOwner.lifecycleScope.launch {
-                        FireflyRepository().getVerses(version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
+                        FireflyRepository().getVerses(version, CurrentSelected.book, CurrentSelected.chapter).collect {
+                            //do nothing but prefetch the chapter
+                        }
                     }
                 }
 

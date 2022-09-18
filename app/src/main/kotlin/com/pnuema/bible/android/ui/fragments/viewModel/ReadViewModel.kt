@@ -10,9 +10,10 @@ import com.pnuema.bible.android.data.IVersionProvider
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class ReadViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
+class ReadViewModel constructor(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
     private val _liveVersions: MutableLiveData<IVersionProvider> = MutableLiveData()
     val liveVersions: LiveData<IVersionProvider> get() = _liveVersions
 
@@ -24,9 +25,15 @@ class ReadViewModel(private val fireflyRepository: FireflyRepository = FireflyRe
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
-            _liveVerses.postValue(fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString()))
-            _liveVersions.postValue(fireflyRepository.getVersions())
-            _liveBook.postValue(fireflyRepository.getBooks())
+            fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter).collect { verses ->
+                _liveVerses.postValue(verses)
+            }
+            fireflyRepository.getVersions().collect { versions ->
+                _liveVersions.postValue(versions)
+            }
+            fireflyRepository.getBooks().collect { books ->
+                _liveBook.postValue(books)
+            }
         }
     }
 

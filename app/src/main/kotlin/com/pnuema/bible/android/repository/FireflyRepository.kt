@@ -2,115 +2,115 @@ package com.pnuema.bible.android.repository
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.pnuema.bible.android.api.FireflyAPI
-import com.pnuema.bible.android.api.IFireflyAPI
 import com.pnuema.bible.android.data.firefly.*
 import com.pnuema.bible.android.database.FireflyDatabase
+import com.pnuema.bible.android.datasource.FireflyDataSource
+import com.pnuema.bible.android.datasource.FireflyDataSourceImpl
+import com.pnuema.bible.android.datasource.LocalDataSource
+import com.pnuema.bible.android.datasource.LocalDataSourceImpl
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.CurrentSelected
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class FireflyRepository : BaseRepository() {
+class FireflyRepository(
+    private val remoteDataSource: FireflyDataSource = FireflyDataSourceImpl(),
+    private val localDataSource: LocalDataSource = LocalDataSourceImpl()
+) : BaseRepository {
     private val connMgr = App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private fun isNetworkConnected(): Boolean {
         return connMgr.activeNetworkInfo?.isConnected ?: false
     }
 
-    override suspend fun getVersions(): Versions = withContext(Dispatchers.IO) {
+    override suspend fun getVersions(): Flow<Versions> = flow {
         //TODO: only get offline version if not connected
-        val offlineVersions = FireflyDatabase.getInstance().versionDao.getVersions()
-        if (offlineVersions.isNotEmpty()) {
-            return@withContext Versions(offlineVersions.map { it.convertToVersion() })
+        localDataSource.getVersions().collect { offlineVersions ->
+            if (offlineVersions.isNotEmpty()) {
+                emit(Versions(offlineVersions.map { it.convertToVersion() }))
+            } else {
+                if (!isNetworkConnected()) {
+                    emit(Versions(listOf()))
+                }
+
+                remoteDataSource.getVersions().collect { versions ->
+                    FireflyDatabase.getInstance().versionDao.putVersions(versions.map { it.convertToOfflineModel() })
+                    emit(Versions(versions))
+                }
+            }
         }
-
-        if (!isNetworkConnected()) {
-            return@withContext Versions(listOf())
-        }
-
-        val api = FireflyAPI.create<IFireflyAPI>()
-        val versions = api.getVersions(null) //TODO select language
-
-        FireflyDatabase.getInstance().versionDao.putVersions(versions.map { it.convertToOfflineModel() })
-
-        return@withContext Versions(versions)
     }
 
-    override suspend fun getChapters(book: String): ChapterCount = withContext(Dispatchers.IO) {
+    override suspend fun getChapters(book: String): Flow<ChapterCount> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val currentBook = CurrentSelected.book
-        val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao.getChapterCount(CurrentSelected.version, currentBook)
-        if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
-            return@withContext ChapterCount(offlineChapterCount.chapterCount)
+        localDataSource.getChapters(CurrentSelected.version, CurrentSelected.book).collect { offlineChapterCount ->
+            if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
+                emit(ChapterCount(offlineChapterCount.chapterCount))
+            } else {
+                if (!isNetworkConnected()) {
+                    emit(ChapterCount())
+                }
+
+                remoteDataSource.getChapters(CurrentSelected.book).collect { chapterCount ->
+                    FireflyDatabase.getInstance().chapterCountDao.putChapterCount(chapterCount.convertToOfflineModel(CurrentSelected.version, CurrentSelected.book))
+                    emit(chapterCount)
+                }
+            }
         }
-
-        if (!isNetworkConnected()) {
-            return@withContext ChapterCount()
-        }
-
-        val api = FireflyAPI.create<IFireflyAPI>()
-        val chapterCount = api.getChapterCount(currentBook, CurrentSelected.version)
-        FireflyDatabase.getInstance().chapterCountDao.putChapterCount(chapterCount.convertToOfflineModel(CurrentSelected.version, currentBook))
-
-        return@withContext chapterCount
     }
 
-    override suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount = withContext(Dispatchers.IO) {
+    override suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCount> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val currentBook = CurrentSelected.book
-        val currentChapter = CurrentSelected.chapter
-        val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao.getVerseCount(CurrentSelected.version, currentBook, currentChapter)
-        if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
-            return@withContext VerseCount(offlineVerseCount.verseCount)
+        localDataSource.getVerseCount(version, book, chapter).collect { offlineVerseCount ->
+            if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
+                emit(VerseCount(offlineVerseCount.verseCount))
+            } else {
+                if (!isNetworkConnected()) {
+                    emit(VerseCount())
+                }
+
+                remoteDataSource.getVerseCount(version, book, chapter).collect { verseCount ->
+                    FireflyDatabase.getInstance().verseCountDao.putVerseCount(verseCount.convertToOfflineModel(version, book, chapter))
+                    emit(verseCount)
+                }
+            }
         }
-
-        if (!isNetworkConnected()) {
-            return@withContext VerseCount()
-        }
-
-        val api = FireflyAPI.create<IFireflyAPI>()
-        val verseCount = api.getVerseCount(book, chapter, version)
-        FireflyDatabase.getInstance().verseCountDao.putVerseCount(verseCount.convertToOfflineModel(version, currentBook, currentChapter))
-
-        return@withContext verseCount
     }
 
-    override suspend fun getBooks(): Books {
+    override suspend fun getBooks(): Flow<Books> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val offlineBooks = FireflyDatabase.getInstance().booksDao.getBooks(CurrentSelected.version)
-        if (offlineBooks.isNotEmpty()) {
-            return Books(offlineBooks.map { it.convertToBook() })
+        localDataSource.getBooks().collect { offlineBooks ->
+            if (offlineBooks.isNotEmpty()) {
+                emit(Books(offlineBooks.map { it.convertToBook() }))
+            } else {
+                if (!isNetworkConnected()) {
+                    emit(Books(listOf()))
+                }
+
+                remoteDataSource.getBooks().collect { books ->
+                    FireflyDatabase.getInstance().booksDao.putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
+                    emit(Books(books))
+                }
+            }
         }
-
-        if (!isNetworkConnected()) {
-            return Books(listOf())
-        }
-
-        val api = FireflyAPI.create<IFireflyAPI>()
-        val books = api.getBooks(CurrentSelected.version)
-
-        FireflyDatabase.getInstance().booksDao.putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
-
-        return Books(books)
     }
 
-    override suspend fun getVerses(version: String, book: String, chapter: String): Verses {
+    override suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<Verses> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        val offlineVerses = FireflyDatabase.getInstance().verseDao.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
-        if (offlineVerses.isNotEmpty()) {
-            return Verses(offlineVerses.map { it.convertToVerse() })
+        localDataSource.getVerses(version, book, chapter).collect { offlineVerses ->
+            if (offlineVerses.isNotEmpty()) {
+                emit(Verses(offlineVerses.map { it.convertToVerse() }))
+            } else {
+                if (!isNetworkConnected()) {
+                    emit(Verses(listOf()))
+                }
+
+                remoteDataSource.getVerses(version, book, chapter).collect { verses ->
+                    FireflyDatabase.getInstance().verseDao.putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
+                    emit(Verses(verses))
+                }
+            }
         }
-
-        if (!isNetworkConnected()) {
-            return Verses(listOf())
-        }
-
-        val api = FireflyAPI.create<IFireflyAPI>()
-        val verses = api.getChapterVerses(book, chapter, version)
-        FireflyDatabase.getInstance().verseDao.putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
-
-        return Verses(verses)
     }
 
     override suspend fun searchVerses(query: String): Verses = Verses(FireflyDatabase.getInstance().verseDao.searchVerses(query = query).map { it.convertToVerse() })

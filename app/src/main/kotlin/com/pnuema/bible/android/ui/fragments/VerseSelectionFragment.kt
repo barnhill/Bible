@@ -62,7 +62,7 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
         FirebaseAnalytics.getInstance(requireContext()).logEvent("VerseSelectionFragment", null)
 
         if (isVisible && CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
-            viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book.toString(), CurrentSelected.chapter.toString())
+            viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
         }
     }
 

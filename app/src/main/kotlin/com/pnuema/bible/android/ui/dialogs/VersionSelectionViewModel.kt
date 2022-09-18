@@ -7,14 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.data.firefly.Versions
 import com.pnuema.bible.android.repository.FireflyRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class VersionSelectionViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
-    val versions: LiveData<Versions> = MutableLiveData()
+    private val _versions: MutableLiveData<Versions> = MutableLiveData()
+    val versions: LiveData<Versions> = _versions
 
     fun loadVersions() {
         viewModelScope.launch(Dispatchers.IO) {
-            (versions as MutableLiveData<Versions>).postValue(fireflyRepository.getVersions())
+            fireflyRepository.getVersions().collect { versions ->
+                _versions.postValue(versions)
+            }
         }
     }
 }

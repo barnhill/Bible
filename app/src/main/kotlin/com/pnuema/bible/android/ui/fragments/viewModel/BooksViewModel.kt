@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.data.firefly.Books
 import com.pnuema.bible.android.repository.FireflyRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class BooksViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
@@ -15,7 +16,9 @@ class BooksViewModel(private val fireflyRepository: FireflyRepository = FireflyR
 
     fun loadBooks() {
         viewModelScope.launch(Dispatchers.IO) {
-            _books.postValue(fireflyRepository.getBooks())
+            fireflyRepository.getBooks().collect { books ->
+                _books.postValue(books)
+            }
         }
     }
 }

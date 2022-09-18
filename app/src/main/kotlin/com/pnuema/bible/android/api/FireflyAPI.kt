@@ -46,6 +46,8 @@ object FireflyAPI {
 
     inline fun <reified T> create(): T = instance.create(T::class.java)
 
+    val api = create<IFireflyAPI>()
+
     private fun provideCache(): Cache? {
         try {
             return Cache(File(App.context.cacheDir, CACHE_FOLDER), 10 * 1024 * 1024L) // 10 MB

@@ -5,24 +5,19 @@ import com.pnuema.bible.android.data.firefly.ChapterCount
 import com.pnuema.bible.android.data.firefly.VerseCount
 import com.pnuema.bible.android.data.firefly.Verses
 import com.pnuema.bible.android.data.firefly.Versions
+import kotlinx.coroutines.flow.Flow
 
-abstract class BaseRepository internal constructor() {
+interface BaseRepository {
 
-    companion object {
-        var instance: BaseRepository? = null
-    }
+    suspend fun getVersions(): Flow<Versions>
 
-    val tag: String get() = javaClass.simpleName
+    suspend fun getBooks(): Flow<Books>
 
-    abstract suspend fun getVersions(): Versions
+    suspend fun getChapters(book: String): Flow<ChapterCount>
 
-    abstract suspend fun getBooks(): Books
+    suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCount>
 
-    abstract suspend fun getChapters(book: String): ChapterCount
+    suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<Verses>
 
-    abstract suspend fun getVerseCount(version: String, book: String, chapter: String): VerseCount
-
-    abstract suspend fun getVerses(version: String, book: String, chapter: String): Verses
-
-    abstract suspend fun searchVerses(query: String): Verses
+    suspend fun searchVerses(query: String): Verses
 }

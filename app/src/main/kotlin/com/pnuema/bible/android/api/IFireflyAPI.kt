@@ -16,8 +16,8 @@ interface IFireflyAPI {
     suspend fun getChapterCount(@Path("book") book: Int?, @Query("v") version: String?): ChapterCount
 
     @GET("books/{book}/chapters/{chapter}/verses")
-    suspend fun getVerseCount(@Path("book") book: String, @Path("chapter") chapter: String, @Query("v") version: String?): VerseCount
+    suspend fun getVerseCount(@Path("book") book: Int, @Path("chapter") chapter: Int, @Query("v") version: String?): VerseCount
 
     @GET("books/{book}/chapters/{chapter}")
-    suspend fun getChapterVerses(@Path("book") book: String, @Path("chapter") chapter: String, @Query("v") version: String?): List<Verse>
+    suspend fun getChapterVerses(@Path("book") book: Int, @Path("chapter") chapter: Int, @Query("v") version: String?): List<Verse>
 }
