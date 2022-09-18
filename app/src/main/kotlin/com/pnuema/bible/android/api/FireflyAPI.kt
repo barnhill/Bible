@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.api
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.pnuema.bible.android.BuildConfig
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.ConnectionUtils.isConnected
@@ -25,9 +26,9 @@ object FireflyAPI {
 
     private val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
 
-    val instance: Retrofit by lazy {
+    private val instance: Retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
         httpClient.callTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -44,9 +45,7 @@ object FireflyAPI {
                 .build()
     }
 
-    inline fun <reified T> create(): T = instance.create(T::class.java)
-
-    val api = create<IFireflyAPI>()
+    val api: IFireflyAPI by lazy { instance.create(IFireflyAPI::class.java) }
 
     private fun provideCache(): Cache? {
         try {
