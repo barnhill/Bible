@@ -20,7 +20,7 @@ class LocalDataSourceImpl: LocalDataSource {
         emit(offlineBooks)
     }
 
-    override suspend fun getChapters(version: String, book: Int): Flow<ChapterCount?> = flow {
+    override suspend fun getChapters(version: String, book: Int): Flow<ChapterCountDomain?> = flow {
         val offlineChapterCount = FireflyDatabase.getInstance().chapterCountDao.getChapterCount(
             version,
             book
@@ -33,7 +33,7 @@ class LocalDataSourceImpl: LocalDataSource {
         version: String,
         book: Int,
         chapter: Int
-    ): Flow<VerseCount?> = flow {
+    ): Flow<VerseCountDomain?> = flow {
         val offlineVerseCount = FireflyDatabase.getInstance().verseCountDao.getVerseCount(
             version, book, chapter
         )

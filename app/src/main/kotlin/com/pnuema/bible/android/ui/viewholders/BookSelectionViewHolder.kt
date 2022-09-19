@@ -8,6 +8,7 @@ import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.databinding.ListitemBookBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
+import com.pnuema.bible.android.ui.viewstates.BookViewState
 
 class BookSelectionViewHolder(
         parent: ViewGroup,
@@ -18,17 +19,17 @@ class BookSelectionViewHolder(
         return super.toString() + " '" + binding.book.text + "'"
     }
 
-    fun bind(book: IBook, listener: BCVSelectionListener) {
-        val isSelected = CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && book.getId() == CurrentSelected.book
+    fun bind(book: BookViewState, listener: BCVSelectionListener) {
+        val isSelected = CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && book.id == CurrentSelected.book
 
         binding.book.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)
 
-        binding.book.text = book.getName()
+        binding.book.text = book.name
 
         itemView.setOnClickListener {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            listener.onBookSelected(book.getId())
+            listener.onBookSelected(book.id)
         }
     }
 }

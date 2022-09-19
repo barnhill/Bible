@@ -1,23 +1,24 @@
 package com.pnuema.bible.android.ui.fragments.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pnuema.bible.android.data.firefly.ChapterCount
 import com.pnuema.bible.android.repository.FireflyRepository
+import com.pnuema.bible.android.ui.fragments.uiStates.ChaptersUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ChaptersViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
-    private val _chapters: MutableLiveData<ChapterCount> = MutableLiveData()
-    val chapters: LiveData<ChapterCount> = _chapters
+    private val _chapters: MutableStateFlow<ChaptersUiState> = MutableStateFlow(ChaptersUiState.Idle)
+    val chapters: StateFlow<ChaptersUiState> = _chapters
 
-    fun loadChapters(book: String) {
+    fun loadChapters(version: String, book: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            fireflyRepository.getChapters(book).collect { chapterCount  ->
-                _chapters.postValue(chapterCount)
+            _chapters.value = ChaptersUiState.Loading
+            fireflyRepository.getChapters(version, book).collect { chapterCount  ->
+                _chapters.value = ChaptersUiState.NotLoading
+                _chapters.value = ChaptersUiState.ChaptersState(chapterCount.convertToViewState())
             }
         }
     }

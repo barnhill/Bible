@@ -1,7 +1,7 @@
 package com.pnuema.bible.android.database
 
 import androidx.room.Entity
-import com.pnuema.bible.android.data.firefly.ChapterCount
+import com.pnuema.bible.android.data.firefly.ChapterCountDomain
 
 @Entity(tableName = "offlineChapterCount", primaryKeys = ["book_id","version"])
 data class ChapterCountOffline (
@@ -9,6 +9,6 @@ data class ChapterCountOffline (
     val version: String,
     val chapterCount: Int = 0
 ) {
-    fun convertToChapterCount(): ChapterCount = ChapterCount(chapterCount)
+    fun convertToChapterCount(): ChapterCountDomain = ChapterCountDomain(chapterCount)
 }
 

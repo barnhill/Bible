@@ -1,8 +1,6 @@
 package com.pnuema.bible.android.datasource
 
-import com.pnuema.bible.android.api.FireflyAPI
 import com.pnuema.bible.android.api.FireflyAPI.api
-import com.pnuema.bible.android.api.IFireflyAPI
 import com.pnuema.bible.android.data.firefly.*
 import com.pnuema.bible.android.statics.CurrentSelected
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +15,7 @@ class FireflyDataSourceImpl: FireflyDataSource {
         emit(api.getBooks(CurrentSelected.version))
     }
 
-    override suspend fun getChapters(book: Int): Flow<ChapterCount> = flow {
+    override suspend fun getChapters(book: Int): Flow<ChapterCountDomain> = flow {
         emit(api.getChapterCount(book, CurrentSelected.version))
     }
 
@@ -25,7 +23,7 @@ class FireflyDataSourceImpl: FireflyDataSource {
         version: String,
         book: Int,
         chapter: Int
-    ): Flow<VerseCount> = flow {
+    ): Flow<VerseCountDomain> = flow {
         emit(api.getVerseCount(book, chapter, version))
     }
 

@@ -11,9 +11,9 @@ interface LocalDataSource {
 
     suspend fun getBooks(): Flow<List<BookOffline>>
 
-    suspend fun getChapters(version: String, book: Int): Flow<ChapterCount?>
+    suspend fun getChapters(version: String, book: Int): Flow<ChapterCountDomain?>
 
-    suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCount?>
+    suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCountDomain?>
 
     suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<List<VerseOffline>>
 

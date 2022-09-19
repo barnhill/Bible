@@ -41,14 +41,14 @@ class FireflyRepository(
         }
     }
 
-    override suspend fun getChapters(book: String): Flow<ChapterCount> = flow {
+    override suspend fun getChapters(version: String, book: Int): Flow<ChapterCountDomain> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
-        localDataSource.getChapters(CurrentSelected.version, CurrentSelected.book).collect { offlineChapterCount ->
+        localDataSource.getChapters(version, book).collect { offlineChapterCount ->
             if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
-                emit(ChapterCount(offlineChapterCount.chapterCount))
+                emit(ChapterCountDomain(offlineChapterCount.chapterCount))
             } else {
                 if (!isNetworkConnected()) {
-                    emit(ChapterCount())
+                    emit(ChapterCountDomain())
                 }
 
                 remoteDataSource.getChapters(CurrentSelected.book).collect { chapterCount ->
@@ -59,14 +59,14 @@ class FireflyRepository(
         }
     }
 
-    override suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCount> = flow {
+    override suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCountDomain> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
         localDataSource.getVerseCount(version, book, chapter).collect { offlineVerseCount ->
             if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
-                emit(VerseCount(offlineVerseCount.verseCount))
+                emit(VerseCountDomain(offlineVerseCount.verseCount))
             } else {
                 if (!isNetworkConnected()) {
-                    emit(VerseCount())
+                    emit(VerseCountDomain())
                 }
 
                 remoteDataSource.getVerseCount(version, book, chapter).collect { verseCount ->
@@ -77,19 +77,19 @@ class FireflyRepository(
         }
     }
 
-    override suspend fun getBooks(): Flow<Books> = flow {
+    override suspend fun getBooks(): Flow<BooksDomain> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
         localDataSource.getBooks().collect { offlineBooks ->
             if (offlineBooks.isNotEmpty()) {
-                emit(Books(offlineBooks.map { it.convertToBook() }))
+                emit(BooksDomain(offlineBooks.map { it.convertToBook() }))
             } else {
                 if (!isNetworkConnected()) {
-                    emit(Books(listOf()))
+                    emit(BooksDomain(listOf()))
                 }
 
                 remoteDataSource.getBooks().collect { books ->
                     FireflyDatabase.getInstance().booksDao.putBooks(books.map { it.convertToOfflineModel(CurrentSelected.version) })
-                    emit(Books(books))
+                    emit(BooksDomain(books))
                 }
             }
         }

@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
+import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.ui.SectionsPagerAdapter
 
 /**
@@ -41,15 +42,19 @@ class BCVDialog : Fragment(), BCVSelectionListener {
     }
 
     override fun onBookSelected(book: Int) {
-        CurrentSelected.book = book
-        CurrentSelected.clearChapter()
-        CurrentSelected.clearVerse()
+        if (CurrentSelected.book != book) {
+            CurrentSelected.book = book
+            CurrentSelected.clearChapter()
+            CurrentSelected.clearVerse()
+        }
         gotoTab(BCV.CHAPTER)
     }
 
     override fun onChapterSelected(chapter: Int) {
-        CurrentSelected.chapter = chapter
-        CurrentSelected.clearVerse()
+        if (CurrentSelected.chapter != chapter) {
+            CurrentSelected.chapter = chapter
+            CurrentSelected.clearVerse()
+        }
         gotoTab(BCV.VERSE)
     }
 

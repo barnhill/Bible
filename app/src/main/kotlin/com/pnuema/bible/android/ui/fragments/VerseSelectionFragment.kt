@@ -1,29 +1,31 @@
 package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
-import com.pnuema.bible.android.data.firefly.VerseCount
+import com.pnuema.bible.android.databinding.FragmentNumberListBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
-import com.pnuema.bible.android.ui.dialogs.NumberSelectionListener
+import com.pnuema.bible.android.ui.fragments.uiStates.VersesUiState
 import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of verse numbers to pick from.
  */
-class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list), NumberSelectionListener {
+class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list) {
     private val viewModel by viewModels<VersesViewModel>()
+    private var _binding: FragmentNumberListBinding? = null
+    private val binding: FragmentNumberListBinding get() = _binding!!
 
     companion object {
         fun newInstance(listener: BCVSelectionListener): VerseSelectionFragment {
@@ -42,18 +44,24 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gridView = view as RecyclerView
-        gridView.layoutManager = GridLayoutManager(context, 3)
+        _binding = FragmentNumberListBinding.bind(view)
+        binding.numberGridView.layoutManager = GridLayoutManager(context, 3)
 
-        viewModel.verses.observe(viewLifecycleOwner, Observer { verseCount ->
-            if (activity == null || activity?.isFinishing != false) {
-                return@Observer
-            }
-
-            if (verseCount is VerseCount) {
-                gridView.adapter = NumberSelectionAdapter(verseCount.verseCount, CurrentSelected.verse, this)
-            }
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.verses
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { state ->
+                    when (state) {
+                        VersesUiState.Idle -> Unit
+                        VersesUiState.Loading -> Unit
+                        VersesUiState.NotLoading -> Unit
+                        is VersesUiState.VersesState -> binding.numberGridView.adapter = NumberSelectionAdapter(
+                            state.viewState.verseCount,
+                            CurrentSelected.verse
+                        ) { number -> listener.onVerseSelected(number) }
+                    }
+                }
+        }
     }
 
     override fun onResume() {
@@ -61,12 +69,11 @@ class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragm
 
         FirebaseAnalytics.getInstance(requireContext()).logEvent("VerseSelectionFragment", null)
 
-        if (isVisible && CurrentSelected.chapter != CurrentSelected.DEFAULT_VALUE) {
-            viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
-        }
+        viewModel.loadVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
     }
 
-    override fun numberSelected(number: Int) {
-        listener.onVerseSelected(number)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
