@@ -1,14 +1,16 @@
 package com.pnuema.bible.android.ui.utils
 
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.TypedArrayUtils.getText
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.statics.App
+import com.pnuema.bible.android.ui.viewstates.VerseViewState
 
 object VerseUtils {
-    fun IVerse.formatted(): String = getText()
+    fun VerseViewState.formatted(): String = verseText
         .replace("¶", "")
         .let {
-            "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(App.context, R.color.secondary_text) and 0xffffff) + "\"><small>" + getVerseNumber() + "&nbsp;&nbsp;</small></font>" + getText()
+            "<font color=\"#" + String.format("#%06x", ContextCompat.getColor(App.context, R.color.secondary_text) and 0xffffff) + "\"><small>" + verseNumber + "&nbsp;&nbsp;</small></font>" + verseText
         }
 }

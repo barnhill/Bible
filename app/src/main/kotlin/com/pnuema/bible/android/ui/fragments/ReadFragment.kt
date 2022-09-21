@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -13,24 +16,24 @@ import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IBook
-import com.pnuema.bible.android.data.IBookProvider
 import com.pnuema.bible.android.data.IVerseProvider
-import com.pnuema.bible.android.data.IVersionProvider
 import com.pnuema.bible.android.databinding.FragmentReadBinding
-import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
+import com.pnuema.bible.android.statics.CurrentSelected.book
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
-import com.pnuema.bible.android.statics.CurrentSelected.version
 import com.pnuema.bible.android.ui.adapters.VersesAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVDialog
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
 import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
+import com.pnuema.bible.android.ui.fragments.uiStates.ReadBookUiState
+import com.pnuema.bible.android.ui.fragments.uiStates.ReadUiState
+import com.pnuema.bible.android.ui.fragments.uiStates.VersionUiState
 import com.pnuema.bible.android.ui.fragments.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
+import com.pnuema.bible.android.ui.viewstates.BookViewState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -39,7 +42,6 @@ import java.util.*
  */
 class ReadFragment : Fragment(R.layout.fragment_read) {
     private val viewModel by viewModels<ReadViewModel>()
-    private val books: MutableList<IBook> = ArrayList()
 
     private var _binding: FragmentReadBinding? = null
     private val binding get() = _binding!!
@@ -55,46 +57,67 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
 
         (activity as? AppCompatActivity ?: return).setSupportActionBar(binding.appBar.toolbar)
 
-        val bookChapterView = binding.appBar.selectedBook
-        val translationView = binding.appBar.selectedTranslation
-        val verseBottomPanel = binding.versesBottomPanel
-        viewModel.liveVersions.observe(viewLifecycleOwner) { iVersionProvider: IVersionProvider ->
-            for (version in iVersionProvider.versions) {
-                if (version.abbreviation == CurrentSelected.version) {
-                    translationView.text = version.abbreviation.uppercase(Locale.getDefault())
-                    break
+        setAppBarDisplay()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.stateVersions
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { state ->
+                    when (state) {
+                        VersionUiState.Idle -> Unit
+                        is VersionUiState.Versions -> {
+                            for (version in state.versions) {
+                                if (version.abbreviation == CurrentSelected.version) {
+                                    binding.appBar.selectedTranslation.text =
+                                        version.abbreviation.uppercase(Locale.getDefault())
+                                    break
+                                }
+                            }
+                        }
+                    }
                 }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.stateBook
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { state ->
+                    when (state) {
+                        is ReadBookUiState.Books -> {
+                            setBookChapterText(state.books)
+                        }
+                        ReadBookUiState.Idle -> Unit
+                    }
+                }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.stateVerses
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { state ->
+                    when(state) {
+                        ReadUiState.Idle -> Unit
+                        is ReadUiState.Verses -> {
+                            if (recyclerView.adapter == null) {
+                                recyclerView.adapter = VersesAdapter()
+                            }
+
+                            adapter.submitList(state.verses)
+
+                            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                                scrollToVerse(
+                                    verse,
+                                    layoutManager
+                                )
+                            }
+                        }
+                    }
             }
         }
-        viewModel.liveBook.observe(viewLifecycleOwner) { iBookProvider: IBookProvider ->
-            books.clear()
-            books.addAll(iBookProvider.books)
-            setBookChapterText(bookChapterView, verseBottomPanel)
-        }
-        viewModel.liveVerses.observe(viewLifecycleOwner) { iVerseProvider: IVerseProvider ->
-            if (recyclerView.adapter == null) {
-                recyclerView.adapter = VersesAdapter()
-            }
-
-            adapter.submitList(iVerseProvider.verses)
-
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                scrollToVerse(
-                    verse,
-                    layoutManager
-                )
-            }
-
-            setBookChapterText(bookChapterView, verseBottomPanel)
-        }
-
-        setAppBarDisplay(bookChapterView, translationView, verseBottomPanel)
     }
 
     override fun onResume() {
         super.onResume()
         FirebaseAnalytics.getInstance(requireContext()).logEvent("ReadFragment", Bundle().apply {
-            putInt(BCVDialog.BCV.BOOK.toString(), CurrentSelected.book)
+            putInt(BCVDialog.BCV.BOOK.toString(), book)
             putInt(BCVDialog.BCV.CHAPTER.toString(), chapter)
             putInt(BCVDialog.BCV.VERSE.toString(), verse)
         })
@@ -123,19 +146,19 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         layoutManager.startSmoothScroll(smoothScroller)
     }
 
-    private fun setAppBarDisplay(bookChapterView: TextView, translationView: TextView, verseBottomPanel: TextView) {
+    private fun setAppBarDisplay() {
         val fragmentActivity = activity
         if (!isAdded || fragmentActivity == null) {
             return
         }
-        setBookChapterText(bookChapterView, verseBottomPanel)
-        bookChapterView.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
+
+        binding.appBar.selectedBook.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
                     refresh()
                 }
             })
         }
-        translationView.setOnClickListener { showVersionsPicker(fragmentActivity, object : NotifyVersionSelectionCompleted {
+        binding.appBar.selectedTranslation.setOnClickListener { showVersionsPicker(fragmentActivity, object : NotifyVersionSelectionCompleted {
                 override fun onSelectionComplete(version: String) {
                     CurrentSelected.version = version
                     refresh()
@@ -144,12 +167,10 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         }
     }
 
-    private fun setBookChapterText(bookChapterView: TextView, verseBottomPanel: TextView) {
-        books.forEach { book ->
-            if (book.getId() == CurrentSelected.book) {
-                bookChapterView.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
-                verseBottomPanel.text = getString(R.string.book_chapter_header_format, book.getName(), chapter)
-            }
+    private fun setBookChapterText(books: List<BookViewState>) {
+        books.find{ it.id == book }?.let { book ->
+            binding.appBar.selectedBook.text = getString(R.string.book_chapter_header_format, book.name, chapter)
+            binding.versesBottomPanel.text = getString(R.string.book_chapter_header_format, book.name, chapter)
         }
     }
 }

@@ -45,7 +45,7 @@ class LocalDataSourceImpl: LocalDataSource {
         emit(offlineVerses)
     }
 
-    override suspend fun searchVerses(query: String): Flow<Verses> {
+    override suspend fun searchVerses(query: String): Flow<VersesDomain> {
         TODO("Not yet implemented")
     }
 }

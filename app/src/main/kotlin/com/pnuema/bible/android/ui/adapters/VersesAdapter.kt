@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.ui.viewholders.CopyrightViewHolder
 import com.pnuema.bible.android.ui.viewholders.VerseViewHolder
+import com.pnuema.bible.android.ui.viewstates.VerseViewState
 
-class VersesAdapter : ListAdapter<IVerse, RecyclerView.ViewHolder>(
-    object : ItemCallback<IVerse>() {
-        override fun areItemsTheSame(oldItem: IVerse, newItem: IVerse): Boolean = oldItem.javaClass == newItem.javaClass
-        override fun areContentsTheSame(oldItem: IVerse, newItem: IVerse): Boolean {
-            return oldItem.getVerseNumber() == newItem.getVerseNumber() && oldItem.getText() == newItem.getText()
+class VersesAdapter : ListAdapter<VerseViewState, RecyclerView.ViewHolder>(
+    object : ItemCallback<VerseViewState>() {
+        override fun areItemsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean = oldItem.javaClass == newItem.javaClass
+        override fun areContentsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean {
+            return oldItem.verseNumber == newItem.verseNumber
+                    && oldItem.verseText == newItem.verseText
         }
     }
 ) {

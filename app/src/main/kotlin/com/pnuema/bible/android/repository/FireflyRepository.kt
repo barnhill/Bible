@@ -23,19 +23,19 @@ class FireflyRepository(
         return connMgr.activeNetworkInfo?.isConnected ?: false
     }
 
-    override suspend fun getVersions(): Flow<Versions> = flow {
+    override suspend fun getVersions(): Flow<VersionsDomain> = flow {
         //TODO: only get offline version if not connected
         localDataSource.getVersions().collect { offlineVersions ->
             if (offlineVersions.isNotEmpty()) {
-                emit(Versions(offlineVersions.map { it.convertToVersion() }))
+                emit(VersionsDomain(offlineVersions.map { it.convertToVersion() }))
             } else {
                 if (!isNetworkConnected()) {
-                    emit(Versions(listOf()))
+                    emit(VersionsDomain(listOf()))
                 }
 
                 remoteDataSource.getVersions().collect { versions ->
                     FireflyDatabase.getInstance().versionDao.putVersions(versions.map { it.convertToOfflineModel() })
-                    emit(Versions(versions))
+                    emit(VersionsDomain(versions))
                 }
             }
         }
@@ -95,23 +95,23 @@ class FireflyRepository(
         }
     }
 
-    override suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<Verses> = flow {
+    override suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<VersesDomain> = flow {
         //TODO: only get offline version if current selected version is marked as offline ready or offline
         localDataSource.getVerses(version, book, chapter).collect { offlineVerses ->
             if (offlineVerses.isNotEmpty()) {
-                emit(Verses(offlineVerses.map { it.convertToVerse() }))
+                emit(VersesDomain(offlineVerses.map { it.convertToVerse() }))
             } else {
                 if (!isNetworkConnected()) {
-                    emit(Verses(listOf()))
+                    emit(VersesDomain(listOf()))
                 }
 
                 remoteDataSource.getVerses(version, book, chapter).collect { verses ->
                     FireflyDatabase.getInstance().verseDao.putVerses(verses.map { it.convertToOfflineModel(CurrentSelected.version) })
-                    emit(Verses(verses))
+                    emit(VersesDomain(verses))
                 }
             }
         }
     }
 
-    override suspend fun searchVerses(query: String): Verses = Verses(FireflyDatabase.getInstance().verseDao.searchVerses(query = query).map { it.convertToVerse() })
+    override suspend fun searchVerses(query: String): VersesDomain = VersesDomain(FireflyDatabase.getInstance().verseDao.searchVerses(query = query).map { it.convertToVerse() })
 }

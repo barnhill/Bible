@@ -17,5 +17,5 @@ interface LocalDataSource {
 
     suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<List<VerseOffline>>
 
-    suspend fun searchVerses(query: String): Flow<Verses>
+    suspend fun searchVerses(query: String): Flow<VersesDomain>
 }

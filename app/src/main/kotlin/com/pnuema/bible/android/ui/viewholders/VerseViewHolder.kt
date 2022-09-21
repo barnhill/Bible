@@ -8,6 +8,7 @@ import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.databinding.ListitemVerseBinding
 import com.pnuema.bible.android.statics.HtmlUtils
 import com.pnuema.bible.android.ui.utils.VerseUtils.formatted
+import com.pnuema.bible.android.ui.viewstates.VerseViewState
 
 class VerseViewHolder(
         parent: ViewGroup,
@@ -21,7 +22,7 @@ class VerseViewHolder(
             get() = R.layout.listitem_verse
     }
 
-    fun bind(verse: IVerse) {
+    fun bind(verse: VerseViewState) {
         binding.verseText.text = HtmlUtils.fromHtml(verse.formatted())
     }
 }
