@@ -4,21 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
-import com.pnuema.bible.android.R
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.pnuema.bible.android.data.IVersion
+import com.pnuema.bible.android.databinding.DialogVersionPickerBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.LanguageUtils
 import com.pnuema.bible.android.ui.adapters.VersionSelectionRecyclerViewAdapter
-import java.util.*
 
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
-    private lateinit var adapter: VersionSelectionRecyclerViewAdapter
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
     private val viewModel: VersionSelectionViewModel by viewModels()
     private val versions = ArrayList<IVersion>()
+
+    private var _binding: DialogVersionPickerBinding? = null
+    private val binding: DialogVersionPickerBinding get() = _binding!!
+    private val adapter: VersionSelectionRecyclerViewAdapter get() = binding.versionRecyclerView.adapter as VersionSelectionRecyclerViewAdapter
 
     constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
         versionSelectionCompleted = notifySelectionCompleted
@@ -37,26 +40,35 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.dialog_version_picker, container)
+        _binding = DialogVersionPickerBinding.inflate(layoutInflater)
 
-        adapter = VersionSelectionRecyclerViewAdapter(versions, this)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.versionRecyclerView)
-        recyclerView.adapter = adapter
+        with(binding.versionRecyclerView) {
+            adapter = VersionSelectionRecyclerViewAdapter(this@VersionSelectionDialog)
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
 
-        viewModel.versions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.versions.observe(viewLifecycleOwner) {
             versions.clear()
             val lang = LanguageUtils.iSOLanguage
-            for (version in it.versions) {
-                if (version.language.contains(lang)) {
-                    versions.add(version)
-                }
-            }
 
-            adapter.setVersions(versions)
-        })
+            versions.addAll(it.versions.filter { iVer -> iVer.language.contains(lang) })
+
+            adapter.submitList(versions)
+        }
 
         viewModel.loadVersions()
 
-        return view
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        })
+
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

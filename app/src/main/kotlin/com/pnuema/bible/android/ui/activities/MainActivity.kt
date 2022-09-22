@@ -3,15 +3,16 @@ package com.pnuema.bible.android.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
+import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
@@ -21,11 +22,17 @@ import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
     private lateinit var readFragment: ReadFragment
+
+    private var _binding: ActivityMainBinding? = null
+    private val binding: ActivityMainBinding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DeepLinks.handleDeepLinks(intent)
 
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
@@ -52,16 +59,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         runBlocking {
             CurrentSelected.readPreferences()
         }
-        super.onResume()
-    }
 
-    override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+        super.onResume()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -78,8 +77,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return true
         }
 
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
         return super.onOptionsItemSelected(item)
     }
 

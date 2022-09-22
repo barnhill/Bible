@@ -12,14 +12,15 @@ import com.pnuema.bible.android.ui.viewstates.BookViewState
 
 class BookSelectionViewHolder(
         parent: ViewGroup,
-        private val binding: ListitemBookBinding = ListitemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        private val listener: BCVSelectionListener,
+        private val binding: ListitemBookBinding = ListitemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false),
 ) : RecyclerView.ViewHolder(binding.root) {
 
     override fun toString(): String {
         return super.toString() + " '" + binding.book.text + "'"
     }
 
-    fun bind(book: BookViewState, listener: BCVSelectionListener) {
+    fun bind(book: BookViewState) {
         val isSelected = CurrentSelected.book != CurrentSelected.DEFAULT_VALUE && book.id == CurrentSelected.book
 
         binding.book.setTextAppearance(if (isSelected) R.style.BookChapterVerse_BookText_Selected else R.style.BookChapterVerse_BookText)

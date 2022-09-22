@@ -3,6 +3,7 @@ package com.pnuema.bible.android.ui.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
@@ -58,6 +59,16 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         (activity as? AppCompatActivity ?: return).setSupportActionBar(binding.appBar.toolbar)
 
         setAppBarDisplay()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (requireActivity().supportFragmentManager.backStackEntryCount > 0) {
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    requireActivity().finish()
+                }
+            }
+        })
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.stateVersions

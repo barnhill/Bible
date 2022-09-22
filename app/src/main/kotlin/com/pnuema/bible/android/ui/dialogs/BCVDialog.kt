@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -22,6 +20,13 @@ import com.pnuema.bible.android.ui.SectionsPagerAdapter
 class BCVDialog : Fragment(), BCVSelectionListener {
     private lateinit var viewPager: ViewPager2
     private var listener: NotifySelectionCompleted? = null
+
+    private val backCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            requireActivity().supportFragmentManager.popBackStack()
+            remove()
+        }
+    }
 
     companion object {
         private const val ARG_STARTING_TAB = "STARTING_POINT"
@@ -70,8 +75,8 @@ class BCVDialog : Fragment(), BCVSelectionListener {
     }
 
     override fun refresh() {
-        listener?.onSelectionComplete(CurrentSelected.book, CurrentSelected.chapter, CurrentSelected.verse)
-        activity?.supportFragmentManager?.popBackStack()
+        listener?.onSelectionComplete(CurrentSelected.book, chapter, CurrentSelected.verse)
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     private fun setListener(listener: NotifySelectionCompleted) {
@@ -97,6 +102,8 @@ class BCVDialog : Fragment(), BCVSelectionListener {
         val startTab = args.getInt(ARG_STARTING_TAB, BCV.BOOK.value)
 
         viewPager.currentItem = startTab
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
 
         return view
     }

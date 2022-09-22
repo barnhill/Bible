@@ -10,9 +10,10 @@ import com.pnuema.bible.android.ui.dialogs.NumberSelectionListener
 
 class NumberSelectionViewHolder(
         parent: ViewGroup,
-        private val binding: ListitemNumberBinding = ListitemNumberBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        private val onClickListener: NumberSelectionListener,
+        private val binding: ListitemNumberBinding = ListitemNumberBinding.inflate(LayoutInflater.from(parent.context), parent, false),
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(position: Int, isSelected: Boolean, onClickListener: NumberSelectionListener) {
+    fun bind(position: Int, isSelected: Boolean) {
         binding.textNumber.text = position.toString()
 
         binding.textNumber.setTextAppearance(if (isSelected) R.style.BookChapterVerse_NumberText_Selected else R.style.BookChapterVerse_NumberText)

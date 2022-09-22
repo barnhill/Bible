@@ -22,6 +22,6 @@ class BookSelectionRecyclerViewAdapter(
         override fun areContentsTheSame(oldItem: BookViewState, newItem: BookViewState): Boolean = oldItem == newItem
     }
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSelectionViewHolder = BookSelectionViewHolder(parent)
-    override fun onBindViewHolder(holder: BookSelectionViewHolder, position: Int) = holder.bind(currentList[position], mListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSelectionViewHolder = BookSelectionViewHolder(parent, mListener)
+    override fun onBindViewHolder(holder: BookSelectionViewHolder, position: Int) = holder.bind(currentList[position])
 }
