@@ -3,10 +3,8 @@ package com.pnuema.bible.android.api
 import com.pnuema.bible.android.BuildConfig
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.ConnectionUtils.isConnected
-import okhttp3.Cache
-import okhttp3.CacheControl
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import okhttp3.*
+import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -17,7 +15,7 @@ import java.util.concurrent.TimeUnit
  * Houses all the api calls to get data
  */
 object FireflyAPI {
-    private const val baseUrl = "http://firefly.pnuema.com/api/v1/"
+    private const val baseUrl = "https://fireflyapi.link/api/v1/"
     private const val CACHE_FOLDER = "http-cache"
     private const val HEADER_CACHE_CONTROL = "Cache-Control"
     private const val CACHE_OFFLINE_DAYS = 365
@@ -29,19 +27,23 @@ object FireflyAPI {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
-        httpClient.callTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(httpLoggingInterceptor)
-                .addInterceptor(provideOfflineCacheInterceptor())
-                .addNetworkInterceptor(provideCacheInterceptor())
-                .cache(provideCache())
+        httpClient
+            .protocols(listOf(Protocol.HTTP_2, Protocol.HTTP_1_1))
+            .callTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(provideOfflineCacheInterceptor())
+            .addNetworkInterceptor(provideCacheInterceptor())
+            .addInterceptor(BrotliInterceptor)
+            .cache(provideCache())
+
         Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .client(httpClient.build())
-                .build()
+            .baseUrl(baseUrl)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(httpClient.build())
+            .build()
     }
 
     val api: IFireflyAPI by lazy { instance.create(IFireflyAPI::class.java) }
