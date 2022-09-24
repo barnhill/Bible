@@ -28,9 +28,11 @@ class FireflyRepository(
         localDataSource.getVersions().collect { offlineVersions ->
             if (offlineVersions.isNotEmpty()) {
                 emit(VersionsDomain(offlineVersions.map { it.convertToVersion() }))
+                return@collect
             } else {
                 if (!isNetworkConnected()) {
                     emit(VersionsDomain(listOf()))
+                    return@collect
                 }
 
                 remoteDataSource.getVersions().collect { versions ->
@@ -46,9 +48,11 @@ class FireflyRepository(
         localDataSource.getChapters(version, book).collect { offlineChapterCount ->
             if (offlineChapterCount != null && offlineChapterCount.chapterCount > 0) {
                 emit(ChapterCountDomain(offlineChapterCount.chapterCount))
+                return@collect
             } else {
                 if (!isNetworkConnected()) {
                     emit(ChapterCountDomain())
+                    return@collect
                 }
 
                 remoteDataSource.getChapters(CurrentSelected.book).collect { chapterCount ->
@@ -64,9 +68,11 @@ class FireflyRepository(
         localDataSource.getVerseCount(version, book, chapter).collect { offlineVerseCount ->
             if (offlineVerseCount != null && offlineVerseCount.verseCount > 0) {
                 emit(VerseCountDomain(offlineVerseCount.verseCount))
+                return@collect
             } else {
                 if (!isNetworkConnected()) {
                     emit(VerseCountDomain())
+                    return@collect
                 }
 
                 remoteDataSource.getVerseCount(version, book, chapter).collect { verseCount ->
@@ -82,9 +88,11 @@ class FireflyRepository(
         localDataSource.getBooks().collect { offlineBooks ->
             if (offlineBooks.isNotEmpty()) {
                 emit(BooksDomain(offlineBooks.map { it.convertToBook() }))
+                return@collect
             } else {
                 if (!isNetworkConnected()) {
                     emit(BooksDomain(listOf()))
+                    return@collect
                 }
 
                 remoteDataSource.getBooks().collect { books ->
@@ -100,9 +108,11 @@ class FireflyRepository(
         localDataSource.getVerses(version, book, chapter).collect { offlineVerses ->
             if (offlineVerses.isNotEmpty()) {
                 emit(VersesDomain(offlineVerses.map { it.convertToVerse() }))
+                return@collect
             } else {
                 if (!isNetworkConnected()) {
                     emit(VersesDomain(listOf()))
+                    return@collect
                 }
 
                 remoteDataSource.getVerses(version, book, chapter).collect { verses ->

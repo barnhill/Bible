@@ -1,15 +1,13 @@
 package com.pnuema.bible.android.ui.dialogs
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pnuema.bible.android.R
+import com.pnuema.bible.android.databinding.DialogBookchapterversePickerBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.ui.SectionsPagerAdapter
@@ -17,8 +15,9 @@ import com.pnuema.bible.android.ui.SectionsPagerAdapter
 /**
  * Book/Chapter/Verse selection dialog
  */
-class BCVDialog : Fragment(), BCVSelectionListener {
-    private lateinit var viewPager: ViewPager2
+class BCVDialog : Fragment(R.layout.dialog_bookchapterverse_picker), BCVSelectionListener {
+    private var _binding: DialogBookchapterversePickerBinding? = null
+    private val binding: DialogBookchapterversePickerBinding get() = _binding!!
     private var listener: NotifySelectionCompleted? = null
 
     private val backCallback = object : OnBackPressedCallback(true) {
@@ -69,9 +68,7 @@ class BCVDialog : Fragment(), BCVSelectionListener {
     }
 
     private fun gotoTab(tab: BCV) {
-        if (::viewPager.isInitialized) {
-            viewPager.currentItem = tab.value
-        }
+        binding.pager.currentItem = tab.value
     }
 
     override fun refresh() {
@@ -83,28 +80,30 @@ class BCVDialog : Fragment(), BCVSelectionListener {
         this.listener = listener
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_bookchapterverse_picker, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding = DialogBookchapterversePickerBinding.bind(view)
 
         val pagerAdapter = SectionsPagerAdapter(this, view.context, this)
-        viewPager = view.findViewById(R.id.pager)
-        viewPager.adapter = pagerAdapter
+        binding.pager.adapter = pagerAdapter
 
         val tabLayout = view.findViewById<TabLayout>(R.id.tabs)
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        TabLayoutMediator(tabLayout, binding.pager) { tab, position ->
             tab.text = pagerAdapter.getPageTitle(position)
         }.attach()
 
-        val args = arguments
-                ?: //TODO log message about arguments being null
-                return view
+        val args = arguments ?: return //TODO log message about arguments being null
 
         val startTab = args.getInt(ARG_STARTING_TAB, BCV.BOOK.value)
 
-        viewPager.currentItem = startTab
+        binding.pager.currentItem = startTab
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+    }
 
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

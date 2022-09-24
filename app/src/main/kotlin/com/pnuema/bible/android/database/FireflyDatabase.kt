@@ -25,18 +25,16 @@ abstract class FireflyDatabase : RoomDatabase() {
     abstract val versionDao: VersionOfflineDao
 
     companion object {
-        private lateinit var INSTANCE: FireflyDatabase
+        private val INSTANCE: FireflyDatabase by lazy {
+            synchronized(FireflyDatabase::class) {
+                Room.databaseBuilder(
+                    App.context,
+                    FireflyDatabase::class.java, FILENAME
+                ).build()
+            }
+        }
         private const val FILENAME = "firefly-offline.db"
 
-        fun getInstance(): FireflyDatabase {
-            if (!::INSTANCE.isInitialized) {
-                synchronized(FireflyDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(App.context,
-                            FireflyDatabase::class.java, FILENAME)
-                            .build()
-                }
-            }
-            return INSTANCE
-        }
+        fun getInstance(): FireflyDatabase = INSTANCE
     }
 }

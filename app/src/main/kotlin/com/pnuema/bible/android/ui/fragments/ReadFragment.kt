@@ -2,10 +2,8 @@ package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
-import com.pnuema.bible.android.data.IBook
-import com.pnuema.bible.android.data.IVerseProvider
 import com.pnuema.bible.android.databinding.FragmentReadBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.CurrentSelected.book

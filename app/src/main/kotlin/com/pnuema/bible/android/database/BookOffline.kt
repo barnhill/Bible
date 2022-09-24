@@ -10,6 +10,6 @@ data class BookOffline(
     val title: String,
     val newTestament: Boolean
 ) {
-    fun convertToBook(): Book = Book(book_id, title, newTestament.compareTo(false))
+    fun convertToBook(): Book = Book(book_id, title, if (newTestament) 1 else 0)
 
 }

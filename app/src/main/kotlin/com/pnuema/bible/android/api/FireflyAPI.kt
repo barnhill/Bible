@@ -21,7 +21,7 @@ object FireflyAPI {
     private const val CACHE_OFFLINE_DAYS = 365
     private const val CACHE_ONLINE_DAYS = 2
 
-    private val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
+    private val httpClient: OkHttpClient.Builder by lazy { OkHttpClient.Builder() }
 
     private val instance: Retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {

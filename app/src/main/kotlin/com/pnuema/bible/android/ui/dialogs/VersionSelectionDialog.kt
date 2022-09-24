@@ -18,9 +18,9 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
     private val viewModel: VersionSelectionViewModel by viewModels()
     private val versions = ArrayList<IVersion>()
-
     private var _binding: DialogVersionPickerBinding? = null
     private val binding: DialogVersionPickerBinding get() = _binding!!
+
     private val adapter: VersionSelectionRecyclerViewAdapter get() = binding.versionRecyclerView.adapter as VersionSelectionRecyclerViewAdapter
 
     constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
