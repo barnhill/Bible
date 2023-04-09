@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.ListitemCopyrightBinding
-import com.pnuema.bible.android.statics.HtmlUtils
+import com.pnuema.bible.android.statics.fromHtml
 
 class CopyrightViewHolder(
         parent: ViewGroup,
@@ -21,6 +21,6 @@ class CopyrightViewHolder(
     }
 
     fun bind(text: String) {
-        binding.copyrightText.text = HtmlUtils.fromHtml(text)
+        binding.copyrightText.text = text.fromHtml()
     }
 }

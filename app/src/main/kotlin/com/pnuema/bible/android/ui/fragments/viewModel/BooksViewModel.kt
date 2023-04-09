@@ -7,6 +7,7 @@ import com.pnuema.bible.android.ui.fragments.uiStates.BooksUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BooksViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
@@ -15,10 +16,10 @@ class BooksViewModel(private val fireflyRepository: FireflyRepository = FireflyR
 
     fun loadBooks() {
         viewModelScope.launch(Dispatchers.IO) {
-            _books.value = BooksUiState.Loading
+            _books.update { BooksUiState.Loading }
             fireflyRepository.getBooks().collect { books ->
-                _books.value = BooksUiState.NotLoading
-                _books.value = BooksUiState.BooksState(books.convertToViewStates())
+                _books.update{ BooksUiState.NotLoading }
+                _books.update{ BooksUiState.BooksState(books.convertToViewStates()) }
             }
         }
     }

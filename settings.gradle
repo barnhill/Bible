@@ -5,13 +5,51 @@ pluginManagement {
         mavenCentral()
     }
 }
+
+plugins {
+    id "com.gradle.enterprise" version "3.12.6"
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
         gradlePluginPortal()
         google()
         mavenCentral()
     }
+}
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+    }
+}
+
+if (System.getenv("REMOTE_CACHE_URL") != null || System.getProperty('REMOTE_CACHE_URL') != null) {
+    buildCache {
+        local {
+            removeUnusedEntriesAfterDays = 30
+        }
+        def cacheUrl = System.getenv("REMOTE_CACHE_URL") == null ? System.getProperty('REMOTE_CACHE_URL') : "${System.getenv("REMOTE_CACHE_URL")}"
+        remote(HttpBuildCache) {
+            url = cacheUrl
+            enabled = true
+            push = true
+            allowUntrustedServer = true
+            allowInsecureProtocol = true
+            if (enabled) {
+                println "Using remote build cache: " + cacheUrl
+            }
+            credentials {
+                username = System.getenv("REMOTE_CACHE_USER") == null ? System.getProperty('REMOTE_CACHE_USER') : "${System.getenv("REMOTE_CACHE_USER")}"
+                password = System.getenv("REMOTE_CACHE_PASS") == null ? System.getProperty('REMOTE_CACHE_PASS') : "${System.getenv("REMOTE_CACHE_PASS")}"
+            }
+        }
+    }
+} else {
+    println "Not using remote build cache!"
 }
 
 rootProject.name = "Bible"

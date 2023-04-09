@@ -6,7 +6,7 @@ import com.pnuema.bible.android.data.firefly.VerseCountDomain
 @Dao
 interface VerseCountOfflineDao {
     @Transaction
-    @Query("select * from offlineVerseCount where version = :version AND book_id = :bookId AND chapter = :chapterId")
+    @Query("select verseCount from offlineVerseCount where version = :version AND book_id = :bookId AND chapter = :chapterId")
     suspend fun getVerseCount(version: String, bookId: Int, chapterId: Int): VerseCountDomain?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

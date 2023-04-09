@@ -1,6 +1,7 @@
 package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
 import com.pnuema.bible.android.ui.viewstates.BookViewState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -56,6 +58,8 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
 
         setAppBarDisplay()
 
+        binding.versesRecyclerView.adapter = VersesAdapter()
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (requireActivity().supportFragmentManager.backStackEntryCount > 0) {
@@ -68,15 +72,14 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.stateVersions
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
                 .collect { state ->
                     when (state) {
                         VersionUiState.Idle -> Unit
                         is VersionUiState.Versions -> {
                             for (version in state.versions) {
                                 if (version.abbreviation == CurrentSelected.version) {
-                                    binding.appBar.selectedTranslation.text =
-                                        version.abbreviation.uppercase(Locale.getDefault())
+                                    binding.appBar.selectedTranslation.text = version.abbreviation.uppercase(Locale.getDefault())
                                     break
                                 }
                             }
@@ -86,7 +89,7 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.stateBook
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
                 .collect { state ->
                     when (state) {
                         is ReadBookUiState.Books -> {
@@ -98,23 +101,17 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.stateVerses
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
                 .collect { state ->
                     when(state) {
                         ReadUiState.Idle -> Unit
                         is ReadUiState.Verses -> {
-                            if (recyclerView.adapter == null) {
-                                recyclerView.adapter = VersesAdapter()
-                            }
-
                             adapter.submitList(state.verses)
 
-                            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                                scrollToVerse(
-                                    verse,
-                                    layoutManager
-                                )
-                            }
+                            scrollToVerse(
+                                verse,
+                                layoutManager
+                            )
                         }
                     }
             }
@@ -154,21 +151,21 @@ class ReadFragment : Fragment(R.layout.fragment_read) {
     }
 
     private fun setAppBarDisplay() {
-        val fragmentActivity = activity
-        if (!isAdded || fragmentActivity == null) {
+        if (!isAdded) {
             return
         }
 
-        binding.appBar.selectedBook.setOnClickListener { showBookChapterVersePicker(fragmentActivity, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
+        binding.appBar.selectedBook.setOnClickListener { showBookChapterVersePicker(parentFragmentManager, BCVDialog.BCV.BOOK, object : NotifySelectionCompleted {
                 override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
                     refresh()
                 }
             })
         }
-        binding.appBar.selectedTranslation.setOnClickListener { showVersionsPicker(fragmentActivity, object : NotifyVersionSelectionCompleted {
+        binding.appBar.selectedTranslation.setOnClickListener { showVersionsPicker(parentFragmentManager, object : NotifyVersionSelectionCompleted {
                 override fun onSelectionComplete(version: String) {
-                    CurrentSelected.version = version
-                    refresh()
+                    /*CurrentSelected.version = version
+                    binding.appBar.selectedTranslation.text = version.uppercase(Locale.getDefault())
+                    refresh()*/
                 }
             })
         }

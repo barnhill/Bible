@@ -7,32 +7,34 @@ import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.fragments.uiStates.ReadBookUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.ReadUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.VersionUiState
-import com.pnuema.bible.android.ui.utils.Extensions.toViewState
+import com.pnuema.bible.android.ui.utils.toViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ReadViewModel constructor(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
     private val _stateVersions: MutableStateFlow<VersionUiState> = MutableStateFlow(VersionUiState.Idle)
-    val stateVersions: StateFlow<VersionUiState> get() = _stateVersions
+    val stateVersions = _stateVersions.asStateFlow()
 
     private val _stateVerses: MutableStateFlow<ReadUiState> = MutableStateFlow(ReadUiState.Idle)
-    val stateVerses: StateFlow<ReadUiState> get() = _stateVerses
+    val stateVerses = _stateVerses.asStateFlow()
 
     private val _stateBook: MutableStateFlow<ReadBookUiState> = MutableStateFlow(ReadBookUiState.Idle)
-    val stateBook: StateFlow<ReadBookUiState> get() = _stateBook
+    val stateBook = _stateBook.asStateFlow()
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
             fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter).collect { verses ->
-                _stateVerses.value = ReadUiState.Verses(verses.verses.map { it.toViewState() })
+                _stateVerses.update { ReadUiState.Idle }
+                _stateVerses.update { ReadUiState.Verses(verses = verses.verses.map { it.toViewState() }) }
             }
             fireflyRepository.getVersions().collect { versions ->
-                _stateVersions.value = VersionUiState.Versions(versions.versions.map { it.toViewState() })
+                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
             }
             fireflyRepository.getBooks().collect { books ->
-                _stateBook.value = ReadBookUiState.Books(books.books.map { it.toViewState() })
+                _stateBook.update { ReadBookUiState.Books(books.books.map { it.toViewState() }) }
             }
         }
     }

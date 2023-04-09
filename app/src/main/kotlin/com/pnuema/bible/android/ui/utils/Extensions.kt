@@ -7,20 +7,18 @@ import com.pnuema.bible.android.ui.viewstates.BookViewState
 import com.pnuema.bible.android.ui.viewstates.VerseViewState
 import com.pnuema.bible.android.ui.viewstates.VersionViewState
 
-object Extensions {
-    fun IVerse.toViewState(): VerseViewState = VerseViewState(
-        verseNumber = getVerseNumber(),
-        verseText = getText(),
-    )
+fun IVerse.toViewState(): VerseViewState = VerseViewState(
+    verseNumber = getVerseNumber(),
+    verseText = getText(),
+)
 
-    fun IVersion.toViewState(): VersionViewState = VersionViewState(
-        abbreviation = abbreviation,
-        text = getDisplayText(),
-    )
+fun IVersion.toViewState(): VersionViewState = VersionViewState(
+    abbreviation = abbreviation,
+    text = getDisplayText(),
+)
 
-    fun IBook.toViewState(): BookViewState = BookViewState(
-        id = getId(),
-        abbreviation = getAbbreviation(),
-        name = getName(),
-    )
-}
+fun IBook.toViewState(): BookViewState = BookViewState(
+    id = getId(),
+    abbreviation = getAbbreviation(),
+    name = getName(),
+)

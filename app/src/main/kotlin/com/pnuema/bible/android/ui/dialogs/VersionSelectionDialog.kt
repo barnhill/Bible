@@ -1,10 +1,12 @@
 package com.pnuema.bible.android.ui.dialogs
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -36,7 +38,7 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     override fun onVersionSelected(version: String) {
         CurrentSelected.version = version
         versionSelectionCompleted.onSelectionComplete(version)
-        dismiss()
+        parentFragmentManager.popBackStackImmediate()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

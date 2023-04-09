@@ -6,7 +6,7 @@ import com.pnuema.bible.android.data.firefly.ChapterCountDomain
 @Dao
 interface ChapterCountOfflineDao {
     @Transaction
-    @Query("select * from offlineChapterCount where version = :version AND book_id = :bookId")
+    @Query("select chapterCount from offlineChapterCount where version = :version AND book_id = :bookId")
     suspend fun getChapterCount(version: String, bookId: Int): ChapterCountDomain?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -7,6 +7,7 @@ import com.pnuema.bible.android.ui.fragments.uiStates.VersesUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class VersesViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
@@ -15,10 +16,10 @@ class VersesViewModel(private val fireflyRepository: FireflyRepository = Firefly
 
     fun loadVerses(version: String, book: Int, chapter: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _verses.value = VersesUiState.Loading
+            _verses.update { VersesUiState.Loading }
             fireflyRepository.getVerseCount(version, book, chapter).collect { verseCount ->
-                _verses.value = VersesUiState.NotLoading
-                _verses.value = VersesUiState.VersesState(verseCount.convertToViewState())
+                _verses.update { VersesUiState.NotLoading }
+                _verses.update { VersesUiState.VersesState(verseCount.convertToViewState()) }
             }
         }
     }

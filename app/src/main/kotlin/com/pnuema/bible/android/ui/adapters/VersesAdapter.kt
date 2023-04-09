@@ -11,11 +11,8 @@ import com.pnuema.bible.android.ui.viewstates.VerseViewState
 
 class VersesAdapter : ListAdapter<VerseViewState, RecyclerView.ViewHolder>(
     object : ItemCallback<VerseViewState>() {
-        override fun areItemsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean = oldItem.javaClass == newItem.javaClass
-        override fun areContentsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean {
-            return oldItem.verseNumber == newItem.verseNumber
-                    && oldItem.verseText == newItem.verseText
-        }
+        override fun areItemsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean = false
+        override fun areContentsTheSame(oldItem: VerseViewState, newItem: VerseViewState): Boolean = false
     }
 ) {
     private lateinit var copyrightText: String

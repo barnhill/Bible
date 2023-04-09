@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
-import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.databinding.ListitemVerseBinding
-import com.pnuema.bible.android.statics.HtmlUtils
+import com.pnuema.bible.android.statics.fromHtml
 import com.pnuema.bible.android.ui.utils.VerseUtils.formatted
 import com.pnuema.bible.android.ui.viewstates.VerseViewState
 
@@ -23,6 +22,6 @@ class VerseViewHolder(
     }
 
     fun bind(verse: VerseViewState) {
-        binding.verseText.text = HtmlUtils.fromHtml(verse.formatted())
+        binding.verseText.text = verse.formatted().fromHtml()
     }
 }
