@@ -24,9 +24,9 @@ jobs:
         check-latest: true
     - name: Build with Gradle
       env:
-        REMOTE_CACHE_URL:  ${{ secrets.REMOTE_CACHE_URL  }}
-        REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
-        REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
+        ORG_GRADLE_PROJECT_REMOTE_CACHE_URL:  ${{ secrets.REMOTE_CACHE_URL  }}
+        ORG_GRADLE_PROJECT_REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
+        ORG_GRADLE_PROJECT_REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
       run: ./gradlew build
     - uses: actions/upload-artifact@v3
       with:
