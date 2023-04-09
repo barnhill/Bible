@@ -1,6 +1,7 @@
 name: Bible CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
@@ -23,7 +24,7 @@ jobs:
         check-latest: true
     - name: Build with Gradle
       env:
-        REMOTE_CACHE_URL: $REMOTE_CACHE_URL
+        REMOTE_CACHE_URL:  $REMOTE_CACHE_URL
         REMOTE_CACHE_USER: $REMOTE_CACHE_USER
         REMOTE_CACHE_PASS: $REMOTE_CACHE_PASS
       run: ./gradlew build
