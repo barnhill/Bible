@@ -57,10 +57,6 @@ android {
     }
 }
 
-kapt {
-    useBuildCache = true
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.devtools.ksp:symbol-processing-api:1.8.20-1.0.10'
@@ -77,13 +73,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation platform('com.google.firebase:firebase-bom:26.3.0')
-    implementation 'com.google.firebase:firebase-storage'
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-core'
+    implementation platform('com.google.firebase:firebase-bom:31.3.0')
+    implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-perf'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-perf-ktx'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
