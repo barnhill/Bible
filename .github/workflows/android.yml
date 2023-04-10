@@ -14,25 +14,27 @@ jobs:
       matrix:
         java: [ '11' ]
 
+    environment: build
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup JDK ${{ matrix.java }}
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: ${{ matrix.java }}
-        check-latest: true
-    - name: Build with Gradle
-      env:
-        ORG_GRADLE_PROJECT_REMOTE_CACHE_URL:  ${{ secrets.REMOTE_CACHE_URL  }}
-        ORG_GRADLE_PROJECT_REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
-        ORG_GRADLE_PROJECT_REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
-      run: ./gradlew build
-    - uses: actions/upload-artifact@v3
-      with:
-        name: APK
-        path: build/outputs/apk/debug/app-debug.apk
-    - uses: actions/upload-artifact@v3
-      with:
-        name: Bundle
-        path: build/outputs/bundle/debug/app-debug.aab
+      - name: Setup Environment Variables
+        env:
+          REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL  }}
+          REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
+          REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
+      - uses: actions/checkout@v3
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+      - name: Build with Gradle
+        run: ./gradlew build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: APK
+          path: build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Bundle
+          path: build/outputs/bundle/debug/app-debug.aab
