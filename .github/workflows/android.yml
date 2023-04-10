@@ -16,6 +16,11 @@ jobs:
 
     environment: build
     steps:
+      - name: Setup Environment Variables
+        - run: |
+            export REMOTE_CACHE_URL=${{ secrets.REMOTE_CACHE_URL }}
+            export REMOTE_CACHE_USER=${{ secrets.REMOTE_CACHE_USER }}
+            export REMOTE_CACHE_PASS=${{ secrets.REMOTE_CACHE_PASS }}
       - uses: actions/checkout@v3
       - name: Setup JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
@@ -24,10 +29,6 @@ jobs:
           java-version: ${{ matrix.java }}
           check-latest: true
       - name: Build with Gradle
-        secrets:
-          REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL  }}
-          REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
-          REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
         run: ./gradlew build
       - uses: actions/upload-artifact@v3
         with:
