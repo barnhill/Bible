@@ -41,9 +41,15 @@ class LocalDataSourceImpl: LocalDataSource {
     }
 
     override suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<List<VerseOffline>> = flow {
-        val offlineVerses = FireflyDatabase.getInstance().verseDao.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter)
+        val offlineVerses = FireflyDatabase.getInstance().verseDao.getVerses(version, book, chapter)
         emit(offlineVerses)
     }
+
+    override suspend fun getVersesByBook(
+        version: String,
+        book: Int,
+    ): List<VerseOffline> = FireflyDatabase.getInstance().verseDao.getVersesByBook(version, book)
+
 
     override suspend fun searchVerses(query: String): Flow<VersesDomain> {
         TODO("Not yet implemented")

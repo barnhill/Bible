@@ -11,6 +11,7 @@ import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.databinding.ListitemVersionBinding
 import com.pnuema.bible.android.statics.CurrentSelected
+import com.pnuema.bible.android.ui.dialogs.DownloadVersionDialog
 import com.pnuema.bible.android.ui.dialogs.VersionSelectionListener
 
 class VersionSelectionViewHolder(
@@ -23,15 +24,19 @@ class VersionSelectionViewHolder(
     }
 
     fun bind(version: IVersion) {
-        binding.root.text = version.getDisplayText()
+        binding.version.text = version.getDisplayText()
 
         val currentIsSelected = !TextUtils.isEmpty(CurrentSelected.version) && CurrentSelected.version == version.abbreviation
 
-        binding.root.setTextColor(ContextCompat.getColor(binding.root.context, if (currentIsSelected) R.color.primary else R.color.primary_text))
-        binding.root.setTypeface(null, if (currentIsSelected) Typeface.BOLD else Typeface.NORMAL)
+        binding.version.setTextColor(ContextCompat.getColor(binding.root.context, if (currentIsSelected) R.color.primary else R.color.primary_text))
+        binding.version.setTypeface(null, if (currentIsSelected) Typeface.BOLD else Typeface.NORMAL)
 
-        binding.root.setOnClickListener {
+        binding.version.setOnClickListener {
             listener.onVersionSelected(version.abbreviation)
+        }
+
+        binding.downloadIcon.setOnClickListener {
+            listener.onVersionDownloadClicked(version.abbreviation)
         }
     }
 }

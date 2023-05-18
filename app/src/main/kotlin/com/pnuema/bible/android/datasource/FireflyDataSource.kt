@@ -14,5 +14,7 @@ interface FireflyDataSource {
 
     suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<List<Verse>>
 
+    suspend fun getVersesByBook(version: String, book: Int): List<Verse>
+
     suspend fun searchVerses(query: String): Flow<VersesDomain>
 }

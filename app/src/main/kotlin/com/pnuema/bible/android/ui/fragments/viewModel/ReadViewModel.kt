@@ -26,14 +26,14 @@ class ReadViewModel constructor(private val fireflyRepository: FireflyRepository
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
+            fireflyRepository.getVersions().collect { versions ->
+                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
+            }
             fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter).collect { verses ->
                 _stateVerses.update { ReadUiState.Idle }
                 _stateVerses.update { ReadUiState.Verses(verses = verses.verses.map { it.toViewState() }) }
             }
-            fireflyRepository.getVersions().collect { versions ->
-                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
-            }
-            fireflyRepository.getBooks().collect { books ->
+            fireflyRepository.getBooks(CurrentSelected.version).collect { books ->
                 _stateBook.update { ReadBookUiState.Books(books.books.map { it.toViewState() }) }
             }
         }

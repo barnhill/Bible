@@ -9,12 +9,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.databinding.DialogVersionPickerBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.LanguageUtils
+import com.pnuema.bible.android.statics.fromHtml
 import com.pnuema.bible.android.ui.adapters.VersionSelectionRecyclerViewAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
@@ -41,6 +48,18 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         parentFragmentManager.popBackStackImmediate()
     }
 
+    override fun onVersionDownloadClicked(version: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.download_confirm_message, version.uppercase()))
+            .setPositiveButton(R.string.download_confirm_yes) { _, _ ->
+                DownloadVersionDialog.newInstance(version).show(parentFragmentManager, "")
+            }
+            .setNegativeButton(R.string.download_confirm_no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogVersionPickerBinding.inflate(layoutInflater)
 
@@ -49,13 +68,17 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
 
-        viewModel.versions.observe(viewLifecycleOwner) {
-            versions.clear()
-            val lang = LanguageUtils.iSOLanguage
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.versions
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect {
+                    versions.clear()
+                    val lang = LanguageUtils.iSOLanguage
 
-            versions.addAll(it.versions.filter { iVer -> iVer.language.contains(lang) })
+                    versions.addAll(it.versions.filter { iVer -> iVer.language.contains(lang) })
 
-            adapter.submitList(versions)
+                    adapter.submitList(versions)
+                }
         }
 
         viewModel.loadVersions()

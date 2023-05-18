@@ -20,4 +20,7 @@ interface IFireflyAPI {
 
     @GET("books/{book}/chapters/{chapter}")
     suspend fun getChapterVerses(@Path("book") book: Int, @Path("chapter") chapter: Int, @Query("v") version: String?): List<Verse>
+
+    @GET("books/{book}")
+    suspend fun getBookVerses(@Path("book") book: Int, @Query("v") version: String?): List<Verse>
 }
