@@ -6,7 +6,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
@@ -24,7 +23,6 @@ class DownloadVersionViewModel constructor(
     private val _progress: MutableSharedFlow<Unit> = MutableSharedFlow()
     val progress = _progress.asSharedFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun downloadVersion(version: String, lifecycle: Lifecycle) {
         viewModelScope.launch(Dispatchers.IO) {
             fireflyRepository.getBooks(version)
