@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.toml.version.checker)
 }
 
 android {
@@ -59,6 +60,14 @@ android {
     sourceSets {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
+}
+
+tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates").configure {
+    // optional parameters
+    checkForGradleUpdate = true
+    outputFormatter = "html"
+    outputDir = "build/dependencyUpdates"
+    reportfileName = "report"
 }
 
 dependencies {
