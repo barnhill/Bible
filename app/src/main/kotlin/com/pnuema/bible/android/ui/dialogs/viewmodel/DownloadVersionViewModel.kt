@@ -33,12 +33,14 @@ class DownloadVersionViewModel constructor(
                     _progressTotal.emit(booksDomain.books.count())
 
                     //limit concurrency
-                    val requestSemaphore = Semaphore(5)
+                    val requestSemaphore = Semaphore(3)
 
-                    booksDomain.books.sortedBy { it.getId() }.map { book ->
-                        requestSemaphore.withPermit {
-                            fireflyRepository.getVersesByBook(version, book.getId())
-                            _progress.emit(Unit)
+                    booksDomain.books.sortedBy { it.getId() }.parallelStream().forEach { book ->
+                        viewModelScope.launch(Dispatchers.IO) {
+                            requestSemaphore.withPermit {
+                                fireflyRepository.getVersesByBook(version, book.getId())
+                                _progress.emit(Unit)
+                            }
                         }
                     }
             }
