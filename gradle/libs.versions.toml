@@ -21,10 +21,10 @@ logging-interceptor = "4.10.0"
 okhttp-brotli = "4.10.0"
 
 #plugins
-kotlinVersion = "1.8.21"
+kotlin= "1.8.21"
 gradlePlugins-agp = "8.0.1"
 googleServices = "4.3.15"
-gradleCacheFix = "2.7.0"
+gradleCacheFix = "2.7.1"
 firebasePerfPlugin = "1.4.2"
 crashlyticsPlugin = "2.9.5"
 licensesPlugin = "0.10.6"
@@ -55,9 +55,9 @@ okhttp-brotli = { group = "com.squareup.okhttp3", name = "okhttp-brotli", versio
 
 [plugins]
 android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-symbol-processing" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 gradle-cachefix = { id = "org.gradle.android.cache-fix", version.ref = "gradleCacheFix" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
