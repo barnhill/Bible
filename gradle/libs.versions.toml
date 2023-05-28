@@ -1,0 +1,65 @@
+[versions]
+#libs
+ktx = "1.10.1"
+fragment-ktx = "1.5.7"
+lifecycle-viewmodel-ktx = "2.6.1"
+lifecycle-extensions = "2.2.0"
+room-version = "2.6.0-alpha01"
+datastore-preferences = "1.0.0"
+material = "1.9.0"
+play-services-oss-licenses = "17.0.1"
+ksp-symbol-processing = "1.8.21-1.0.11"
+recyclerview = "1.3.0"
+constraintlayout = "2.1.4"
+firebase-bom = "31.3.0"
+firebase-storage-ktx = "20.2.0"
+firebase-analytics-ktx = "21.2.2"
+firebase-perf-ktx = "20.3.2"
+retrofit = "2.9.0"
+converter-moshi = "2.9.0"
+logging-interceptor = "4.10.0"
+okhttp-brotli = "4.10.0"
+
+#plugins
+kotlin= "1.8.21"
+gradlePlugins-agp = "8.0.2"
+googleServices = "4.3.15"
+gradleCacheFix = "2.7.1"
+firebasePerfPlugin = "1.4.2"
+crashlyticsPlugin = "2.9.5"
+licensesPlugin = "0.10.6"
+tomlChecker = "0.46.0"
+
+[libraries]
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "play-services-oss-licenses" }
+ksp-symbol-processing = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp-symbol-processing" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebase-storage-ktx" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebase-analytics-ktx" }
+firebase-perf-ktx = { group = "com.google.firebase", name = "firebase-perf-ktx", version.ref = "firebase-perf-ktx" }
+square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+square-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "converter-moshi" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+okhttp-brotli = { group = "com.squareup.okhttp3", name = "okhttp-brotli", version.ref = "okhttp-brotli" }
+
+[plugins]
+android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-symbol-processing" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+gradle-cachefix = { id = "org.gradle.android.cache-fix", version.ref = "gradleCacheFix" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
+toml-version-checker = { id = "com.github.ben-manes.versions", version.ref = "tomlChecker" }
