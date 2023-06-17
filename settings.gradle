@@ -27,24 +27,26 @@ gradleEnterprise {
     }
 }
 
-if (System.getenv("REMOTE_CACHE_URL") != null || System.getProperty('REMOTE_CACHE_URL') != null) {
+def cacheUrl = System.getenv("REMOTE_CACHE_URL") == null ? settings["REMOTE_CACHE_URL"] : "${System.getenv("REMOTE_CACHE_URL")}"
+
+if (cacheUrl != null) {
     buildCache {
         local {
             removeUnusedEntriesAfterDays = 30
         }
-        def cacheUrl = System.getenv("REMOTE_CACHE_URL") == null ? System.getProperty('REMOTE_CACHE_URL') : "${System.getenv("REMOTE_CACHE_URL")}"
+
         remote(HttpBuildCache) {
             url = cacheUrl
             enabled = true
             push = true
             allowUntrustedServer = true
-            allowInsecureProtocol = true
+            allowInsecureProtocol = false
             if (enabled) {
                 println "Using remote build cache: " + cacheUrl
             }
             credentials {
-                username = System.getenv("REMOTE_CACHE_USER") == null ? System.getProperty('REMOTE_CACHE_USER') : "${System.getenv("REMOTE_CACHE_USER")}"
-                password = System.getenv("REMOTE_CACHE_PASS") == null ? System.getProperty('REMOTE_CACHE_PASS') : "${System.getenv("REMOTE_CACHE_PASS")}"
+                username = System.getenv("REMOTE_CACHE_USER") == null ? settings['REMOTE_CACHE_USER'] : "${System.getenv("REMOTE_CACHE_USER")}"
+                password = System.getenv("REMOTE_CACHE_PASS") == null ? settings['REMOTE_CACHE_PASS'] : "${System.getenv("REMOTE_CACHE_PASS")}"
             }
         }
     }
