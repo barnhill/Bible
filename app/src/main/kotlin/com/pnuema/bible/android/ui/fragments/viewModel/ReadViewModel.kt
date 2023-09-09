@@ -8,13 +8,16 @@ import com.pnuema.bible.android.ui.fragments.uiStates.ReadBookUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.ReadUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.VersionUiState
 import com.pnuema.bible.android.ui.utils.toViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReadViewModel constructor(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
+@HiltViewModel
+class ReadViewModel @Inject constructor(private val fireflyRepository: FireflyRepository): ViewModel() {
     private val _stateVersions: MutableStateFlow<VersionUiState> = MutableStateFlow(VersionUiState.Idle)
     val stateVersions = _stateVersions.asStateFlow()
 

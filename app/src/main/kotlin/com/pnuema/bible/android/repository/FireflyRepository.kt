@@ -11,16 +11,15 @@ import com.pnuema.bible.android.database.ChapterCountOffline
 import com.pnuema.bible.android.database.FireflyDatabase
 import com.pnuema.bible.android.database.VerseCountOffline
 import com.pnuema.bible.android.datasource.FireflyDataSource
-import com.pnuema.bible.android.datasource.FireflyDataSourceImpl
 import com.pnuema.bible.android.datasource.LocalDataSource
-import com.pnuema.bible.android.datasource.LocalDataSourceImpl
 import com.pnuema.bible.android.statics.App
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class FireflyRepository(
-    private val remoteDataSource: FireflyDataSource = FireflyDataSourceImpl(),
-    private val localDataSource: LocalDataSource = LocalDataSourceImpl()
+class FireflyRepository @Inject constructor(
+    private val remoteDataSource: FireflyDataSource,
+    private val localDataSource: LocalDataSource
 ) : BaseRepository {
     private val connMgr = App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

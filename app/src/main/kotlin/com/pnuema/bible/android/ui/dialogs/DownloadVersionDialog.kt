@@ -11,8 +11,10 @@ import com.pnuema.bible.android.databinding.DialogDownloadVersionBinding
 import com.pnuema.bible.android.statics.CurrentSelected.version
 import com.pnuema.bible.android.ui.dialogs.viewmodel.DownloadVersionViewModel
 import com.pnuema.bible.android.ui.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
     companion object {
         const val VERSION_TO_DOWNLOAD = "VERSION_TO_DOWNLOAD"

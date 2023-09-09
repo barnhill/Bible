@@ -1,7 +1,6 @@
 package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -31,14 +30,14 @@ import com.pnuema.bible.android.ui.fragments.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.DialogUtils.showVersionsPicker
 import com.pnuema.bible.android.ui.viewstates.BookViewState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
 /**
  * The reading pane fragment
  */
+@AndroidEntryPoint
 class ReadFragment : Fragment(R.layout.fragment_read) {
     private val viewModel by viewModels<ReadViewModel>()
 

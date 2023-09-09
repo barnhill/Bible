@@ -1,12 +1,10 @@
 package com.pnuema.bible.android.ui.dialogs
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -18,11 +16,11 @@ import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.databinding.DialogVersionPickerBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.LanguageUtils
-import com.pnuema.bible.android.statics.fromHtml
 import com.pnuema.bible.android.ui.adapters.VersionSelectionRecyclerViewAdapter
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
     private val viewModel: VersionSelectionViewModel by viewModels()

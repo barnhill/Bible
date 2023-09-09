@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.FragmentNumberListBinding
@@ -17,11 +16,13 @@ import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
 import com.pnuema.bible.android.ui.fragments.uiStates.VersesUiState
 import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of verse numbers to pick from.
  */
+@AndroidEntryPoint
 class VerseSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list) {
     private val viewModel by viewModels<VersesViewModel>()
     private var _binding: FragmentNumberListBinding? = null

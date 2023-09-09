@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -12,9 +13,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import javax.inject.Inject
 
-class DownloadVersionViewModel constructor(
-    private val fireflyRepository: FireflyRepository = FireflyRepository()
+@HiltViewModel
+class DownloadVersionViewModel @Inject constructor(
+    private val fireflyRepository: FireflyRepository
 ): ViewModel() {
 
     private val _progressTotal: MutableSharedFlow<Int> = MutableSharedFlow()

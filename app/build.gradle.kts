@@ -7,8 +7,9 @@ plugins {
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
-    id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.toml.version.checker)
+    alias(libs.plugins.hilt.plugin)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -94,6 +95,9 @@ dependencies {
     implementation(libs.square.moshi)
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp.brotli)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 }
 
 apply(plugin = "com.google.gms.google-services")
