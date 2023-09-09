@@ -13,10 +13,12 @@ import com.pnuema.bible.android.database.VerseCountOffline
 import com.pnuema.bible.android.datasource.FireflyDataSource
 import com.pnuema.bible.android.datasource.LocalDataSource
 import com.pnuema.bible.android.statics.App
+import dagger.Reusable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+@Reusable
 class FireflyRepository @Inject constructor(
     private val remoteDataSource: FireflyDataSource,
     private val localDataSource: LocalDataSource

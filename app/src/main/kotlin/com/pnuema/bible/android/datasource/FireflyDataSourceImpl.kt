@@ -8,9 +8,11 @@ import com.pnuema.bible.android.data.firefly.VerseCountDomain
 import com.pnuema.bible.android.data.firefly.VersesDomain
 import com.pnuema.bible.android.data.firefly.Version
 import com.pnuema.bible.android.statics.CurrentSelected
+import dagger.Reusable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+@Reusable
 class FireflyDataSourceImpl: FireflyDataSource {
     override suspend fun getVersions(): Flow<List<Version>> = flow {
         emit(api.getVersions(null)) //TODO select language

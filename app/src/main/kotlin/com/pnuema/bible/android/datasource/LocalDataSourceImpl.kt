@@ -1,14 +1,18 @@
 package com.pnuema.bible.android.datasource
 
-import com.pnuema.bible.android.data.firefly.*
+import com.pnuema.bible.android.data.firefly.ChapterCountDomain
+import com.pnuema.bible.android.data.firefly.VerseCountDomain
+import com.pnuema.bible.android.data.firefly.VersesDomain
 import com.pnuema.bible.android.database.BookOffline
 import com.pnuema.bible.android.database.FireflyDatabase
 import com.pnuema.bible.android.database.VerseOffline
 import com.pnuema.bible.android.database.VersionOffline
 import com.pnuema.bible.android.statics.CurrentSelected
+import dagger.Reusable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+@Reusable
 class LocalDataSourceImpl: LocalDataSource {
     override suspend fun getVersions(): Flow<List<VersionOffline>> = flow {
         val offlineVersions = FireflyDatabase.getInstance().versionDao.getVersions()
