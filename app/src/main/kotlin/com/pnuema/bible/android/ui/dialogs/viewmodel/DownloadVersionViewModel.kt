@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
+import com.pnuema.bible.android.ui.dialogs.DownloadProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,10 +21,7 @@ class DownloadVersionViewModel @Inject constructor(
     private val fireflyRepository: FireflyRepository
 ): ViewModel() {
 
-    private val _progressTotal: MutableSharedFlow<Int> = MutableSharedFlow()
-    val progressTotal = _progressTotal.asSharedFlow()
-
-    private val _progress: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val _progress: MutableSharedFlow<DownloadProgress> = MutableSharedFlow()
     val progress = _progress.asSharedFlow()
 
     fun downloadVersion(version: String, lifecycle: Lifecycle) {
@@ -33,7 +31,10 @@ class DownloadVersionViewModel @Inject constructor(
                 .flowOn(Dispatchers.IO)
                 .collect { booksDomain ->
 
-                    _progressTotal.emit(booksDomain.books.count())
+                    val total = booksDomain.books.count()
+                    var progress = 0
+
+                    _progress.emit(DownloadProgress.Max(total))
 
                     //limit concurrency
                     val requestSemaphore = Semaphore(3)
@@ -42,7 +43,11 @@ class DownloadVersionViewModel @Inject constructor(
                         viewModelScope.launch(Dispatchers.IO) {
                             requestSemaphore.withPermit {
                                 fireflyRepository.getVersesByBook(version, book.getId())
-                                _progress.emit(Unit)
+                                _progress.emit(DownloadProgress.ProgressByOne)
+
+                                if (total == ++progress) {
+                                    _progress.emit(DownloadProgress.Complete)
+                                }
                             }
                         }
                     }

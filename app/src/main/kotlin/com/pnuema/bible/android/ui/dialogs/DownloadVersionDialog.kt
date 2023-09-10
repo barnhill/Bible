@@ -8,10 +8,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.DialogDownloadVersionBinding
-import com.pnuema.bible.android.statics.CurrentSelected.version
 import com.pnuema.bible.android.ui.dialogs.viewmodel.DownloadVersionViewModel
 import com.pnuema.bible.android.ui.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,29 +35,26 @@ class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.downloadDialogTitle.text = getString(R.string.downloading_version_x, version)
-        binding.downloadDialogProgress.progress = 0
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.progressTotal
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    binding.downloadDialogProgress.max = it
-                }
+        val versionToDownload = requireArguments().getString(VERSION_TO_DOWNLOAD) ?: run {
+            dismiss()
+            return
         }
+
+        binding.downloadDialogTitle.text = getString(R.string.downloading_version_x, versionToDownload.uppercase())
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.progress
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    binding.downloadDialogProgress.incrementProgressBy(1)
-
-                    if (binding.downloadDialogProgress.progress == binding.downloadDialogProgress.max) {
-                        dismiss()
+                .flowOn(Dispatchers.Main)
+                .collect { state ->
+                    when(state) {
+                        is DownloadProgress.ProgressByOne -> binding.downloadDialogProgress.incrementProgressBy(1)
+                        is DownloadProgress.Max -> binding.downloadDialogProgress.max = state.max
+                        is DownloadProgress.Complete -> dismiss()
                     }
                 }
         }
 
-        viewModel.downloadVersion(requireArguments().getString(VERSION_TO_DOWNLOAD) ?: "", viewLifecycleOwner.lifecycle)
+        viewModel.downloadVersion(versionToDownload, viewLifecycleOwner.lifecycle)
     }
 }
