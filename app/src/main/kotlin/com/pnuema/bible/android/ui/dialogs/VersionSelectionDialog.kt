@@ -88,12 +88,9 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
             }
         })
 
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.loadVersions()
+
+        return binding.root
     }
 
     override fun onDestroyView() {
