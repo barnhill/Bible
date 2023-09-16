@@ -30,6 +30,10 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
 
     private val adapter: VersionSelectionRecyclerViewAdapter get() = binding.versionRecyclerView.adapter as VersionSelectionRecyclerViewAdapter
 
+    interface DownloadCompleted {
+        fun onDownloadComplete()
+    }
+
     constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
         versionSelectionCompleted = notifySelectionCompleted
     }
@@ -50,7 +54,11 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.download_confirm_message, version.uppercase()))
             .setPositiveButton(R.string.download_confirm_yes) { _, _ ->
-                DownloadVersionDialog.newInstance(version).show(parentFragmentManager, "")
+                DownloadVersionDialog.newInstance(version, object : DownloadCompleted {
+                    override fun onDownloadComplete() {
+                        viewModel.loadVersions()
+                    }
+                }).show(childFragmentManager, null)
             }
             .setNegativeButton(R.string.download_confirm_no) { dialog, _ ->
                 dialog.dismiss()
@@ -70,16 +78,9 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
             viewModel.versions
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect {
-                    versions.clear()
-                    val lang = LanguageUtils.iSOLanguage
-
-                    versions.addAll(it.versions.filter { iVer -> iVer.language.contains(lang) })
-
-                    adapter.submitList(versions)
+                    adapter.submitList(it.versions.filter { iVer -> iVer.language.contains(LanguageUtils.iSOLanguage) })
                 }
         }
-
-        viewModel.loadVersions()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -88,6 +89,11 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         })
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadVersions()
     }
 
     override fun onDestroyView() {

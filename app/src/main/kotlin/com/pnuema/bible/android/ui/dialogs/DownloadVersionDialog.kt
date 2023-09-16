@@ -2,6 +2,7 @@ package com.pnuema.bible.android.ui.dialogs
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -19,16 +20,19 @@ import kotlinx.coroutines.launch
 class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
     companion object {
         const val VERSION_TO_DOWNLOAD = "VERSION_TO_DOWNLOAD"
-        fun newInstance(version: String): DownloadVersionDialog {
+
+        fun newInstance(version: String, callback: VersionSelectionDialog.DownloadCompleted): DownloadVersionDialog {
             return DownloadVersionDialog().apply {
                 isCancelable = false
-                arguments = Bundle().apply {
-                    putString(VERSION_TO_DOWNLOAD, version)
-                }
+                this.callback = callback
+                arguments = bundleOf(
+                    VERSION_TO_DOWNLOAD to version
+                )
             }
         }
     }
 
+    var callback: VersionSelectionDialog.DownloadCompleted? = null
     private val binding: DialogDownloadVersionBinding by viewBinding()
     private val viewModel: DownloadVersionViewModel by viewModels()
 
@@ -50,7 +54,10 @@ class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
                     when(state) {
                         is DownloadProgress.ProgressByOne -> binding.downloadDialogProgress.incrementProgressBy(1)
                         is DownloadProgress.Max -> binding.downloadDialogProgress.max = state.max
-                        is DownloadProgress.Complete -> dismiss()
+                        is DownloadProgress.Complete -> {
+                            callback?.onDownloadComplete()
+                            dismiss()
+                        }
                     }
                 }
         }

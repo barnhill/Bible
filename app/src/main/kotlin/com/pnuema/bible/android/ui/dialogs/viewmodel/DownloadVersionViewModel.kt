@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.pnuema.bible.android.database.VersionOfflineDao
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.ui.dialogs.DownloadProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DownloadVersionViewModel @Inject constructor(
-    private val fireflyRepository: FireflyRepository
+    private val fireflyRepository: FireflyRepository,
+    private val offlineDao: VersionOfflineDao,
 ): ViewModel() {
 
     private val _progress: MutableSharedFlow<DownloadProgress> = MutableSharedFlow()
@@ -37,7 +39,7 @@ class DownloadVersionViewModel @Inject constructor(
                     _progress.emit(DownloadProgress.Max(total))
 
                     //limit concurrency
-                    val requestSemaphore = Semaphore(3)
+                    val requestSemaphore = Semaphore(5)
 
                     booksDomain.books.sortedBy { it.getId() }.parallelStream().forEach { book ->
                         viewModelScope.launch(Dispatchers.IO) {
@@ -46,6 +48,7 @@ class DownloadVersionViewModel @Inject constructor(
                                 _progress.emit(DownloadProgress.ProgressByOne)
 
                                 if (total == ++progress) {
+                                    offlineDao.markCompleteOfflineAvailable(version = version)
                                     _progress.emit(DownloadProgress.Complete)
                                 }
                             }

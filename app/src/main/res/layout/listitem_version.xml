@@ -22,14 +22,15 @@
         app:layout_constraintEnd_toStartOf="@+id/download_icon"
         tools:text="King James Version" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
+    <ImageView
         android:id="@+id/download_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_margin"
         android:background="?selectableItemBackground"
         android:src="@drawable/cloud_download_outline"
-        android:tint="@color/accent"
+        android:contentDescription="@string/download_icon_content_description"
+        app:tint="@color/accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

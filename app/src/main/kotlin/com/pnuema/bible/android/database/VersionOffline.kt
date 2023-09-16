@@ -1,19 +1,21 @@
 package com.pnuema.bible.android.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pnuema.bible.android.data.firefly.Version
 
 @Entity(tableName = "offlineVersion")
 data class VersionOffline(
-    @PrimaryKey var version: String,
+    @PrimaryKey val abbreviation: String,
+    val id: Int,
+    var version: String,
     val url: String,
     val publisher: String,
     val copyright: String,
-    val copyright_info: String,
+    @ColumnInfo(name = "copyright_info") val copyrightInfo: String,
     val language: String,
-    val abbreviation: String,
-    val id: Int
+    val completeOffline: Boolean = false
 ) {
     fun getDisplayText(): String = version
 
@@ -22,10 +24,11 @@ data class VersionOffline(
         url = url,
         publisher = publisher,
         copyright = copyright,
-        copyright_info = copyright_info,
+        copyright_info = copyrightInfo,
         language = language,
         abbreviation = abbreviation,
-        id = id
+        id = id,
+        completeOffline = completeOffline
     )
 }
 

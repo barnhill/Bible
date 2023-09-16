@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.databinding.ListitemVersionBinding
 import com.pnuema.bible.android.statics.CurrentSelected
-import com.pnuema.bible.android.ui.dialogs.DownloadVersionDialog
 import com.pnuema.bible.android.ui.dialogs.VersionSelectionListener
 
 class VersionSelectionViewHolder(
@@ -35,8 +35,11 @@ class VersionSelectionViewHolder(
             listener.onVersionSelected(version.abbreviation)
         }
 
-        binding.downloadIcon.setOnClickListener {
-            listener.onVersionDownloadClicked(version.abbreviation)
+        binding.downloadIcon.apply {
+            isVisible = !version.convertToOfflineModel().completeOffline
+            setOnClickListener {
+                listener.onVersionDownloadClicked(version.abbreviation)
+            }
         }
     }
 }
