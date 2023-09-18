@@ -14,7 +14,7 @@ import com.pnuema.bible.android.statics.App
         VersionOffline::class,
         VerseOfflineFts::class,
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 abstract class FireflyDatabase : RoomDatabase() {

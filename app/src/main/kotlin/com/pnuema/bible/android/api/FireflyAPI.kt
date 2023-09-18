@@ -3,7 +3,11 @@ package com.pnuema.bible.android.api
 import com.pnuema.bible.android.BuildConfig
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.ConnectionUtils.isConnected
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
