@@ -12,7 +12,7 @@ import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.fragments.ReadFragment
+import com.pnuema.bible.android.ui.read.ReadFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

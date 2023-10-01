@@ -1,12 +1,12 @@
-package com.pnuema.bible.android.ui.fragments.viewModel
+package com.pnuema.bible.android.ui.read.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
-import com.pnuema.bible.android.ui.fragments.uiStates.ReadBookUiState
-import com.pnuema.bible.android.ui.fragments.uiStates.ReadUiState
-import com.pnuema.bible.android.ui.fragments.uiStates.VersionUiState
+import com.pnuema.bible.android.ui.read.state.ReadBookUiState
+import com.pnuema.bible.android.ui.read.state.VersionUiState
+import com.pnuema.bible.android.ui.read.state.ReadUiState
 import com.pnuema.bible.android.ui.utils.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

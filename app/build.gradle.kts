@@ -55,7 +55,13 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+
     namespace = "com.pnuema.bible.android"
 
     sourceSets {
@@ -82,10 +88,18 @@ dependencies {
     implementation(libs.lifecycle.extensions)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.ui.tooling.preview.android)
     ksp(libs.room.compiler)
     implementation(libs.datastore)
     implementation(libs.material)
     implementation(libs.licenses)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.lifecycle)
+    implementation(libs.androidx.compose.viewmodel.lifecycle)
 
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.analytics.ktx)

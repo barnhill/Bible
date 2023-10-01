@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.fragments.uiStates
+package com.pnuema.bible.android.ui.read.state
 
 import com.pnuema.bible.android.ui.viewstates.BookViewState
 

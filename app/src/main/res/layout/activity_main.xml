@@ -12,7 +12,7 @@
             android:id="@+id/read_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.pnuema.bible.android.ui.fragments.ReadFragment"
+            android:name="com.pnuema.bible.android.ui.read.ReadFragment"
             android:tag="ReadFragment"/>
 
     <include layout="@layout/drawer" />

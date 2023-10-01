@@ -4,8 +4,9 @@ import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.ui.viewstates.BookViewState
-import com.pnuema.bible.android.ui.viewstates.VerseViewState
-import com.pnuema.bible.android.ui.viewstates.VersionViewState
+import com.pnuema.bible.android.ui.read.state.VerseViewState
+import com.pnuema.bible.android.ui.read.state.VersionViewState
+import java.util.Locale
 
 fun IVerse.toViewState(): VerseViewState = VerseViewState(
     verseNumber = getVerseNumber(),
@@ -22,3 +23,8 @@ fun IBook.toViewState(): BookViewState = BookViewState(
     abbreviation = getAbbreviation(),
     name = getName(),
 )
+
+fun String.capitalizeTitleCase(): String {
+    return lowercase().trim().split("\\s+".toRegex())
+        .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase(Locale.getDefault()) } }
+}

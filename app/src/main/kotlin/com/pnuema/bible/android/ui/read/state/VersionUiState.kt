@@ -1,6 +1,4 @@
-package com.pnuema.bible.android.ui.fragments.uiStates
-
-import com.pnuema.bible.android.ui.viewstates.VersionViewState
+package com.pnuema.bible.android.ui.read.state
 
 sealed class VersionUiState {
     object Idle: VersionUiState()
