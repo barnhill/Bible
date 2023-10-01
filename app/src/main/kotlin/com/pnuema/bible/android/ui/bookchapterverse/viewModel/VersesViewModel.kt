@@ -1,9 +1,9 @@
-package com.pnuema.bible.android.ui.fragments.viewModel
+package com.pnuema.bible.android.ui.bookchapterverse.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
-import com.pnuema.bible.android.ui.fragments.uiStates.VersesUiState
+import com.pnuema.bible.android.ui.bookchapterverse.uiStates.VersesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

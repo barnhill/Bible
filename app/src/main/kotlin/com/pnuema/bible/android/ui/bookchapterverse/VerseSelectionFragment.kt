@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.fragments
+package com.pnuema.bible.android.ui.bookchapterverse
 
 import android.os.Bundle
 import android.view.View
@@ -14,8 +14,8 @@ import com.pnuema.bible.android.databinding.FragmentNumberListBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
-import com.pnuema.bible.android.ui.fragments.uiStates.VersesUiState
-import com.pnuema.bible.android.ui.fragments.viewModel.VersesViewModel
+import com.pnuema.bible.android.ui.bookchapterverse.uiStates.VersesUiState
+import com.pnuema.bible.android.ui.bookchapterverse.viewModel.VersesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

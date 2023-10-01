@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.viewstates
+package com.pnuema.bible.android.ui.bookchapterverse.bookselection.state
 
 data class BookViewState(
     val id: Int,

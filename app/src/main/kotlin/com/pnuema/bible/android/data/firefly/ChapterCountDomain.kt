@@ -2,7 +2,7 @@ package com.pnuema.bible.android.data.firefly
 
 import com.pnuema.bible.android.data.IChapterCount
 import com.pnuema.bible.android.database.ChapterCountOffline
-import com.pnuema.bible.android.ui.viewstates.ChapterCountViewState
+import com.pnuema.bible.android.ui.bookchapterverse.viewstates.ChapterCountViewState
 
 data class ChapterCountDomain (
     val chapterCount: Int = 0

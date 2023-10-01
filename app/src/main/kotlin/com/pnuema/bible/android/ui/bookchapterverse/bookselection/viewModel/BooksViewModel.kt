@@ -1,10 +1,10 @@
-package com.pnuema.bible.android.ui.fragments.viewModel
+package com.pnuema.bible.android.ui.bookchapterverse.bookselection.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
-import com.pnuema.bible.android.ui.fragments.uiStates.BooksUiState
+import com.pnuema.bible.android.ui.bookchapterverse.bookselection.state.BooksUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

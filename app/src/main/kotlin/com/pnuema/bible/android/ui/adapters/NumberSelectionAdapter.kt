@@ -3,7 +3,7 @@ package com.pnuema.bible.android.ui.adapters
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.ui.dialogs.NumberSelectionListener
-import com.pnuema.bible.android.ui.viewholders.NumberSelectionViewHolder
+import com.pnuema.bible.android.ui.bookchapterverse.viewholders.NumberSelectionViewHolder
 
 class NumberSelectionAdapter(
     private val mMaxNumber: Int,

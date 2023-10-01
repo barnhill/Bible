@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.viewholders
+package com.pnuema.bible.android.ui.bookchapterverse.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

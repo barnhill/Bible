@@ -28,9 +28,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
-import com.pnuema.bible.android.ui.fragments.BookSelectionFragment
-import com.pnuema.bible.android.ui.fragments.ChapterSelectionFragment
-import com.pnuema.bible.android.ui.fragments.VerseSelectionFragment
+import com.pnuema.bible.android.ui.bookchapterverse.bookselection.BookSelectionFragment
+import com.pnuema.bible.android.ui.bookchapterverse.ChapterSelectionFragment
+import com.pnuema.bible.android.ui.bookchapterverse.VerseSelectionFragment
 import java.util.*
 
 /**

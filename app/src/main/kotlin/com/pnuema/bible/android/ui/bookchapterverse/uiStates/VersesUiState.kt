@@ -1,6 +1,6 @@
-package com.pnuema.bible.android.ui.fragments.uiStates
+package com.pnuema.bible.android.ui.bookchapterverse.uiStates
 
-import com.pnuema.bible.android.ui.viewstates.VerseCountViewState
+import com.pnuema.bible.android.ui.bookchapterverse.viewstates.VerseCountViewState
 
 sealed class VersesUiState {
     object Idle: VersesUiState()
