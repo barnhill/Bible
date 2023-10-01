@@ -7,16 +7,17 @@ plugins {
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
-    id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.toml.version.checker)
+    alias(libs.plugins.hilt.plugin)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.pnuema.bible.android"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -94,6 +95,9 @@ dependencies {
     implementation(libs.square.moshi)
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp.brotli)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 }
 
 apply(plugin = "com.google.gms.google-services")

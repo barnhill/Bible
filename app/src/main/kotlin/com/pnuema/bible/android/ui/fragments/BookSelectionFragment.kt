@@ -7,23 +7,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.FragmentBookListBinding
-import com.pnuema.bible.android.databinding.FragmentNumberListBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.adapters.BookSelectionRecyclerViewAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
 import com.pnuema.bible.android.ui.fragments.uiStates.BooksUiState
 import com.pnuema.bible.android.ui.fragments.viewModel.BooksViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of books to pick from.
  */
+@AndroidEntryPoint
 class BookSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_book_list) {
     private val viewModel by viewModels<BooksViewModel>()
     private var _binding: FragmentBookListBinding? = null

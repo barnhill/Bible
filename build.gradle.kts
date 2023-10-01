@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.google.android.gms:oss-licenses-plugin:0.10.6")
+        classpath(libs.oss.licenses.plugin)
     }
 }
 
@@ -15,9 +15,10 @@ plugins {
     alias(libs.plugins.kotlin.jvm).apply(false)
     alias(libs.plugins.google.services).apply(false)
     alias(libs.plugins.gradle.cachefix).apply(false)
+    alias(libs.plugins.hilt.plugin).apply(false)
 }
 
 tasks.wrapper {
-    gradleVersion = "8.2.1"
+    gradleVersion = "8.3"
     distributionType = Wrapper.DistributionType.BIN
 }

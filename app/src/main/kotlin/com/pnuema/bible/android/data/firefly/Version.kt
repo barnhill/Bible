@@ -11,7 +11,8 @@ data class Version(
     var copyright_info: String,
     override var language: String,
     override var abbreviation: String,
-    override val id: Int
+    override val id: Int,
+    val completeOffline: Boolean = false,
 ) : IVersion {
 
     override fun getDisplayText(): String {
@@ -23,9 +24,10 @@ data class Version(
         url = url,
         publisher = publisher,
         copyright = copyright,
-        copyright_info = copyright_info,
+        copyrightInfo = copyright_info,
         language = language,
         abbreviation = abbreviation,
-        id = id
+        id = id,
+        completeOffline = completeOffline
     )
 }

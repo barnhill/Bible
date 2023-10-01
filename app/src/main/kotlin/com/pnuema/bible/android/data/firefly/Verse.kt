@@ -10,6 +10,8 @@ data class Verse(
     val verseText: String
 ) : IVerse {
     override fun getText(): String = verseText
+    override fun getChapterNumber(): Int = chapter
+
     override fun getVerseNumber(): Int = verse
 
     override fun convertToOfflineModel(version: String) = VerseOffline(

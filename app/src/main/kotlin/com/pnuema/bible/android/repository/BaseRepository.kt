@@ -11,13 +11,15 @@ interface BaseRepository {
 
     suspend fun getVersions(): Flow<VersionsDomain>
 
-    suspend fun getBooks(): Flow<BooksDomain>
+    suspend fun getBooks(version: String): Flow<BooksDomain>
 
     suspend fun getChapters(version: String, book: Int): Flow<ChapterCountDomain>
 
     suspend fun getVerseCount(version: String, book: Int, chapter: Int): Flow<VerseCountDomain>
 
     suspend fun getVerses(version: String, book: Int, chapter: Int): Flow<VersesDomain>
+
+    suspend fun getVersesByBook(version: String, book: Int): VersesDomain
 
     suspend fun searchVerses(query: String): VersesDomain
 }

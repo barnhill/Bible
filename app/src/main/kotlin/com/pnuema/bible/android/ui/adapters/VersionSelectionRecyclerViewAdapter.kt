@@ -18,7 +18,7 @@ class VersionSelectionRecyclerViewAdapter(
 ) : ListAdapter<IVersion, VersionSelectionViewHolder>(
     object : ItemCallback<IVersion>() {
         override fun areItemsTheSame(oldItem: IVersion, newItem: IVersion): Boolean = oldItem.javaClass == newItem.javaClass
-        override fun areContentsTheSame(oldItem: IVersion, newItem: IVersion): Boolean = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: IVersion, newItem: IVersion): Boolean = oldItem.convertToOfflineModel() == newItem.convertToOfflineModel()
     }
 ) {
 

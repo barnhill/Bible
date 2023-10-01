@@ -2,9 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <stroke
         android:width="1dp"
-        android:color="@color/primary" />
+        android:color="@android:color/transparent" />
 
-    <solid android:color="@color/primary" />
+    <solid android:color="@color/background_light" />
 
     <padding
         android:left="1dp"

@@ -1,19 +1,13 @@
 package com.pnuema.bible.android.ui.fragments
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.FragmentNumberListBinding
@@ -22,11 +16,13 @@ import com.pnuema.bible.android.ui.adapters.NumberSelectionAdapter
 import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
 import com.pnuema.bible.android.ui.fragments.uiStates.ChaptersUiState
 import com.pnuema.bible.android.ui.fragments.viewModel.ChaptersViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of chapter numbers to pick from.
  */
+@AndroidEntryPoint
 class ChapterSelectionFragment(private val listener: BCVSelectionListener) : Fragment(R.layout.fragment_number_list) {
     private val viewModel by viewModels<ChaptersViewModel>()
     private var _binding: FragmentNumberListBinding? = null

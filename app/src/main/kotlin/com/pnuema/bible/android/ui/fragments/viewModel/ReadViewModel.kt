@@ -8,13 +8,16 @@ import com.pnuema.bible.android.ui.fragments.uiStates.ReadBookUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.ReadUiState
 import com.pnuema.bible.android.ui.fragments.uiStates.VersionUiState
 import com.pnuema.bible.android.ui.utils.toViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReadViewModel constructor(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
+@HiltViewModel
+class ReadViewModel @Inject constructor(private val fireflyRepository: FireflyRepository): ViewModel() {
     private val _stateVersions: MutableStateFlow<VersionUiState> = MutableStateFlow(VersionUiState.Idle)
     val stateVersions = _stateVersions.asStateFlow()
 
@@ -26,14 +29,14 @@ class ReadViewModel constructor(private val fireflyRepository: FireflyRepository
 
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
+            fireflyRepository.getVersions().collect { versions ->
+                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
+            }
             fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter).collect { verses ->
                 _stateVerses.update { ReadUiState.Idle }
                 _stateVerses.update { ReadUiState.Verses(verses = verses.verses.map { it.toViewState() }) }
             }
-            fireflyRepository.getVersions().collect { versions ->
-                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
-            }
-            fireflyRepository.getBooks().collect { books ->
+            fireflyRepository.getBooks(CurrentSelected.version).collect { books ->
                 _stateBook.update { ReadBookUiState.Books(books.books.map { it.toViewState() }) }
             }
         }

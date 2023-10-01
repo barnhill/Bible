@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.ui.fragments.uiStates.ChaptersUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChaptersViewModel(private val fireflyRepository: FireflyRepository = FireflyRepository()): ViewModel() {
+@HiltViewModel
+class ChaptersViewModel @Inject constructor(private val fireflyRepository: FireflyRepository): ViewModel() {
     private val _chapters: MutableStateFlow<ChaptersUiState> = MutableStateFlow(ChaptersUiState.Idle)
     val chapters: StateFlow<ChaptersUiState> = _chapters
 
