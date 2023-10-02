@@ -1,6 +1,6 @@
 package com.pnuema.bible.android.ui.read.state
 
-import com.pnuema.bible.android.ui.bookchapterverse.bookselection.state.BookViewState
+import com.pnuema.bible.android.ui.bookchapterverse.state.BookViewState
 
 sealed class ReadBookUiState {
     object Idle: ReadBookUiState()

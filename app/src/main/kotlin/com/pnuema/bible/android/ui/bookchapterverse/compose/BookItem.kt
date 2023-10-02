@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.bookchapterverse.bookselection.compose
+package com.pnuema.bible.android.ui.bookchapterverse.compose
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,15 +11,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.BibleTheme
-import com.pnuema.bible.android.ui.bookchapterverse.bookselection.state.BookViewState
+import com.pnuema.bible.android.ui.bookchapterverse.state.BookViewState
 
 @Composable
 fun BookItem(
+    modifier: Modifier = Modifier,
     book: BookViewState,
     onClick: () -> Unit,
 ) {
     Text(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(all = 16.dp)
             .clickable { onClick() },

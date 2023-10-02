@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.bookchapterverse.bookselection.state
+package com.pnuema.bible.android.ui.bookchapterverse.state
 
 sealed class BooksUiState {
     object Idle: BooksUiState()

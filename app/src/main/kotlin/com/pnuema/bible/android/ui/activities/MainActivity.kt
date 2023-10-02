@@ -11,14 +11,15 @@ import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
-import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
+import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
 import com.pnuema.bible.android.ui.read.ReadFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    NotifySelectionCompleted {
     private lateinit var readFragment: ReadFragment
 
     private var _binding: ActivityMainBinding? = null

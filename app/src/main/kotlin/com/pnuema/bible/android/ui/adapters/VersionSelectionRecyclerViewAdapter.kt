@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pnuema.bible.android.data.IVersion
-import com.pnuema.bible.android.ui.dialogs.BCVSelectionListener
+import com.pnuema.bible.android.ui.bookchapterverse.BCVSelectionListener
 import com.pnuema.bible.android.ui.dialogs.VersionSelectionListener
-import com.pnuema.bible.android.ui.bookchapterverse.viewholders.VersionSelectionViewHolder
+import com.pnuema.bible.android.ui.viewholders.VersionSelectionViewHolder
 
 /**
  * [RecyclerView.Adapter] that can display a [IVersion] and makes a call to the

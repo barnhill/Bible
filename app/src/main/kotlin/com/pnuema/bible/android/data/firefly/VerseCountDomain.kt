@@ -2,7 +2,7 @@ package com.pnuema.bible.android.data.firefly
 
 import com.pnuema.bible.android.data.IVerseCount
 import com.pnuema.bible.android.database.VerseCountOffline
-import com.pnuema.bible.android.ui.bookchapterverse.viewstates.VerseCountViewState
+import com.pnuema.bible.android.ui.bookchapterverse.state.VerseCountViewState
 
 data class VerseCountDomain (
     val verseCount: Int = 0

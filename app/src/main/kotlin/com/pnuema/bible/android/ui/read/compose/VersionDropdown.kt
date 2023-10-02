@@ -35,7 +35,7 @@ fun VersionDropdown(
     ) {
         Row(
             modifier = Modifier
-                .padding(all = 8.dp)
+                .padding(all = 12.dp)
                 .clickable { onClicked() }
         ) {
             Text(
@@ -43,7 +43,7 @@ fun VersionDropdown(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
                 text = versionAbbreviation.uppercase(Locale.getDefault()),
-                style = BibleTheme.typography.caption2,
+                style = BibleTheme.typography.body2,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Image(

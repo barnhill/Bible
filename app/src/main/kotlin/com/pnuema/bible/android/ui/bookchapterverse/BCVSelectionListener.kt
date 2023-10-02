@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.dialogs
+package com.pnuema.bible.android.ui.bookchapterverse
 
 interface BCVSelectionListener {
     fun onBookSelected(book: Int)

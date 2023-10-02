@@ -14,6 +14,6 @@ abstract class RepositoryModule {
     @Binds
     @ViewModelScoped
     abstract fun bindFireflyRepository(
-        repository: FireflyRepository
+        fireflyRepository: FireflyRepository
     ): BaseRepository
 }

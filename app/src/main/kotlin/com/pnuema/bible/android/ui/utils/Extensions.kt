@@ -3,7 +3,7 @@ package com.pnuema.bible.android.ui.utils
 import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.data.IVerse
 import com.pnuema.bible.android.data.IVersion
-import com.pnuema.bible.android.ui.bookchapterverse.bookselection.state.BookViewState
+import com.pnuema.bible.android.ui.bookchapterverse.state.BookViewState
 import com.pnuema.bible.android.ui.read.state.VerseViewState
 import com.pnuema.bible.android.ui.read.state.VersionViewState
 import java.util.Locale

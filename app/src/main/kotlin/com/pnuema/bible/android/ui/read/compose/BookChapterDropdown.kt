@@ -36,7 +36,7 @@ fun BookChapterDropdown(
     ) {
         Row(
             modifier = Modifier
-                .padding(all = 8.dp)
+                .padding(all = 12.dp)
                 .clickable { onClicked() },
         ) {
             Text(
@@ -44,7 +44,7 @@ fun BookChapterDropdown(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
                 text = "$book $chapter".capitalizeTitleCase(),
-                style = BibleTheme.typography.caption2,
+                style = BibleTheme.typography.body2,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Image(

@@ -14,8 +14,8 @@ import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.CurrentSelected.book
 import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
-import com.pnuema.bible.android.ui.dialogs.BCVDialog
-import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
+import com.pnuema.bible.android.ui.bookchapterverse.BCVDialog
+import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
 import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.read.compose.ReadScreen
 import com.pnuema.bible.android.ui.read.state.ReadBookUiState
