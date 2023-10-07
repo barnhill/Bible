@@ -21,6 +21,7 @@ import com.pnuema.bible.android.ui.read.compose.ReadScreen
 import com.pnuema.bible.android.ui.read.state.ReadBookUiState
 import com.pnuema.bible.android.ui.read.state.ReadUiState
 import com.pnuema.bible.android.ui.read.state.VersionUiState
+import com.pnuema.bible.android.ui.read.state.VersionViewState
 import com.pnuema.bible.android.ui.read.viewModel.ReadViewModel
 import com.pnuema.bible.android.ui.utils.DialogUtils
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
@@ -41,7 +42,7 @@ class ReadFragment : Fragment() {
     ): View = setContent {
         val books by viewModel.stateBook.collectAsStateWithLifecycle()
         val verses by viewModel.stateVerses.collectAsStateWithLifecycle()
-        val versions by viewModel.stateVersions.collectAsStateWithLifecycle()
+        val version by viewModel.stateVersion.collectAsStateWithLifecycle()
 
         when (books) {
             is ReadBookUiState.Books -> {
@@ -51,9 +52,9 @@ class ReadFragment : Fragment() {
                         book = book.name,
                         chapter = chapter.toString(),
                         verseToFocus = verse,
-                        versionAbbreviation = when(versions) {
-                            is VersionUiState.Idle -> CurrentSelected.version
-                            is VersionUiState.Versions -> CurrentSelected.version
+                        version = when(version) {
+                            is VersionUiState.Idle -> VersionUiState.Version(version = VersionViewState("", "", ""))
+                            is VersionUiState.Version -> version as VersionUiState.Version
                         },
                         verses = when(verses) {
                             is ReadUiState.Idle -> ReadUiState.Verses(listOf())

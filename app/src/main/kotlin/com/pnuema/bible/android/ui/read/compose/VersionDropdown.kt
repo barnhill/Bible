@@ -43,7 +43,7 @@ fun VersionDropdown(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
                 text = versionAbbreviation.uppercase(Locale.getDefault()),
-                style = BibleTheme.typography.body2,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Image(

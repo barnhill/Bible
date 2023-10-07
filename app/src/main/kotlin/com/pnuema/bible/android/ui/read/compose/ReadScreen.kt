@@ -1,18 +1,24 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.ui.BibleTheme
+import com.pnuema.bible.android.ui.read.state.CopyrightViewState
 import com.pnuema.bible.android.ui.read.state.ReadUiState
 import com.pnuema.bible.android.ui.read.state.VerseViewState
+import com.pnuema.bible.android.ui.read.state.VersionUiState
+import com.pnuema.bible.android.ui.read.state.VersionViewState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -20,7 +26,7 @@ fun ReadScreen(
     book: String,
     chapter: String,
     verseToFocus: Int,
-    versionAbbreviation: String,
+    version: VersionUiState.Version,
     verses: ReadUiState.Verses,
     onBookChapterClicked: () -> Unit,
     onVersionClicked: () -> Unit
@@ -34,7 +40,7 @@ fun ReadScreen(
                 BibleAppBar(
                     book = book,
                     chapter = chapter,
-                    versionAbbreviation = versionAbbreviation,
+                    versionAbbreviation = version.version.abbreviation,
                     onBookChapterClicked = onBookChapterClicked,
                     onVersionClicked = onVersionClicked
                 )
@@ -46,8 +52,16 @@ fun ReadScreen(
                     .padding(top = paddingValues.calculateTopPadding())
                     .fillMaxSize(),
                 content = {
-                    items(verses.verses) {
-                        VerseItem(state = it)
+                    itemsIndexed(verses.verses) { index, item ->
+                        VerseItem(state = item)
+
+                        if (index == verses.verses.lastIndex) {
+                            if (version.version.copyright.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                CopyrightItem(state = CopyrightViewState(version.version.copyright))
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
 
                     coroutineScope.launch {
@@ -68,7 +82,7 @@ private fun ReadScreen_Preview() {
             book = "Genesis",
             chapter = "1",
             verseToFocus = 1,
-            versionAbbreviation = "ERV",
+            version = VersionUiState.Version(version = VersionViewState("ERV", "erv", "")),
             verses = ReadUiState.Verses(
                 verses = listOf(
                     VerseViewState(1, "In the beginning god created the heavens and the earth."),

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.repository.FireflyRepository
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.read.state.ReadBookUiState
-import com.pnuema.bible.android.ui.read.state.VersionUiState
 import com.pnuema.bible.android.ui.read.state.ReadUiState
+import com.pnuema.bible.android.ui.read.state.VersionUiState
 import com.pnuema.bible.android.ui.utils.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReadViewModel @Inject constructor(private val fireflyRepository: FireflyRepository): ViewModel() {
-    private val _stateVersions: MutableStateFlow<VersionUiState> = MutableStateFlow(VersionUiState.Idle)
-    val stateVersions = _stateVersions.asStateFlow()
+    private val _stateVersion: MutableStateFlow<VersionUiState> = MutableStateFlow(VersionUiState.Idle)
+    val stateVersion = _stateVersion.asStateFlow()
 
     private val _stateVerses: MutableStateFlow<ReadUiState> = MutableStateFlow(ReadUiState.Idle)
     val stateVerses = _stateVerses.asStateFlow()
@@ -30,7 +30,11 @@ class ReadViewModel @Inject constructor(private val fireflyRepository: FireflyRe
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
             fireflyRepository.getVersions().collect { versions ->
-                _stateVersions.update { VersionUiState.Versions(versions.versions.map { it.toViewState() }) }
+                _stateVersion.update {
+                    VersionUiState.Version(versions.versions.first {
+                        it.abbreviation.lowercase() == CurrentSelected.version.lowercase()
+                    }.toViewState())
+                }
             }
             fireflyRepository.getVerses(CurrentSelected.version, CurrentSelected.book, CurrentSelected.chapter).collect { verses ->
                 _stateVerses.update { ReadUiState.Idle }

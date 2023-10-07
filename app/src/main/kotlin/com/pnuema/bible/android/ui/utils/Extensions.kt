@@ -16,6 +16,7 @@ fun IVerse.toViewState(): VerseViewState = VerseViewState(
 fun IVersion.toViewState(): VersionViewState = VersionViewState(
     abbreviation = abbreviation,
     text = getDisplayText(),
+    copyright = copyright,
 )
 
 fun IBook.toViewState(): BookViewState = BookViewState(

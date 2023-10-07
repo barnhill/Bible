@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -40,7 +41,8 @@ fun VerseItem(
                 .padding(all = 24.dp)
                 .align(alignment = Alignment.Center),
             text = verseNumber.toString(),
-            style = BibleTheme.typography.body2,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
             color = if (isSelected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
         )
     }

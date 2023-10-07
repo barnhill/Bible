@@ -44,7 +44,7 @@ fun BookChapterDropdown(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
                 text = "$book $chapter".capitalizeTitleCase(),
-                style = BibleTheme.typography.body2,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Image(

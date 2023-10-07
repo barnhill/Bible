@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -54,13 +55,15 @@ fun BCVDialogScreen(
                         }
                     }
                 ) {
+                    val isBookPageSelected = pagerState.currentPage == BCVDialog.BCV.BOOK.value
                     Text(
                         modifier = Modifier
                             .align(alignment = Alignment.Center)
                             .padding(vertical = 12.dp),
                         text = stringResource(R.string.book).uppercase(Locale.getDefault()),
-                        style = if (pagerState.currentPage == BCVDialog.BCV.BOOK.value) BibleTheme.typography.body2 else BibleTheme.typography.body1,
-                        color = if (pagerState.currentPage == BCVDialog.BCV.BOOK.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        style = if (isBookPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                        fontWeight = if (isBookPageSelected) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isBookPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                     )
                 }
                 Box(
@@ -70,13 +73,15 @@ fun BCVDialogScreen(
                         }
                     }
                 ) {
+                    val isChapterPageSelected = pagerState.currentPage == BCVDialog.BCV.CHAPTER.value
                     Text(
                         modifier = Modifier
                             .align(alignment = Alignment.Center)
                             .padding(vertical = 12.dp),
                         text = stringResource(R.string.chapter).uppercase(Locale.getDefault()),
-                        style = if (pagerState.currentPage == BCVDialog.BCV.CHAPTER.value) BibleTheme.typography.body2 else BibleTheme.typography.body1,
-                        color = if (pagerState.currentPage == BCVDialog.BCV.CHAPTER.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        style = if (isChapterPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                        fontWeight = if (isChapterPageSelected) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isChapterPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                     )
                 }
                 Box(
@@ -86,13 +91,15 @@ fun BCVDialogScreen(
                         }
                     }
                 ) {
+                    val isVersePageSelected = pagerState.currentPage == BCVDialog.BCV.VERSE.value
                     Text(
                         modifier = Modifier
                             .align(alignment = Alignment.Center)
                             .padding(vertical = 12.dp),
                         text = stringResource(R.string.verse).uppercase(Locale.getDefault()),
-                        style = if (pagerState.currentPage == BCVDialog.BCV.VERSE.value) BibleTheme.typography.body2 else BibleTheme.typography.body1,
-                        color = if (pagerState.currentPage == BCVDialog.BCV.VERSE.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        style = if (isVersePageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                        fontWeight = if (isVersePageSelected) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isVersePageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

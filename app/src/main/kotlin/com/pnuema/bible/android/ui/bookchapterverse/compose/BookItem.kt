@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -25,7 +26,8 @@ fun BookItem(
             .padding(all = 16.dp)
             .clickable { onClick() },
         text = book.name,
-        style = if (book.id == CurrentSelected.book) BibleTheme.typography.body2 else BibleTheme.typography.caption2,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = if (book.id == CurrentSelected.book) FontWeight.Bold else FontWeight.Normal,
         color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
     )
 }
