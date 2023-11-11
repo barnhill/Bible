@@ -69,10 +69,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (id == R.id.nav_settings) {
             //TODO add settings
         } else if (id == R.id.nav_about) {
-            val intent = Intent(this, OssLicensesMenuActivity::class.java)
-            val title = getString(R.string.license_screen_title)
-            intent.putExtra("title", title)
-            startActivity(intent)
+            Intent(this, OssLicensesMenuActivity::class.java).apply {
+                putExtra("title", getString(R.string.license_screen_title))
+                startActivity(this)
+            }
+
             return true
         }
 
