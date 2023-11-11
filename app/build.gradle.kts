@@ -21,6 +21,9 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -41,13 +44,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
     }
 
     viewBinding {

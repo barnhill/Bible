@@ -24,7 +24,7 @@ fun VerseItem(
     onClick: () -> Unit,
 ) {
     val isSelected = verseNumber == CurrentSelected.verse
-    val backgroundColor = MaterialTheme.colorScheme.primary
+    val backgroundColor = MaterialTheme.colorScheme.secondary
     Box(
         modifier = modifier
             .fillMaxWidth()

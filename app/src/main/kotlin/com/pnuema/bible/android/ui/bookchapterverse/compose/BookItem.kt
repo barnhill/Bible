@@ -28,7 +28,7 @@ fun BookItem(
         text = book.name,
         style = MaterialTheme.typography.titleMedium,
         fontWeight = if (book.id == CurrentSelected.book) FontWeight.Bold else FontWeight.Normal,
-        color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+        color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
     )
 }
 

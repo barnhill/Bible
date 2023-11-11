@@ -15,7 +15,7 @@ fun VerseItem(
     state: VerseViewState
 ) {
     val annotatedVerse = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary, fontSize = MaterialTheme.typography.titleSmall.fontSize)) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = MaterialTheme.typography.titleSmall.fontSize)) {
             append("    ")
             append(state.verseNumber.toString())
             append("  ")

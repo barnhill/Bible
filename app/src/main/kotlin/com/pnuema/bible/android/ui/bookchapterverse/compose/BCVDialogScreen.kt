@@ -63,7 +63,7 @@ fun BCVDialogScreen(
                         text = stringResource(R.string.book).uppercase(Locale.getDefault()),
                         style = if (isBookPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                         fontWeight = if (isBookPageSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isBookPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        color = if (isBookPageSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
                     )
                 }
                 Box(
@@ -81,7 +81,7 @@ fun BCVDialogScreen(
                         text = stringResource(R.string.chapter).uppercase(Locale.getDefault()),
                         style = if (isChapterPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                         fontWeight = if (isChapterPageSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isChapterPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        color = if (isChapterPageSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
                     )
                 }
                 Box(
@@ -99,7 +99,7 @@ fun BCVDialogScreen(
                         text = stringResource(R.string.verse).uppercase(Locale.getDefault()),
                         style = if (isVersePageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                         fontWeight = if (isVersePageSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isVersePageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        color = if (isVersePageSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

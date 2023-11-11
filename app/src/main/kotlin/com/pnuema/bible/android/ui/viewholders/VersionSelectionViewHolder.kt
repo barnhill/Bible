@@ -28,7 +28,7 @@ class VersionSelectionViewHolder(
 
         val currentIsSelected = !TextUtils.isEmpty(CurrentSelected.version) && CurrentSelected.version == version.abbreviation
 
-        binding.version.setTextColor(ContextCompat.getColor(binding.root.context, if (currentIsSelected) R.color.primary else R.color.primary_text))
+        binding.version.setTextColor(ContextCompat.getColor(binding.root.context, if (currentIsSelected) R.color.accent else R.color.primary_text))
         binding.version.setTypeface(null, if (currentIsSelected) Typeface.BOLD else Typeface.NORMAL)
 
         binding.version.setOnClickListener {

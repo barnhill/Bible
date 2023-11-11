@@ -33,10 +33,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setContentView(binding.root)
 
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-        navigationView.bringToFront()
-        navigationView.requestLayout()
+        findViewById<NavigationView>(R.id.nav_view).apply {
+            setNavigationItemSelectedListener(this@MainActivity)
+            bringToFront()
+            requestLayout()
+        }
 
         readFragment = supportFragmentManager.findFragmentById(R.id.read_fragment) as ReadFragment
     }
