@@ -25,14 +25,14 @@ logging-interceptor = "4.10.0"
 okhttp-brotli = "4.10.0"
 
 #plugins
-kotlin= "1.9.10"
+kotlin= "1.9.21"
 gradlePlugins-agp = "8.2.0"
 googleServices = "4.4.0"
-gradleCacheFix = "2.7.1"
+gradleCacheFix = "3.0"
 firebasePerfPlugin = "1.4.2"
 crashlyticsPlugin = "2.9.9"
 licensesPlugin = "0.10.6"
-tomlChecker = "0.46.0"
+tomlChecker = "0.47.0"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
