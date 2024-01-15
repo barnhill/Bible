@@ -5,8 +5,8 @@ import androidx.fragment.app.commit
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.ui.bookchapterverse.BCVDialog
 import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
-import com.pnuema.bible.android.ui.dialogs.VersionSelectionDialog
+import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
+import com.pnuema.bible.android.ui.versionselection.ui.VersionSelectionDialog
 
 /**
  * Dialog utilities to generate and display dialogs.

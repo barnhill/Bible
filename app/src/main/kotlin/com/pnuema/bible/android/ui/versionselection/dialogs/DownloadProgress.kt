@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.dialogs
+package com.pnuema.bible.android.ui.versionselection.dialogs
 
 sealed class DownloadProgress {
     data class Max(val max: Int): DownloadProgress()

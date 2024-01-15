@@ -16,7 +16,7 @@ import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
 import com.pnuema.bible.android.ui.bookchapterverse.BCVDialog
 import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.dialogs.NotifyVersionSelectionCompleted
+import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.read.compose.ReadScreen
 import com.pnuema.bible.android.ui.read.state.ReadBookUiState
 import com.pnuema.bible.android.ui.read.state.ReadUiState
@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class ReadFragment : Fragment() {
-    private val viewModel by viewModels<ReadViewModel>()
+    private val viewModel: ReadViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

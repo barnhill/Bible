@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.dialogs
+package com.pnuema.bible.android.ui.versionselection.dialogs
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.DialogDownloadVersionBinding
-import com.pnuema.bible.android.ui.dialogs.viewmodel.DownloadVersionViewModel
+import com.pnuema.bible.android.ui.versionselection.viewModel.DownloadVersionViewModel
 import com.pnuema.bible.android.ui.utils.viewBinding
+import com.pnuema.bible.android.ui.versionselection.ui.VersionSelectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn

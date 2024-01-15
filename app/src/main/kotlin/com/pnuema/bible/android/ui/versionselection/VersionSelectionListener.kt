@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.dialogs
+package com.pnuema.bible.android.ui.versionselection
 
 interface VersionSelectionListener {
     fun onVersionSelected(version: String)

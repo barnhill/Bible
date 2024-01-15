@@ -1,4 +1,4 @@
-package com.pnuema.bible.android.ui.dialogs.viewmodel
+package com.pnuema.bible.android.ui.versionselection.viewModel
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.pnuema.bible.android.database.VersionOfflineDao
 import com.pnuema.bible.android.repository.FireflyRepository
-import com.pnuema.bible.android.ui.dialogs.DownloadProgress
+import com.pnuema.bible.android.ui.versionselection.dialogs.DownloadProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

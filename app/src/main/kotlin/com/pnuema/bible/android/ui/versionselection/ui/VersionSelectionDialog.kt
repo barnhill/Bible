@@ -1,34 +1,30 @@
-package com.pnuema.bible.android.ui.dialogs
+package com.pnuema.bible.android.ui.versionselection.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pnuema.bible.android.R
-import com.pnuema.bible.android.data.IVersion
-import com.pnuema.bible.android.databinding.DialogVersionPickerBinding
 import com.pnuema.bible.android.statics.CurrentSelected
-import com.pnuema.bible.android.statics.LanguageUtils
-import com.pnuema.bible.android.ui.adapters.VersionSelectionRecyclerViewAdapter
+import com.pnuema.bible.android.ui.BibleTheme
+import com.pnuema.bible.android.ui.utils.setContent
+import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
+import com.pnuema.bible.android.ui.versionselection.VersionSelectionListener
+import com.pnuema.bible.android.ui.versionselection.dialogs.DownloadVersionDialog
+import com.pnuema.bible.android.ui.versionselection.ui.compose.VersionSelectionScreen
+import com.pnuema.bible.android.ui.versionselection.viewModel.VersionSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
     private val viewModel: VersionSelectionViewModel by viewModels()
-    private val versions = ArrayList<IVersion>()
-    private var _binding: DialogVersionPickerBinding? = null
-    private val binding: DialogVersionPickerBinding get() = _binding!!
-
-    private val adapter: VersionSelectionRecyclerViewAdapter get() = binding.versionRecyclerView.adapter as VersionSelectionRecyclerViewAdapter
 
     interface DownloadCompleted {
         fun onDownloadComplete()
@@ -66,20 +62,23 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
             .show()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = DialogVersionPickerBinding.inflate(layoutInflater)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View = setContent {
+        val state by viewModel.versions.collectAsStateWithLifecycle()
 
-        with(binding.versionRecyclerView) {
-            adapter = VersionSelectionRecyclerViewAdapter(this@VersionSelectionDialog)
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.versions
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    adapter.submitList(it.versions.filter { iVer -> iVer.language.contains(LanguageUtils.iSOLanguage) })
+        BibleTheme {
+            VersionSelectionScreen(
+                versions = state.versions,
+                onDownloadClicked = {
+                    onVersionDownloadClicked(it)
+                },
+                onVersionClicked = {
+                    onVersionSelected(it)
                 }
+            )
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -89,12 +88,5 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         })
 
         viewModel.loadVersions()
-
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 }
