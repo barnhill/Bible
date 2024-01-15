@@ -25,7 +25,7 @@ fun VersionItem(
     version: IVersion,
     isCurrentSelectedVersion: Boolean,
     onVersionClicked: (String) -> Unit,
-    onDownloadClicked: (String) -> Unit,
+    onActionClicked: (IVersion) -> Unit,
 ) {
     BibleTheme {
         Row(
@@ -40,13 +40,25 @@ fun VersionItem(
                 text = version.getDisplayText(),
                 color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
             )
+
+
             Image(
                 modifier = Modifier
                     .padding(vertical = 16.dp)
-                    .clickable { onDownloadClicked(version.abbreviation) }
+                    .clickable { onActionClicked(version) }
                     .align(alignment = Alignment.CenterVertically),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-                imageVector = ImageVector.vectorResource(R.drawable.cloud_download_outline),
+                colorFilter = ColorFilter.tint(
+                    if (version.convertToOfflineModel().completeOffline)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.secondary
+                ),
+                imageVector = ImageVector.vectorResource(
+                    if (version.convertToOfflineModel().completeOffline)
+                        R.drawable.trash_can_outline
+                    else
+                        R.drawable.cloud_download_outline
+                ),
                 contentDescription = null
             )
         }
@@ -69,7 +81,6 @@ private fun VersionItem_Preview() {
                     get() = ""
 
                 override fun getDisplayText(): String = "King James Version"
-
                 override fun convertToOfflineModel(): VersionOffline {
                     return VersionOffline(
                         abbreviation = "KJV",
@@ -86,7 +97,44 @@ private fun VersionItem_Preview() {
             },
             isCurrentSelectedVersion = true,
             onVersionClicked = {},
-            onDownloadClicked = {}
+            onActionClicked = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun VersionItem_Offline_Preview() {
+    BibleTheme {
+        VersionItem(
+            version = object : IVersion{
+                override val id: Int
+                    get() = 1
+                override val language: String
+                    get() = ""
+                override val abbreviation: String
+                    get() = ""
+                override val copyright: String
+                    get() = ""
+
+                override fun getDisplayText(): String = "King James Version"
+                override fun convertToOfflineModel(): VersionOffline {
+                    return VersionOffline(
+                        abbreviation = "KJV",
+                        id = 1,
+                        version = "KJV",
+                        url = "",
+                        publisher = "",
+                        copyright = "",
+                        copyrightInfo = "",
+                        language = "",
+                        completeOffline = true
+                    )
+                }
+            },
+            isCurrentSelectedVersion = true,
+            onVersionClicked = {},
+            onActionClicked = {}
         )
     }
 }

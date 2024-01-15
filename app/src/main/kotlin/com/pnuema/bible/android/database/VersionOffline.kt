@@ -17,8 +17,6 @@ data class VersionOffline(
     val language: String,
     val completeOffline: Boolean = false
 ) {
-    fun getDisplayText(): String = version
-
     fun convertToVersion() = Version(
         version = version,
         url = url,

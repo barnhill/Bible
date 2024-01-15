@@ -21,7 +21,10 @@ class DownloadVersionDialog : DialogFragment() {
     companion object {
         const val VERSION_TO_DOWNLOAD = "VERSION_TO_DOWNLOAD"
 
-        fun newInstance(version: String, callback: VersionSelectionDialog.DownloadCompleted): DownloadVersionDialog {
+        fun newInstance(
+            version: String,
+            callback: VersionSelectionDialog.DownloadCompleted
+        ): DownloadVersionDialog {
             return DownloadVersionDialog().apply {
                 isCancelable = false
                 this.callback = callback
@@ -54,6 +57,7 @@ class DownloadVersionDialog : DialogFragment() {
 
         LaunchedEffect(key1 = state.isComplete, block = {
             if (state.isComplete) {
+                callback?.onDownloadComplete()
                 dismiss()
             }
         })

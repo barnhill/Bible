@@ -26,8 +26,15 @@ class DownloadVersionViewModel @Inject constructor(
     val progress = _progress.asStateFlow()
 
     fun downloadVersion(versionToDownload: String) {
-        _progress.update {
-            it.copy(versionToDownload = versionToDownload)
+        viewModelScope.launch {
+            fireflyRepository.getVersions()
+                .flowOn(Dispatchers.IO)
+                .collect { versions ->
+                    val display = versions.versions.find { it.abbreviation == versionToDownload }?.getDisplayText() ?: ""
+                    _progress.update {
+                        it.copy(versionToDownloadDisplay = display)
+                    }
+                }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -55,7 +62,7 @@ class DownloadVersionViewModel @Inject constructor(
                                 }
 
                                 if (total == ++progress) {
-                                    offlineDao.markCompleteOfflineAvailable(version = versionToDownload)
+                                    offlineDao.markCompleteOfflineAvailable(version = versionToDownload, isAvailableOffline = true)
                                     _progress.update {
                                         it.copy(isComplete = true)
                                     }

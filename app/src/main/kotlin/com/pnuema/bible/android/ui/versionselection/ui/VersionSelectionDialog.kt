@@ -9,8 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.BibleTheme
 import com.pnuema.bible.android.ui.utils.setContent
@@ -46,37 +44,35 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
         parentFragmentManager.popBackStackImmediate()
     }
 
-    override fun onVersionDownloadClicked(version: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(getString(R.string.download_confirm_message, version.uppercase()))
-            .setPositiveButton(R.string.download_confirm_yes) { _, _ ->
-                DownloadVersionDialog.newInstance(version, object : DownloadCompleted {
-                    override fun onDownloadComplete() {
-                        viewModel.loadVersions()
-                    }
-                }).show(childFragmentManager, null)
-            }
-            .setNegativeButton(R.string.download_confirm_no) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = setContent {
-        val state by viewModel.versions.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         BibleTheme {
             VersionSelectionScreen(
-                versions = state.versions,
-                onDownloadClicked = {
-                    onVersionDownloadClicked(it)
+                state = state,
+                onActionClicked = {
+                    if (it.convertToOfflineModel().completeOffline)
+                        viewModel.showRemoveVersionDialog(it)
+                    else
+                        viewModel.showDownloadVersionDialog(it)
                 },
                 onVersionClicked = {
                     onVersionSelected(it)
+                },
+                onDialogDismiss = { viewModel.clearDialogs() },
+                onDownloadApproved = {
+                    DownloadVersionDialog.newInstance(it.abbreviation, object : DownloadCompleted {
+                        override fun onDownloadComplete() {
+                            viewModel.loadVersions()
+                        }
+                    }).show(childFragmentManager, null)
+                },
+                onRemoveApproved = {
+                    viewModel.removeOfflineVersion(it.abbreviation)
                 }
             )
         }

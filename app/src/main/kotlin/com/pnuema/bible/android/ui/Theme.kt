@@ -17,6 +17,7 @@ private val DarkColorPalette = darkColorScheme(
     onBackground = Color(0xFFDEDEDE),
     surfaceVariant = Color(0xFF43A047),
     tertiary = Color(0xFFA0A0A0),
+    error = Color(0xFFAA0000),
 )
 
 private val LightColorPalette = lightColorScheme(
@@ -28,6 +29,7 @@ private val LightColorPalette = lightColorScheme(
     onBackground = Color(0xFF212121),
     surfaceVariant = Color(0xFF689F38),
     tertiary = Color(0xFF797979),
+    error = Color(0xFFCC0000),
 )
 
 private val Typography = Typography()

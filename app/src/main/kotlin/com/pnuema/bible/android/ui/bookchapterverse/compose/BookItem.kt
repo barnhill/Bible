@@ -1,6 +1,7 @@
 package com.pnuema.bible.android.ui.bookchapterverse.compose
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -20,16 +21,21 @@ fun BookItem(
     book: BookViewState,
     onClick: () -> Unit,
 ) {
-    Text(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(all = 16.dp)
             .clickable { onClick() },
-        text = book.name,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = if (book.id == CurrentSelected.book) FontWeight.Bold else FontWeight.Normal,
-        color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
-    )
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = book.name,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = if (book.id == CurrentSelected.book) FontWeight.Bold else FontWeight.Normal,
+            color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+        )
+    }
 }
 
 @Preview(showBackground = true)

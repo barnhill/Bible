@@ -1,6 +1,8 @@
 package com.pnuema.bible.android.datasource
 
-import com.pnuema.bible.android.data.firefly.*
+import com.pnuema.bible.android.data.firefly.ChapterCountDomain
+import com.pnuema.bible.android.data.firefly.VerseCountDomain
+import com.pnuema.bible.android.data.firefly.VersesDomain
 import com.pnuema.bible.android.database.BookOffline
 import com.pnuema.bible.android.database.VerseOffline
 import com.pnuema.bible.android.database.VersionOffline
@@ -20,4 +22,6 @@ interface LocalDataSource {
     suspend fun getVersesByBook(version: String, book: Int): List<VerseOffline>
 
     suspend fun searchVerses(query: String): Flow<VersesDomain>
+
+    suspend fun removeOfflineVersion(version: String)
 }

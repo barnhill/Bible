@@ -1,6 +1,10 @@
 package com.pnuema.bible.android.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface VersionOfflineDao {
@@ -12,6 +16,6 @@ interface VersionOfflineDao {
     suspend fun putVersions(version: List<VersionOffline>)
 
     @Transaction
-    @Query("update offlineVersion set completeOffline = 1 where abbreviation = :version")
-    suspend fun markCompleteOfflineAvailable(version: String)
+    @Query("update offlineVersion set completeOffline = :isAvailableOffline where abbreviation = :version")
+    suspend fun markCompleteOfflineAvailable(version: String, isAvailableOffline: Boolean)
 }

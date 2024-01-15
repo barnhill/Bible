@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -21,24 +22,31 @@ fun DownloadVersionScreen(
     modifier: Modifier = Modifier,
     state: DownloadProgress,
 ) {
-    Column(
-        modifier = modifier
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            modifier = Modifier.padding(bottom = 16.dp),
-            text = stringResource(R.string.downloading_version_x, state.versionToDownload)
-        )
-        LinearProgressIndicator(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .padding(bottom = 2.dp),
-            progress = state.progress.toFloat() / state.max.toFloat(),
-            strokeCap = StrokeCap.Round,
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.secondaryContainer
-        )
+    BibleTheme {
+        Column(
+            modifier = modifier
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = 16.dp
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 16.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                text = stringResource(R.string.downloading_version_x, state.versionToDownloadDisplay)
+            )
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .padding(bottom = 2.dp),
+                progress = state.progress.toFloat() / state.max.toFloat(),
+                strokeCap = StrokeCap.Round,
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        }
     }
 }
 
@@ -49,6 +57,7 @@ private fun DownloadVersionScreen_Preview() {
         DownloadVersionScreen(
             state = DownloadProgress(
                 versionToDownload = "KJV",
+                versionToDownloadDisplay = "King James Version",
                 max = 100,
                 progress = 40,
                 isComplete = false,
