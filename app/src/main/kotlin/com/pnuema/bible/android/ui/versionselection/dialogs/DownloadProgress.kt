@@ -1,7 +1,8 @@
 package com.pnuema.bible.android.ui.versionselection.dialogs
 
-sealed class DownloadProgress {
-    data class Max(val max: Int): DownloadProgress()
-    data object ProgressByOne: DownloadProgress()
-    data object Complete: DownloadProgress()
-}
+data class DownloadProgress (
+    val versionToDownload: String = "",
+    val max: Int = Int.MAX_VALUE,
+    val progress: Int = 0,
+    val isComplete: Boolean = false,
+)

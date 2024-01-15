@@ -30,18 +30,19 @@ fun VersionItem(
     BibleTheme {
         Row(
             modifier = modifier
-                .padding(vertical = 16.dp),
+                .clickable { onVersionClicked(version.abbreviation) },
         ) {
             Text(
                 modifier = Modifier
+                    .padding(vertical = 16.dp)
                     .weight(1f)
-                    .align(alignment = Alignment.CenterVertically)
-                    .clickable { onVersionClicked(version.abbreviation) },
+                    .align(alignment = Alignment.CenterVertically),
                 text = version.getDisplayText(),
                 color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
             )
             Image(
                 modifier = Modifier
+                    .padding(vertical = 16.dp)
                     .clickable { onDownloadClicked(version.abbreviation) }
                     .align(alignment = Alignment.CenterVertically),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),

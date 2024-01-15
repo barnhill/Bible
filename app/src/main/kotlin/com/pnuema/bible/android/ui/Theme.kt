@@ -8,7 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val _darkColorPalette = darkColorScheme(
+private val DarkColorPalette = darkColorScheme(
     primary = Color(0xFF2E7D32),
     onPrimary = Color(0xFFE8F5E9),
     secondary = Color(0xFF689F38),
@@ -19,7 +19,7 @@ private val _darkColorPalette = darkColorScheme(
     tertiary = Color(0xFFA0A0A0),
 )
 
-private val _lightColorPalette = lightColorScheme(
+private val LightColorPalette = lightColorScheme(
     primary = Color(0xFF8BC34A),
     onPrimary = Color(0xFFFEFEFE),
     secondary = Color(0xFF689F38),
@@ -30,13 +30,13 @@ private val _lightColorPalette = lightColorScheme(
     tertiary = Color(0xFF797979),
 )
 
-private val _typography = Typography()
+private val Typography = Typography()
 
 @Composable
 fun BibleTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     MaterialTheme(
-        typography = _typography,
-        colorScheme = if (darkTheme) _darkColorPalette else _lightColorPalette,
+        typography = Typography,
+        colorScheme = if (darkTheme) DarkColorPalette else LightColorPalette,
         content = content
     )
 }

@@ -1,9 +1,12 @@
 package com.pnuema.bible.android.ui.versionselection.ui.compose
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.database.VersionOffline
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -19,6 +22,8 @@ fun VersionSelectionScreen(
         LazyColumn {
            items(versions) {
                 VersionItem(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
                     version = it,
                     isCurrentSelectedVersion = CurrentSelected.version == it.abbreviation,
                     onVersionClicked = onVersionClicked,

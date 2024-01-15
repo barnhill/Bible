@@ -1,24 +1,23 @@
 package com.pnuema.bible.android.ui.versionselection.dialogs
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import com.pnuema.bible.android.R
-import com.pnuema.bible.android.databinding.DialogDownloadVersionBinding
-import com.pnuema.bible.android.ui.versionselection.viewModel.DownloadVersionViewModel
-import com.pnuema.bible.android.ui.utils.viewBinding
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pnuema.bible.android.ui.utils.setContent
+import com.pnuema.bible.android.ui.versionselection.dialogs.compose.DownloadVersionScreen
 import com.pnuema.bible.android.ui.versionselection.ui.VersionSelectionDialog
+import com.pnuema.bible.android.ui.versionselection.viewModel.DownloadVersionViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
+class DownloadVersionDialog : DialogFragment() {
     companion object {
         const val VERSION_TO_DOWNLOAD = "VERSION_TO_DOWNLOAD"
 
@@ -34,35 +33,33 @@ class DownloadVersionDialog : DialogFragment(R.layout.dialog_download_version) {
     }
 
     var callback: VersionSelectionDialog.DownloadCompleted? = null
-    private val binding: DialogDownloadVersionBinding by viewBinding()
     private val viewModel: DownloadVersionViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val versionToDownload = requireArguments().getString(VERSION_TO_DOWNLOAD) ?: run {
             dismiss()
-            return
+            ""
         }
 
-        binding.downloadDialogTitle.text = getString(R.string.downloading_version_x, versionToDownload.uppercase())
+        viewModel.downloadVersion(versionToDownload)
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.progress
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .flowOn(Dispatchers.Main)
-                .collect { state ->
-                    when(state) {
-                        is DownloadProgress.ProgressByOne -> binding.downloadDialogProgress.incrementProgressBy(1)
-                        is DownloadProgress.Max -> binding.downloadDialogProgress.max = state.max
-                        is DownloadProgress.Complete -> {
-                            callback?.onDownloadComplete()
-                            dismiss()
-                        }
-                    }
-                }
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = setContent {
+        val state by viewModel.progress.collectAsStateWithLifecycle()
 
-        viewModel.downloadVersion(versionToDownload, viewLifecycleOwner.lifecycle)
+        LaunchedEffect(key1 = state.isComplete, block = {
+            if (state.isComplete) {
+                dismiss()
+            }
+        })
+
+        DownloadVersionScreen(
+            state = state
+        )
     }
 }
