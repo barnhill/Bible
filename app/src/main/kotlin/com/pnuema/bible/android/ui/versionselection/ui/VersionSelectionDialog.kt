@@ -14,7 +14,6 @@ import com.pnuema.bible.android.ui.BibleTheme
 import com.pnuema.bible.android.ui.utils.setContent
 import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.versionselection.VersionSelectionListener
-import com.pnuema.bible.android.ui.versionselection.dialogs.DownloadVersionDialog
 import com.pnuema.bible.android.ui.versionselection.ui.compose.VersionSelectionScreen
 import com.pnuema.bible.android.ui.versionselection.viewModel.VersionSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,10 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
     private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
     private val viewModel: VersionSelectionViewModel by viewModels()
-
-    interface DownloadCompleted {
-        fun onDownloadComplete()
-    }
 
     constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
         versionSelectionCompleted = notifySelectionCompleted
@@ -65,15 +60,11 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
                 },
                 onDialogDismiss = { viewModel.clearDialogs() },
                 onDownloadApproved = {
-                    DownloadVersionDialog.newInstance(it.abbreviation, object : DownloadCompleted {
-                        override fun onDownloadComplete() {
-                            viewModel.loadVersions()
-                        }
-                    }).show(childFragmentManager, null)
+                    viewModel.downloadVersion(it.abbreviation)
                 },
                 onRemoveApproved = {
                     viewModel.removeOfflineVersion(it.abbreviation)
-                }
+                },
             )
         }
 

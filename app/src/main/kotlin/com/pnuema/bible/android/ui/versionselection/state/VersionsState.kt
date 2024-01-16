@@ -7,4 +7,5 @@ data class VersionsState(
     val versions: VersionsDomain = VersionsDomain(),
     val removeDialogVersion: IVersion? = null,
     val downloadDialogVersion: IVersion? = null,
+    val downloadProgress: DownloadProgress? = null,
 )
