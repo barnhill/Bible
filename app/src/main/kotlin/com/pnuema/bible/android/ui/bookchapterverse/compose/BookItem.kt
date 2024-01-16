@@ -24,11 +24,11 @@ fun BookItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(all = 16.dp)
             .clickable { onClick() },
     ) {
         Text(
             modifier = Modifier
+                .padding(all = 16.dp)
                 .fillMaxWidth(),
             text = book.name,
             style = MaterialTheme.typography.titleMedium,

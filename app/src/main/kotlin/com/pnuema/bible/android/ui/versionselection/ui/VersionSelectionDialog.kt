@@ -65,6 +65,9 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
                 onRemoveApproved = {
                     viewModel.removeOfflineVersion(it.abbreviation)
                 },
+                onBackPressed = {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
             )
         }
 

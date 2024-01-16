@@ -9,6 +9,7 @@
 
     <string name="license_screen_title">Licenses</string>
 
+    <string name="pick_version_title">Select Bible Version</string>
     <string name="downloading_version_x">Downloading %1$s</string>
     <string name="download_icon_content_description">Download icon</string>
     <string name="download_confirm_title">Make available offline</string>
