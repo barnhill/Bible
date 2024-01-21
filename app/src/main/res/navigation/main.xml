@@ -10,10 +10,18 @@
         android:label="ReadFragment" >
         <action
             android:id="@+id/action_readFragment_to_BCVDialog"
-            app:destination="@id/BCVDialog" />
+            app:destination="@id/BCVDialog"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_readFragment_to_versionSelectionDialog"
-            app:destination="@id/versionSelectionDialog" />
+            app:destination="@id/versionSelectionDialog"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/BCVDialog"
