@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.toml.version.checker)
     alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.android.navsafe.args)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -91,6 +92,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     ksp(libs.room.compiler)
     implementation(libs.datastore)
     implementation(libs.material)

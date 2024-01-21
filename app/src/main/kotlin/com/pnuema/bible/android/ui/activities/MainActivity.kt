@@ -12,15 +12,14 @@ import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.read.ReadFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+class MainActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
     NotifySelectionCompleted {
-    private lateinit var readFragment: ReadFragment
 
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding get() = _binding!!
@@ -38,8 +37,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             bringToFront()
             requestLayout()
         }
-
-        readFragment = supportFragmentManager.findFragmentById(R.id.read_fragment) as ReadFragment
     }
 
     override fun onPause() {
@@ -85,6 +82,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        readFragment.refresh()
     }
 }

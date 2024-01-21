@@ -6,37 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.getValue
-import androidx.fragment.app.DialogFragment
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.BibleTheme
 import com.pnuema.bible.android.ui.utils.setContent
-import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.versionselection.VersionSelectionListener
 import com.pnuema.bible.android.ui.versionselection.ui.compose.VersionSelectionScreen
 import com.pnuema.bible.android.ui.versionselection.viewModel.VersionSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
-    private lateinit var versionSelectionCompleted: NotifyVersionSelectionCompleted
+class VersionSelectionDialog : Fragment(), VersionSelectionListener {
+    companion object {
+        const val RESULT_KEY = "VersionSelectionDialog_RESULT_KEY"
+    }
     private val viewModel: VersionSelectionViewModel by viewModels()
 
-    constructor(notifySelectionCompleted: NotifyVersionSelectionCompleted): this() {
-        versionSelectionCompleted = notifySelectionCompleted
-    }
-
-    companion object {
-        fun instantiate(notifySelectionCompleted: NotifyVersionSelectionCompleted): VersionSelectionDialog {
-            return VersionSelectionDialog(notifySelectionCompleted)
+    private val backCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            requireActivity().supportFragmentManager.popBackStack()
+            remove()
         }
     }
 
     override fun onVersionSelected(version: String) {
-        CurrentSelected.version = version
-        versionSelectionCompleted.onSelectionComplete(version)
-        parentFragmentManager.popBackStackImmediate()
+        setFragmentResult(RESULT_KEY, bundleOf(RESULT_KEY to version))
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     override fun onCreateView(
@@ -71,12 +69,8 @@ class VersionSelectionDialog() : DialogFragment(), VersionSelectionListener {
             )
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().supportFragmentManager.popBackStack()
-            }
-        })
-
         viewModel.loadVersions()
+    }.apply {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
     }
 }

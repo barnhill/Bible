@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.getValue
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.CurrentSelected.book
@@ -16,16 +18,15 @@ import com.pnuema.bible.android.statics.CurrentSelected.chapter
 import com.pnuema.bible.android.statics.CurrentSelected.verse
 import com.pnuema.bible.android.ui.bookchapterverse.BCVDialog
 import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.versionselection.NotifyVersionSelectionCompleted
 import com.pnuema.bible.android.ui.read.compose.ReadScreen
 import com.pnuema.bible.android.ui.read.state.ReadBookUiState
 import com.pnuema.bible.android.ui.read.state.ReadUiState
 import com.pnuema.bible.android.ui.read.state.VersionUiState
 import com.pnuema.bible.android.ui.read.state.VersionViewState
 import com.pnuema.bible.android.ui.read.viewModel.ReadViewModel
-import com.pnuema.bible.android.ui.utils.DialogUtils
 import com.pnuema.bible.android.ui.utils.DialogUtils.showBookChapterVersePicker
 import com.pnuema.bible.android.ui.utils.setContent
+import com.pnuema.bible.android.ui.versionselection.ui.VersionSelectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -61,6 +62,12 @@ class ReadFragment : Fragment() {
                             is ReadUiState.Verses -> verses as ReadUiState.Verses
                         },
                         onBookChapterClicked = {
+                            setFragmentResultListener(VersionSelectionDialog.RESULT_KEY) { _, _ ->
+                                refresh()
+                            }
+                            findNavController().navigate(
+                                ReadFragmentDirections.actionReadFragmentToBCVDialog()
+                            )
                             showBookChapterVersePicker(parentFragmentManager, BCVDialog.BCV.BOOK, object :
                                 NotifySelectionCompleted {
                                 override fun onSelectionComplete(book: Int, chapter: Int, verse: Int) {
@@ -69,13 +76,13 @@ class ReadFragment : Fragment() {
                             })
                         },
                         onVersionClicked = {
-                            DialogUtils.showVersionsPicker(parentFragmentManager, object :
-                                NotifyVersionSelectionCompleted {
-                                override fun onSelectionComplete(version: String) {
-                                    CurrentSelected.version = version
-                                    refresh()
-                                }
-                            })
+                            setFragmentResultListener(VersionSelectionDialog.RESULT_KEY) { key, bundle ->
+                                CurrentSelected.version = bundle.getString(key).toString()
+                                refresh()
+                            }
+                            findNavController().navigate(
+                                ReadFragmentDirections.actionReadFragmentToVersionSelectionDialog()
+                            )
                         }
                     )
                 }

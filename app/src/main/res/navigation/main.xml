@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    app:startDestination="@id/readFragment">
+
+    <fragment
+        android:id="@+id/readFragment"
+        android:name="com.pnuema.bible.android.ui.read.ReadFragment"
+        android:label="ReadFragment" >
+        <action
+            android:id="@+id/action_readFragment_to_BCVDialog"
+            app:destination="@id/BCVDialog" />
+        <action
+            android:id="@+id/action_readFragment_to_versionSelectionDialog"
+            app:destination="@id/versionSelectionDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/BCVDialog"
+        android:name="com.pnuema.bible.android.ui.bookchapterverse.BCVDialog"
+        android:label="BCVDialog" />
+    <fragment
+        android:id="@+id/versionSelectionDialog"
+        android:name="com.pnuema.bible.android.ui.versionselection.ui.VersionSelectionDialog"
+        android:label="VersionSelectionDialog" />
+</navigation>

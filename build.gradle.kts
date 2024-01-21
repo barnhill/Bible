@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.gradle.cachefix) apply false
     alias(libs.plugins.hilt.plugin) apply false
+    alias(libs.plugins.android.navsafe.args) apply false
 }
 
 tasks.wrapper {

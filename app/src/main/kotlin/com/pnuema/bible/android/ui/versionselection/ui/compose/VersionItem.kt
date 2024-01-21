@@ -2,6 +2,7 @@ package com.pnuema.bible.android.ui.versionselection.ui.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -28,39 +29,46 @@ fun VersionItem(
     onActionClicked: (IVersion) -> Unit,
 ) {
     BibleTheme {
-        Row(
+        Box(
             modifier = modifier
                 .clickable { onVersionClicked(version.abbreviation) },
         ) {
-            Text(
+            Row(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .weight(1f)
-                    .align(alignment = Alignment.CenterVertically),
-                text = version.getDisplayText(),
-                color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
-            )
+                    .padding(start = 16.dp)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 24.dp)
+                        .weight(1f)
+                        .align(alignment = Alignment.CenterVertically),
+                    text = version.getDisplayText(),
+                    color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+                )
 
-
-            Image(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
+                Box(modifier = Modifier
                     .clickable { onActionClicked(version) }
                     .align(alignment = Alignment.CenterVertically),
-                colorFilter = ColorFilter.tint(
-                    if (version.convertToOfflineModel().completeOffline)
-                        MaterialTheme.colorScheme.error
-                    else
-                        MaterialTheme.colorScheme.secondary
-                ),
-                imageVector = ImageVector.vectorResource(
-                    if (version.convertToOfflineModel().completeOffline)
-                        R.drawable.trash_can_outline
-                    else
-                        R.drawable.cloud_download_outline
-                ),
-                contentDescription = null
-            )
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .padding(all = 16.dp),
+                        colorFilter = ColorFilter.tint(
+                            if (version.convertToOfflineModel().completeOffline)
+                                MaterialTheme.colorScheme.error
+                            else
+                                MaterialTheme.colorScheme.secondary
+                        ),
+                        imageVector = ImageVector.vectorResource(
+                            if (version.convertToOfflineModel().completeOffline)
+                                R.drawable.trash_can_outline
+                            else
+                                R.drawable.cloud_download_outline
+                        ),
+                        contentDescription = null
+                    )
+                }
+            }
         }
     }
 }

@@ -45,21 +45,7 @@ class BCVDialog : Fragment(), BCVSelectionListener {
         }
     }
 
-    companion object {
-        private const val ARG_STARTING_TAB = "STARTING_POINT"
-
-        fun instantiate(startingTab: BCV, notifySelectionCompleted: NotifySelectionCompleted): BCVDialog {
-            val dialog = BCVDialog()
-            val bundle = Bundle()
-            bundle.putInt(ARG_STARTING_TAB, startingTab.value)
-            dialog.arguments = bundle
-            dialog.setListener(notifySelectionCompleted)
-
-            return dialog
-        }
-    }
-
-    enum class BCV constructor(val value: Int) {
+    enum class BCV(val value: Int) {
         BOOK(0), CHAPTER(1), VERSE(2)
     }
 
@@ -81,7 +67,7 @@ class BCVDialog : Fragment(), BCVSelectionListener {
         val bookUiState by booksViewModel.books.collectAsStateWithLifecycle()
         val chapterUiState by chaptersViewModel.chapters.collectAsStateWithLifecycle()
         val verseUiState by versesViewModel.verses.collectAsStateWithLifecycle()
-        val pageCount = remember { BCV.values().count() }
+        val pageCount = remember { BCV.entries.toTypedArray().count() }
         val pagerState = rememberPagerState(
             initialPage = BCV.BOOK.value,
             initialPageOffsetFraction = 0f,
@@ -98,7 +84,10 @@ class BCVDialog : Fragment(), BCVSelectionListener {
             booksUiState = bookUiState,
             chaptersUiState = chapterUiState,
             versesUiState = verseUiState,
-            listener = this
+            listener = this,
+            onBackPressed = {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         )
     }.apply {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
