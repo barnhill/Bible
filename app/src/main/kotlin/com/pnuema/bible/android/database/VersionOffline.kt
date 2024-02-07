@@ -14,7 +14,6 @@ data class VersionOffline(
     val publisher: String,
     val copyright: String,
     @ColumnInfo(name = "copyright_info") val copyrightInfo: String,
-    val language: String,
     val completeOffline: Boolean = false
 ) {
     fun convertToVersion() = Version(
@@ -23,7 +22,6 @@ data class VersionOffline(
         publisher = publisher,
         copyright = copyright,
         copyright_info = copyrightInfo,
-        language = language,
         abbreviation = abbreviation,
         id = id,
         completeOffline = completeOffline

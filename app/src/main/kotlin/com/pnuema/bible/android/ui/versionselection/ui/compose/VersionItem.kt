@@ -81,8 +81,6 @@ private fun VersionItem_Preview() {
             version = object : IVersion{
                 override val id: Int
                     get() = 1
-                override val language: String
-                    get() = ""
                 override val abbreviation: String
                     get() = ""
                 override val copyright: String
@@ -98,7 +96,6 @@ private fun VersionItem_Preview() {
                         publisher = "",
                         copyright = "",
                         copyrightInfo = "",
-                        language = "",
                         completeOffline = false
                     )
                 }
@@ -118,8 +115,6 @@ private fun VersionItem_Offline_Preview() {
             version = object : IVersion{
                 override val id: Int
                     get() = 1
-                override val language: String
-                    get() = ""
                 override val abbreviation: String
                     get() = ""
                 override val copyright: String
@@ -135,7 +130,6 @@ private fun VersionItem_Offline_Preview() {
                         publisher = "",
                         copyright = "",
                         copyrightInfo = "",
-                        language = "",
                         completeOffline = true
                     )
                 }

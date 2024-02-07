@@ -9,7 +9,6 @@ data class Version(
     val publisher: String,
     override val copyright: String,
     val copyright_info: String,
-    override val language: String,
     override val abbreviation: String,
     override val id: Int,
     val completeOffline: Boolean = false,
@@ -25,7 +24,6 @@ data class Version(
         publisher = publisher,
         copyright = copyright,
         copyrightInfo = copyright_info,
-        language = language,
         abbreviation = abbreviation,
         id = id,
         completeOffline = completeOffline

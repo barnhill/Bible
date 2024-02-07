@@ -185,8 +185,6 @@ private fun VersionSelectionScreen_Preview() {
                         object : IVersion {
                             override val id: Int
                                 get() = 1
-                            override val language: String
-                                get() = ""
                             override val abbreviation: String
                                 get() = ""
                             override val copyright: String
@@ -203,7 +201,6 @@ private fun VersionSelectionScreen_Preview() {
                                     publisher = "",
                                     copyright = "",
                                     copyrightInfo = "",
-                                    language = "",
                                     completeOffline = false
                                 )
                             }
@@ -211,8 +208,6 @@ private fun VersionSelectionScreen_Preview() {
                         object : IVersion {
                             override val id: Int
                                 get() = 2
-                            override val language: String
-                                get() = ""
                             override val abbreviation: String
                                 get() = ""
                             override val copyright: String
@@ -229,7 +224,6 @@ private fun VersionSelectionScreen_Preview() {
                                     publisher = "",
                                     copyright = "",
                                     copyrightInfo = "",
-                                    language = "",
                                     completeOffline = true
                                 )
                             }
@@ -237,8 +231,6 @@ private fun VersionSelectionScreen_Preview() {
                         object : IVersion {
                             override val id: Int
                                 get() = 3
-                            override val language: String
-                                get() = ""
                             override val abbreviation: String
                                 get() = ""
                             override val copyright: String
@@ -255,7 +247,6 @@ private fun VersionSelectionScreen_Preview() {
                                     publisher = "",
                                     copyright = "",
                                     copyrightInfo = "",
-                                    language = "",
                                     completeOffline = false
                                 )
                             }
