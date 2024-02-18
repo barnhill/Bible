@@ -1,5 +1,3 @@
-import org.gradle.internal.impldep.org.bouncycastle.cms.RecipientId.password
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -28,12 +26,13 @@ gradleEnterprise {
     }
 }
 
-if (System.getenv("REMOTE_CACHE_URL") != null || extra["REMOTE_CACHE_URL"] != null) {
+val remoteCacheFromProperties: String? by extra
+if (System.getenv("REMOTE_CACHE_URL") != null || remoteCacheFromProperties != null) {
     buildCache {
         local {
             removeUnusedEntriesAfterDays = 30
         }
-        val cacheUrl = if (System.getenv("REMOTE_CACHE_URL") == null) extra["REMOTE_CACHE_URL"] as String else System.getenv("REMOTE_CACHE_URL")
+        val cacheUrl = if (System.getenv("REMOTE_CACHE_URL") == null) remoteCacheFromProperties as String else System.getenv("REMOTE_CACHE_URL")
         remote<HttpBuildCache> {
             url = uri(cacheUrl)
             isEnabled = true
@@ -43,9 +42,12 @@ if (System.getenv("REMOTE_CACHE_URL") != null || extra["REMOTE_CACHE_URL"] != nu
             if (isEnabled) {
                 println("Using remote build cache: $cacheUrl")
             }
+
+            val remoteCacheUserFromProperties: String? by extra
+            val remoteCachePassFromProperties: String? by extra
             credentials {
-                username = if (System.getenv("REMOTE_CACHE_USER") == null) extra["REMOTE_CACHE_USER"] as String else System.getenv("REMOTE_CACHE_USER")
-                password = if (System.getenv("REMOTE_CACHE_PASS") == null) extra["REMOTE_CACHE_PASS"] as String else System.getenv("REMOTE_CACHE_PASS")
+                username = if (System.getenv("REMOTE_CACHE_USER") == null) remoteCacheUserFromProperties as String else System.getenv("REMOTE_CACHE_USER")
+                password = if (System.getenv("REMOTE_CACHE_PASS") == null) remoteCachePassFromProperties as String else System.getenv("REMOTE_CACHE_PASS")
             }
         }
     }
