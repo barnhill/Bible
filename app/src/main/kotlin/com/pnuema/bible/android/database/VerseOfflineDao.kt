@@ -1,7 +1,10 @@
 package com.pnuema.bible.android.database
 
-import androidx.room.*
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface VerseOfflineDao {
@@ -23,4 +26,11 @@ interface VerseOfflineDao {
             WHERE offlineVerses_fts MATCH :query
     """)
     suspend fun searchVerses(query: String): List<VerseOffline>
+
+    @Transaction
+    @Query("""
+       DELETE FROM offlineVerses
+       WHERE version = :version
+    """)
+    suspend fun removeOfflineVersion(version: String)
 }

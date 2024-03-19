@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.toml.version.checker)
     alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.android.navsafe.args)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -21,6 +22,9 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -41,13 +45,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
     }
 
     viewBinding {
@@ -55,7 +58,13 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.9"
+    }
+
     namespace = "com.pnuema.bible.android"
 
     sourceSets {
@@ -82,10 +91,20 @@ dependencies {
     implementation(libs.lifecycle.extensions)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     ksp(libs.room.compiler)
     implementation(libs.datastore)
     implementation(libs.material)
     implementation(libs.licenses)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.lifecycle)
+    implementation(libs.androidx.compose.viewmodel.lifecycle)
 
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.analytics.ktx)

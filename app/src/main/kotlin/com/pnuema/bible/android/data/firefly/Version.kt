@@ -4,13 +4,12 @@ import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.database.VersionOffline
 
 data class Version(
-    var version: String,
-    var url: String,
-    var publisher: String,
-    var copyright: String,
-    var copyright_info: String,
-    override var language: String,
-    override var abbreviation: String,
+    val version: String,
+    val url: String,
+    val publisher: String,
+    override val copyright: String,
+    val copyright_info: String,
+    override val abbreviation: String,
     override val id: Int,
     val completeOffline: Boolean = false,
 ) : IVersion {
@@ -25,7 +24,6 @@ data class Version(
         publisher = publisher,
         copyright = copyright,
         copyrightInfo = copyright_info,
-        language = language,
         abbreviation = abbreviation,
         id = id,
         completeOffline = completeOffline

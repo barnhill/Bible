@@ -173,5 +173,9 @@ class FireflyRepository @Inject constructor(
         }
     }
 
+    override suspend fun removeOfflineVersion(version: String) {
+        localDataSource.removeOfflineVersion(version)
+    }
+
     override suspend fun searchVerses(query: String): VersesDomain = VersesDomain(FireflyDatabase.getInstance().verseDao.searchVerses(query = query).map { it.convertToVerse() })
 }

@@ -14,18 +14,14 @@ data class VersionOffline(
     val publisher: String,
     val copyright: String,
     @ColumnInfo(name = "copyright_info") val copyrightInfo: String,
-    val language: String,
     val completeOffline: Boolean = false
 ) {
-    fun getDisplayText(): String = version
-
     fun convertToVersion() = Version(
         version = version,
         url = url,
         publisher = publisher,
         copyright = copyright,
         copyright_info = copyrightInfo,
-        language = language,
         abbreviation = abbreviation,
         id = id,
         completeOffline = completeOffline

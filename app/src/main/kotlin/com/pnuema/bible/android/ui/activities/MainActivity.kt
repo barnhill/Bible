@@ -11,15 +11,15 @@ import com.pnuema.bible.android.R
 import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
-import com.pnuema.bible.android.ui.dialogs.NotifySelectionCompleted
-import com.pnuema.bible.android.ui.fragments.ReadFragment
+import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NotifySelectionCompleted {
-    private lateinit var readFragment: ReadFragment
+class MainActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    NotifySelectionCompleted {
 
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding get() = _binding!!
@@ -32,12 +32,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setContentView(binding.root)
 
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-        navigationView.bringToFront()
-        navigationView.requestLayout()
-
-        readFragment = supportFragmentManager.findFragmentById(R.id.read_fragment) as ReadFragment
+        findViewById<NavigationView>(R.id.nav_view).apply {
+            setNavigationItemSelectedListener(this@MainActivity)
+            bringToFront()
+            requestLayout()
+        }
     }
 
     override fun onPause() {
@@ -68,10 +67,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (id == R.id.nav_settings) {
             //TODO add settings
         } else if (id == R.id.nav_about) {
-            val intent = Intent(this, OssLicensesMenuActivity::class.java)
-            val title = getString(R.string.license_screen_title)
-            intent.putExtra("title", title)
-            startActivity(intent)
+            Intent(this, OssLicensesMenuActivity::class.java).apply {
+                putExtra("title", getString(R.string.license_screen_title))
+                startActivity(this)
+            }
+
             return true
         }
 
@@ -82,6 +82,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         CurrentSelected.book = book
         CurrentSelected.chapter = chapter
         CurrentSelected.verse = verse
-        readFragment.refresh()
     }
 }

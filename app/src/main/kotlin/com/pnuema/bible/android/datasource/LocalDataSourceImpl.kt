@@ -58,4 +58,9 @@ class LocalDataSourceImpl: LocalDataSource {
     override suspend fun searchVerses(query: String): Flow<VersesDomain> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun removeOfflineVersion(version: String) {
+        FireflyDatabase.getInstance().verseDao.removeOfflineVersion(version = version)
+        FireflyDatabase.getInstance().versionDao.markCompleteOfflineAvailable(version = version, isAvailableOffline = false)
+    }
 }

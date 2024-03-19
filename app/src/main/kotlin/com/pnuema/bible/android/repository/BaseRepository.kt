@@ -22,4 +22,6 @@ interface BaseRepository {
     suspend fun getVersesByBook(version: String, book: Int): VersesDomain
 
     suspend fun searchVerses(query: String): VersesDomain
+
+    suspend fun removeOfflineVersion(version: String)
 }
