@@ -21,13 +21,4 @@
         <item name="android:background">@color/background_light</item>
     </style>
 
-    <style name="DownloadDialog"/>
-    <style name="DownloadDialog.Text">
-        <item name="android:textColor">@color/primary_text</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="DownloadDialog.ProgressBar" parent="@style/Widget.Material3.LinearProgressIndicator">
-        <item name="android:layout_marginVertical">@dimen/text_margin</item>
-    </style>
-
 </resources>

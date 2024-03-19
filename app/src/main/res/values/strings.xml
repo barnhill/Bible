@@ -13,6 +13,7 @@
     <string name="pick_version_title">Select Bible Version</string>
     <string name="downloading_version_x">Downloading %1$s</string>
     <string name="download_icon_content_description">Download icon</string>
+    <string name="delete_icon_content_description">Remove version icon</string>
     <string name="download_confirm_title">Make available offline</string>
     <string name="download_confirm_message">Do you want to download the %1$s for offline use?</string>
     <string name="remove_confirm_title">Remove offline version</string>

@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,22 +51,29 @@ fun VersionItem(
                     .clickable { onActionClicked(version) }
                     .align(alignment = Alignment.CenterVertically),
                 ) {
+                    val downloadComplete = version.convertToOfflineModel().completeOffline
                     Image(
                         modifier = Modifier
                             .padding(all = 16.dp),
                         colorFilter = ColorFilter.tint(
-                            if (version.convertToOfflineModel().completeOffline)
+                            if (downloadComplete)
                                 MaterialTheme.colorScheme.error
                             else
                                 MaterialTheme.colorScheme.secondary
                         ),
                         imageVector = ImageVector.vectorResource(
-                            if (version.convertToOfflineModel().completeOffline)
+                            if (downloadComplete)
                                 R.drawable.trash_can_outline
                             else
                                 R.drawable.cloud_download_outline
                         ),
-                        contentDescription = null
+                        contentDescription = stringResource(
+                            id = if (downloadComplete) {
+                                R.string.download_icon_content_description
+                            } else {
+                                R.string.delete_icon_content_description
+                            }
+                        )
                     )
                 }
             }
