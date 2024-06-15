@@ -28,7 +28,7 @@ jobs:
           REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL }}
           REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
           REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
-        run: ./gradlew build
+        run: ./gradlew build bundleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: APK
