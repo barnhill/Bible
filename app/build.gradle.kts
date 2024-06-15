@@ -62,7 +62,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     namespace = "com.pnuema.bible.android"
