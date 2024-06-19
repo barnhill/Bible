@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  * Houses all the api calls to get data
  */
 object FireflyAPI {
-    private const val BASE_URL = "https://fireflyapi.pnuema.com/api/v1/"
+    private const val BASE_URL = "https://firefly.pnuema.com/api/v1/"
     private const val CACHE_FOLDER = "http-cache"
     private const val HEADER_CACHE_CONTROL = "Cache-Control"
     private const val CACHE_OFFLINE_DAYS = 365
