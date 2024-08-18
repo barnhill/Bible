@@ -3,7 +3,9 @@ package com.pnuema.bible.android.data.firefly
 import com.pnuema.bible.android.data.IVerseCount
 import com.pnuema.bible.android.database.VerseCountOffline
 import com.pnuema.bible.android.ui.bookchapterverse.state.VerseCountViewState
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class VerseCountDomain (
     val verseCount: Int = 0
 ): IVerseCount {

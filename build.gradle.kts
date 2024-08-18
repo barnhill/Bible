@@ -17,6 +17,8 @@ plugins {
     alias(libs.plugins.gradle.cachefix) apply false
     alias(libs.plugins.hilt.plugin) apply false
     alias(libs.plugins.android.navsafe.args) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.serialization.plugin) apply false
 }
 
 tasks.wrapper {

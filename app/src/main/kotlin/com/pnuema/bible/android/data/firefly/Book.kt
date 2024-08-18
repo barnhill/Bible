@@ -2,7 +2,9 @@ package com.pnuema.bible.android.data.firefly
 
 import com.pnuema.bible.android.data.IBook
 import com.pnuema.bible.android.database.BookOffline
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Book(
     val bookId: Int,
     val title: String,

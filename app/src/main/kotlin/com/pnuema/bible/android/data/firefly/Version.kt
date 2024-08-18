@@ -2,7 +2,9 @@ package com.pnuema.bible.android.data.firefly
 
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.database.VersionOffline
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Version(
     val version: String,
     val url: String,

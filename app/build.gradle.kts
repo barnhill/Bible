@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.serialization.plugin)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
@@ -61,10 +63,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-
     namespace = "com.pnuema.bible.android"
 
     sourceSets {
@@ -98,6 +96,7 @@ dependencies {
     implementation(libs.datastore)
     implementation(libs.material)
     implementation(libs.licenses)
+    implementation(libs.kotlin.serialization)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -111,7 +110,7 @@ dependencies {
     implementation(libs.firebase.perf.ktx)
 
     implementation(libs.square.retrofit)
-    implementation(libs.square.moshi)
+    implementation(libs.converter.moshi)
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp.brotli)
 

@@ -3,15 +3,17 @@ package com.pnuema.bible.android.api
 import com.pnuema.bible.android.BuildConfig
 import com.pnuema.bible.android.statics.App
 import com.pnuema.bible.android.statics.ConnectionUtils.isConnected
+import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -45,7 +47,10 @@ object FireflyAPI {
 
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(
+                Json.asConverterFactory(
+                    "application/json; charset=UTF8".toMediaType())
+            )
             .client(httpClient.build())
             .build()
     }

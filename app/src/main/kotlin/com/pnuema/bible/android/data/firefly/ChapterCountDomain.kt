@@ -3,7 +3,9 @@ package com.pnuema.bible.android.data.firefly
 import com.pnuema.bible.android.data.IChapterCount
 import com.pnuema.bible.android.database.ChapterCountOffline
 import com.pnuema.bible.android.ui.bookchapterverse.state.ChapterCountViewState
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ChapterCountDomain (
     val chapterCount: Int = 0
 ): IChapterCount {
