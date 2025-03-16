@@ -31,9 +31,6 @@ develocity {
 val remoteCacheUrl: String? by extra
 if (System.getenv("REMOTE_CACHE_URL") != null || remoteCacheUrl != null) {
     buildCache {
-        local {
-            removeUnusedEntriesAfterDays = 30
-        }
         val cacheUrl = if (System.getenv("REMOTE_CACHE_URL") == null) remoteCacheUrl as String else System.getenv("REMOTE_CACHE_URL")
         remote<HttpBuildCache> {
             url = uri(cacheUrl)
