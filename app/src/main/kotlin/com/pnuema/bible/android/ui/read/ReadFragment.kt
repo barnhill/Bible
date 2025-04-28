@@ -48,7 +48,7 @@ class ReadFragment : Fragment() {
         when (books) {
             is ReadBookUiState.Books -> {
                 val model = books as ReadBookUiState.Books
-                model.books.find{ it.id == book }?.let { book ->
+                model.books.find { it.id == book }?.let { book ->
                     ReadScreen(
                         book = book.name,
                         chapter = chapter.toString(),

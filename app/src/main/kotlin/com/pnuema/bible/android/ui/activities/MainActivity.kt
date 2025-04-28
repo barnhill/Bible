@@ -3,6 +3,7 @@ package com.pnuema.bible.android.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(),
     private val binding: ActivityMainBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         DeepLinks.handleDeepLinks(intent)
 

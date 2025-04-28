@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.versionselection.ui.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -82,6 +83,7 @@ fun VersionItem(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun VersionItem_Preview() {
     BibleTheme {
@@ -116,6 +118,7 @@ private fun VersionItem_Preview() {
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun VersionItem_Offline_Preview() {
     BibleTheme {

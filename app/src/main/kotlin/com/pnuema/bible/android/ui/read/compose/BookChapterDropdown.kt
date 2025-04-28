@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,10 @@ fun BookChapterDropdown(
             .clip(MaterialTheme.shapes.extraLarge)
             .clickable { onClicked() },
         shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors()
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     ) {
         Row(
             modifier = Modifier.padding(all = 12.dp)
@@ -59,6 +63,7 @@ fun BookChapterDropdown(
 }
 
 @Preview
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BookChapterDropdown_Preview() {
     BibleTheme {

@@ -1,10 +1,11 @@
 package com.pnuema.bible.android.ui.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,13 +30,13 @@ import com.pnuema.bible.android.ui.BibleTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackTopBar(
+    modifier: Modifier = Modifier,
     title: String,
     backArrowIcon: Boolean = true,
     onBackPressed: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .height(56.dp)
+        modifier = modifier
             .background(Color.Transparent)
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
@@ -43,6 +44,9 @@ fun BackTopBar(
             .padding(horizontal = 8.dp)
     ) {
         TopAppBar(
+            modifier = Modifier
+                .padding(0.dp)
+                .wrapContentHeight(),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -68,6 +72,7 @@ fun BackTopBar(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BibleTopbar_Preview() {
     BibleTheme {

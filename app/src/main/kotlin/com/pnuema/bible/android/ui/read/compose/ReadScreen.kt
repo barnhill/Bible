@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -44,13 +45,13 @@ fun ReadScreen(
                     onBookChapterClicked = onBookChapterClicked,
                     onVersionClicked = onVersionClicked
                 )
-            }
+            },
         ) { paddingValues ->
             LazyColumn(
-                state = listState,
                 modifier = Modifier
-                    .padding(top = paddingValues.calculateTopPadding())
+                    .padding(paddingValues)
                     .fillMaxSize(),
+                state = listState,
                 content = {
                     itemsIndexed(verses.verses) { index, item ->
                         VerseItem(state = item)
@@ -74,7 +75,8 @@ fun ReadScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ReadScreen_Preview() {
     BibleTheme {

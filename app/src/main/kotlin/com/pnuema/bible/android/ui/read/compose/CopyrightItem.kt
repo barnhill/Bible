@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +33,7 @@ fun CopyrightItem(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CopyrightItem_Preview() {
     BibleTheme {
