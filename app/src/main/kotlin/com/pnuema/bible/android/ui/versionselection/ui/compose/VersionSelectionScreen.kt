@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -63,7 +63,7 @@ fun VersionSelectionScreen(
                         onVersionClicked = onVersionClicked,
                         onActionClicked = onActionClicked,
                     )
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }
@@ -165,10 +165,10 @@ fun VersionDownloadDialog(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
                     .padding(bottom = 2.dp),
-                progress = state.progress.toFloat() / state.max.toFloat(),
-                strokeCap = StrokeCap.Round,
+                progress = { state.progress.toFloat() / state.max.toFloat() },
                 color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.secondaryContainer
+                trackColor = MaterialTheme.colorScheme.secondaryContainer,
+                strokeCap = StrokeCap.Round,
             )
         }
     }

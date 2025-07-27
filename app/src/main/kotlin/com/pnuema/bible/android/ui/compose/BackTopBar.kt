@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,7 +61,8 @@ fun BackTopBar(
                 IconButton(
                     onClick = { onBackPressed() }) {
                     Icon(
-                        imageVector = if (backArrowIcon) Icons.Filled.ArrowBack else Icons.Filled.Close,
+                        imageVector = if (backArrowIcon) Icons.AutoMirrored.Filled.ArrowBack
+                                      else Icons.Filled.Close,
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSecondary
                     )

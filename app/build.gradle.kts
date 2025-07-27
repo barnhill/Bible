@@ -16,11 +16,11 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = libs.versions.targetSdk.get().toInt()
     defaultConfig {
         applicationId = "com.pnuema.bible.android"
-        minSdk = 26
-        targetSdk = 35
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -46,9 +46,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     kotlin {

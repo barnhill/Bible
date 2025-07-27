@@ -1,5 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+import java.io.IOException
+import java.net.Socket
+
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -9,7 +13,7 @@ pluginManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version "3.19.2"
+    id("com.gradle.develocity") version "4.1"
 }
 
 dependencyResolutionManagement {
@@ -29,17 +33,23 @@ develocity {
 }
 
 val remoteCacheUrl: String? by extra
-if (System.getenv("REMOTE_CACHE_URL") != null || remoteCacheUrl != null) {
+val cacheUrl: String? = if (System.getenv("REMOTE_CACHE_URL") == null) remoteCacheUrl else System.getenv("REMOTE_CACHE_URL")
+
+if (cacheUrl != null) {
     buildCache {
-        val cacheUrl = if (System.getenv("REMOTE_CACHE_URL") == null) remoteCacheUrl as String else System.getenv("REMOTE_CACHE_URL")
+        local {
+            isEnabled = true
+        }
         remote<HttpBuildCache> {
             url = uri(cacheUrl)
-            isEnabled = true
+            isEnabled = isOnline()
             isPush = true
             isAllowUntrustedServer = true
-            isAllowInsecureProtocol = true
+            isAllowInsecureProtocol = false
             if (isEnabled) {
                 println("Using remote build cache: $cacheUrl")
+            } else {
+                println("Not using remote build cache!")
             }
 
             val remoteCacheUser: String? by extra
@@ -52,6 +62,20 @@ if (System.getenv("REMOTE_CACHE_URL") != null || remoteCacheUrl != null) {
     }
 } else {
     println("Not using remote build cache!")
+}
+
+fun isOnline(): Boolean {
+    try {
+        // Attempt to create a socket connection to a well-known server (e.g., Cloudflare DNS)
+        // This is a common way to check for basic internet connectivity.
+        // Adjust the host and port as needed for your network environment.
+        Socket("1.1.1.1", 53).close()
+        println("Internet connection test passed")
+        return true
+    } catch (_: IOException) {
+        println("Internet connection test failed, offline mode")
+        return false
+    }
 }
 
 rootProject.name = "Bible"

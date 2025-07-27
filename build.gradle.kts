@@ -21,7 +21,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization.plugin) apply false
 }
 
-tasks.wrapper {
-    gradleVersion = "8.14"
-    distributionType = Wrapper.DistributionType.BIN
+tasks {
+    wrapper {
+        gradleVersion = libs.versions.gradle.get()
+        distributionType = Wrapper.DistributionType.BIN
+    }
 }

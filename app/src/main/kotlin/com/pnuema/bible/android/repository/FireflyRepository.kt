@@ -1,7 +1,5 @@
 package com.pnuema.bible.android.repository
 
-import android.content.Context
-import android.net.ConnectivityManager
 import com.pnuema.bible.android.data.firefly.BooksDomain
 import com.pnuema.bible.android.data.firefly.ChapterCountDomain
 import com.pnuema.bible.android.data.firefly.VerseCountDomain
@@ -13,6 +11,7 @@ import com.pnuema.bible.android.database.VerseCountOffline
 import com.pnuema.bible.android.datasource.FireflyDataSource
 import com.pnuema.bible.android.datasource.LocalDataSource
 import com.pnuema.bible.android.statics.App
+import com.pnuema.bible.android.statics.ConnectionUtils
 import dagger.Reusable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,11 +22,7 @@ class FireflyRepository @Inject constructor(
     private val remoteDataSource: FireflyDataSource,
     private val localDataSource: LocalDataSource
 ) : BaseRepository {
-    private val connMgr = App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    private fun isNetworkConnected(): Boolean {
-        return connMgr.activeNetworkInfo?.isConnected ?: false
-    }
+    private val isNetworkConnected: Boolean get() = ConnectionUtils.isConnected(App.context)
 
     override suspend fun getVersions(): Flow<VersionsDomain> = flow {
         //TODO: only get offline version if not connected
@@ -36,7 +31,7 @@ class FireflyRepository @Inject constructor(
                 emit(VersionsDomain(offlineVersions.map { it.convertToVersion() }))
                 return@collect
             } else {
-                if (!isNetworkConnected()) {
+                if (!isNetworkConnected) {
                     emit(VersionsDomain(emptyList()))
                     return@collect
                 }
@@ -56,7 +51,7 @@ class FireflyRepository @Inject constructor(
                 emit(ChapterCountDomain(offlineChapterCount.chapterCount))
                 return@collect
             } else {
-                if (!isNetworkConnected()) {
+                if (!isNetworkConnected) {
                     emit(ChapterCountDomain())
                     return@collect
                 }
@@ -76,7 +71,7 @@ class FireflyRepository @Inject constructor(
                 emit(VerseCountDomain(offlineVerseCount.verseCount))
                 return@collect
             } else {
-                if (!isNetworkConnected()) {
+                if (!isNetworkConnected) {
                     emit(VerseCountDomain())
                     return@collect
                 }
@@ -96,7 +91,7 @@ class FireflyRepository @Inject constructor(
                 emit(BooksDomain(offlineBooks.map { it.convertToBook() }))
                 return@collect
             } else {
-                if (!isNetworkConnected()) {
+                if (!isNetworkConnected) {
                     emit(BooksDomain(emptyList()))
                     return@collect
                 }
@@ -116,7 +111,7 @@ class FireflyRepository @Inject constructor(
                 emit(VersesDomain(offlineVerses.map { it.convertToVerse() }))
                 return@collect
             } else {
-                if (!isNetworkConnected()) {
+                if (!isNetworkConnected) {
                     emit(VersesDomain(emptyList()))
                     return@collect
                 }
@@ -138,7 +133,7 @@ class FireflyRepository @Inject constructor(
         if (offlineVerses.isNotEmpty()) {
             return VersesDomain(offlineVerses.map { it.convertToVerse() })
         } else {
-            if (!isNetworkConnected()) {
+            if (!isNetworkConnected) {
                 return VersesDomain(emptyList())
             }
 
