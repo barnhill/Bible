@@ -1,7 +1,7 @@
-# Bible [![Bible CI](https://github.com/barnhill/Bible/actions/workflows/android.yml/badge.svg)](https://github.com/barnhill/Bible/actions/workflows/android.yml) [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+# Bible [![Bible CI](https://github.com/barnhill/Bible/actions/workflows/android.yml/badge.svg)](https://github.com/barnhill/Bible/actions/workflows/android.yml) [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 This project is a bible app to allow for simple browsing and reading of the bible.  Different translations allow for comparison of translations as well.
 
-# Bible App for Android [![Bible CI](https://github.com/barnhill/Bible/actions/workflows/android.yml/badge.svg)](https://github.com/barnhill/Bible/actions/workflows/android.yml) [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+# Bible App for Android [![Bible CI](https://github.com/barnhill/Bible/actions/workflows/android.yml/badge.svg)](https://github.com/barnhill/Bible/actions/workflows/android.yml) [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
 Bible App for Android is a application designed to provide users with access to the Holy Bible on their Android devices. It offers a user-friendly interface, various translations, search functionality, and more, making it a comprehensive tool for studying scripture on the go.
 
