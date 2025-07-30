@@ -8,10 +8,10 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.crashlytics)
     alias(libs.plugins.toml.version.checker)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.android.navsafe.args)
+    alias(libs.plugins.firebase.crashlytics)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -52,9 +52,6 @@ android {
         jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
     }
 
-    viewBinding {
-        android.buildFeatures.viewBinding = true
-    }
     buildFeatures {
         buildConfig = true
         compose = true
@@ -102,14 +99,14 @@ dependencies {
     implementation(libs.androidx.compose.lifecycle)
     implementation(libs.androidx.compose.viewmodel.lifecycle)
 
-    implementation(libs.firebase.storage.ktx)
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.perf.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 
     implementation(libs.square.retrofit)
     implementation(libs.converter.moshi)
-    implementation(libs.okhttp.logging)
-    implementation(libs.okhttp.brotli)
+
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.bundles.okhttp)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

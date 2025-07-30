@@ -20,13 +20,9 @@ ksp-symbol-processing = "2.2.0-2.0.2"
 recyclerview = "1.4.0"
 constraintlayout = "2.2.1"
 firebase-bom = "34.0.0"
-firebase-storage-ktx = "21.0.2"
-firebase-analytics-ktx = "22.5.0"
-firebase-perf-ktx = "21.0.5"
 retrofit = "3.0.0"
 kotlin-serialization = "1.9.0"
-logging-interceptor = "5.1.0"
-okhttp-brotli = "5.1.0"
+okhttp = "5.1.0"
 navigation = "2.9.2"
 
 #plugins
@@ -36,7 +32,6 @@ googleServices = "4.4.3"
 gradleCacheFix = "3.0.1"
 firebasePerfPlugin = "2.0.0"
 crashlyticsPlugin = "3.0.5"
-licensesPlugin = "0.10.6"
 tomlChecker = "0.52.0"
 kotlin-serialization-plugin = "2.2.0"
 
@@ -67,14 +62,28 @@ material = { group = "com.google.android.material", name = "material", version.r
 licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "play-services-oss-licenses" }
 ksp-symbol-processing = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp-symbol-processing" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
-firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebase-storage-ktx" }
-firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebase-analytics-ktx" }
-firebase-perf-ktx = { group = "com.google.firebase", name = "firebase-perf-ktx", version.ref = "firebase-perf-ktx" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module ="com.google.firebase:firebase-crashlytics" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
-okhttp-brotli = { group = "com.squareup.okhttp3", name = "okhttp-brotli", version.ref = "okhttp-brotli" }
+okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
+okhttp-brotli = { group = "com.squareup.okhttp3", name = "okhttp-brotli" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
+
+[bundles]
+firebase = [
+    "firebase-analytics",
+    "firebase-storage",
+    "firebase-perf",
+    "firebase-crashlytics"
+]
+okhttp = [
+    "okhttp-logging",
+    "okhttp-brotli"
+]
 
 [plugins]
 android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
@@ -86,7 +95,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 gradle-cachefix = { id = "org.gradle.android.cache-fix", version.ref = "gradleCacheFix" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
 toml-version-checker = { id = "com.github.ben-manes.versions", version.ref = "tomlChecker" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 android-navsafe-args = { id = "androidx.navigation.safeargs", version.ref = "navigation" }

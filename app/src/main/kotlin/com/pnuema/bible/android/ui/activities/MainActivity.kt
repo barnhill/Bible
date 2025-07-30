@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
-import com.pnuema.bible.android.databinding.ActivityMainBinding
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.statics.DeepLinks
 import com.pnuema.bible.android.ui.bookchapterverse.NotifySelectionCompleted
@@ -18,21 +17,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),
+class MainActivity : AppCompatActivity(R.layout.activity_main),
     NavigationView.OnNavigationItemSelectedListener,
     NotifySelectionCompleted {
-
-    private var _binding: ActivityMainBinding? = null
-    private val binding: ActivityMainBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         DeepLinks.handleDeepLinks(intent)
-
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-
-        setContentView(binding.root)
 
         findViewById<NavigationView>(R.id.nav_view).apply {
             setNavigationItemSelectedListener(this@MainActivity)
