@@ -1,8 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.gradle.internal.extensions.core.extra
+
 plugins {
     alias(libs.plugins.android)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization.plugin)
     alias(libs.plugins.compose.compiler)
@@ -15,14 +16,17 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
+val gitVersionName: String by rootProject.extra
+val gitVersionCode: String by rootProject.extra
 android {
+    namespace = "com.pnuema.bible.android"
     compileSdk = libs.versions.targetSdk.get().toInt()
     defaultConfig {
         applicationId = "com.pnuema.bible.android"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = gitVersionCode.toInt()
+        versionName = gitVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -36,32 +40,83 @@ android {
             }
         }
     }
+
+    signingConfigs {
+        val bibleCertLocation: String? by rootProject.extra
+        val certLocation: String = if (System.getenv("bibleCertLocation") == null) bibleCertLocation!! else System.getenv("bibleCertLocation")
+
+        val bibleKeystorePassword: String? by rootProject.extra
+        val certPass: String = if (System.getenv("bibleKeystorePassword") == null) bibleKeystorePassword!! else System.getenv("bibleKeystorePassword")
+
+        register("release") {
+            storeFile = file(certLocation)
+            storePassword = certPass
+            keyAlias = "bible"
+            keyPassword = certPass
+        }
+        named("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
-        named("release") {
+        release {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            isDebuggable = false
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
+            isShrinkResources = false
+            enableUnitTestCoverage = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            versionNameSuffix = "-debug"
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            enableUnitTestCoverage = true
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlin {
-        jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
-        buildConfig = true
         compose = true
+        buildConfig = true
     }
 
-    namespace = "com.pnuema.bible.android"
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 
     sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
+        getByName("test") {
+            kotlin.directories += "src/test/java"
+            kotlin.directories += "src/test/kotlin"
+        }
+        getByName("androidTest") {
+            kotlin.directories += "src/androidTest/java"
+            kotlin.directories += "src/androidTest/kotlin"
+        }
     }
+}
+
+kotlin {
+    jvmToolchain(JavaVersion.VERSION_21.toString().toInt())
 }
 
 tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates").configure {

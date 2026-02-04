@@ -3,7 +3,7 @@
     "project_number": "502741197718",
     "firebase_url": "https://fireflyapp-fe9f5.firebaseio.com",
     "project_id": "fireflyapp-fe9f5",
-    "storage_bucket": "fireflyapp-fe9f5.appspot.com"
+    "storage_bucket": "fireflyapp-fe9f5.firebasestorage.app"
   },
   "client": [
     {
@@ -22,6 +22,35 @@
             "certificate_hash": "4e83e0f4a81e8728f30e8fa4f00a050ba2f5f83d"
           }
         },
+        {
+          "client_id": "502741197718-473d1vgh9iihepoprgk4a69ol90m9bh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx3psYNordbZdD5xUdl2JXxIBgXlBMiMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502741197718-473d1vgh9iihepoprgk4a69ol90m9bh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502741197718:android:b4bae16c7b34142ab133b7",
+        "android_client_info": {
+          "package_name": "com.pnuema.bible.android.debug"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "502741197718-473d1vgh9iihepoprgk4a69ol90m9bh2.apps.googleusercontent.com",
           "client_type": 3

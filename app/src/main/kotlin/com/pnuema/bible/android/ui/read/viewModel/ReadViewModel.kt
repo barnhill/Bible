@@ -32,7 +32,7 @@ class ReadViewModel @Inject constructor(private val fireflyRepository: FireflyRe
             fireflyRepository.getVersions().collect { versions ->
                 _stateVersion.update {
                     VersionUiState.Version(versions.versions.first {
-                        it.abbreviation.lowercase() == CurrentSelected.version.lowercase()
+                        it.abbreviation.equals(CurrentSelected.version, ignoreCase = true)
                     }.toViewState())
                 }
             }

@@ -38,7 +38,15 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         if (0 == getWidth() || 0 == getHeight()) {
             return;
         }
+
+        if (!(drawable instanceof BitmapDrawable)) {
+            return;
+        }
+
         final Bitmap b = ( (BitmapDrawable) drawable ).getBitmap();
+        if (b == null) {
+            return;
+        }
         final Bitmap bitmap = b.copy( Bitmap.Config.ARGB_8888, true );
 
         final int w = getWidth( )/*, h = getHeight( )*/;
