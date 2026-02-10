@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
