@@ -1,7 +1,7 @@
 [versions]
 minSdk = "26"
 targetSdk = "36"
-gradle = "9.1.0"
+gradle = "9.3.1"
 
 #libs
 compose-bom = "2026.01.01"
@@ -19,7 +19,7 @@ play-services-oss-licenses = "17.4.0"
 ksp-symbol-processing = "2.3.5"
 recyclerview = "1.4.0"
 constraintlayout = "2.2.1"
-firebase-bom = "34.8.0"
+firebase-bom = "34.9.0"
 retrofit = "3.0.0"
 kotlin-serialization = "1.10.0"
 okhttp = "5.3.2"

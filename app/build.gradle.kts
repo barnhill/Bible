@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.android.navsafe.args)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.gradle.cachefix)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -54,12 +55,6 @@ android {
             keyAlias = "bible"
             keyPassword = certPass
         }
-        named("debug") {
-            storeFile = file("debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-        }
     }
 
     buildTypes {
@@ -69,8 +64,8 @@ android {
                 "proguard-rules.pro"
             )
             isDebuggable = false
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             enableUnitTestCoverage = false
             signingConfig = signingConfigs.getByName("release")
         }
