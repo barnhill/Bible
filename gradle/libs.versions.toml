@@ -26,14 +26,14 @@ okhttp = "5.3.2"
 navigation = "2.9.7"
 
 #plugins
-kotlin= "2.3.0"
+kotlin= "2.3.10"
 gradlePlugins-agp = "9.0.0"
 googleServices = "4.4.4"
 gradleCacheFix = "3.0.3"
 firebasePerfPlugin = "2.0.2"
 crashlyticsPlugin = "3.0.6"
 tomlChecker = "0.53.0"
-kotlin-serialization-plugin = "2.3.0"
+kotlin-serialization-plugin = "2.3.10"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
