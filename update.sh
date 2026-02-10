@@ -2,4 +2,4 @@
 ####################################
 ##### Update Ruby Dependencies #####
 ####################################
-bundle update
+bundle update --all
