@@ -1,0 +1,44 @@
+name: Publish to Google Play
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
+
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL }}
+      REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
+      REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
+      bibleCertLocation: "/home/runner/work/Bible/Bible/app/bible.keystore.jks"
+      bibleKeystorePassword: ${{ secrets.BIBLE_KEYSTORE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: '0'
+      - name: set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.4'
+          bundler-cache: true
+      - name: Setup Signing Credentials
+        run: |
+          mkdir ~/.gradle
+          echo "${{ secrets.GRADLE_PROPERTIES_BASE64 }}" | base64 -d > ~/.gradle/gradle.properties
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /home/runner/work/Bible/Bible/app/bible.keystore.jks
+          echo "${{ secrets.FASTLANE_AUTH }}" | base64 -d > /home/runner/work/Bible/Bible/fastlane/fastlane-auth.json
+      - name: Run Fastlane Release Script
+        run: ./release.sh
