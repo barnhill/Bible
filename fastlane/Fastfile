@@ -1,0 +1,75 @@
+fastlane_require 'httparty'
+default_platform(:android)
+
+#--------------------------------------------------
+#-----------       CONFIGURATION       ------------
+#--------------------------------------------------
+$master_branch = "main"
+$publish_track = "alpha"
+$rollout_percentage = "1"
+$path_to_release_aab = "app/build/outputs/bundle/release/app-release.aab"
+$json_key_file = "fastlane/fastlane-auth.json"
+
+#[-------------------------------------------------------------------------------]#
+#[-------------------------- Upload APK to Google Play --------------------------]#
+#[-------------------------------------------------------------------------------]#
+desc "Deploy to the Google Play Store"
+lane :upload_to_google_play_store do
+
+UI.success "Verifying keys to Google Play ..."
+
+validate_play_store_json_key(json_key: $json_key_file)
+
+UI.success "Building release bundle ..."
+build
+
+# Get the version name from your Gradle file
+version_name = get_version_name
+
+UI.message "Using version name: #{version_name}"
+
+UI.success "Uploading to Google Play ..."
+
+#
+# Upload bundle to the play store using supply and post to selected track (full release)
+# JSON info for play store is required in fastlane/fastlane-auth.json
+#
+# https://docs.fastlane.tools/actions/supply/#parameters
+#
+supply(
+    track: $publish_track,
+    rollout: $rollout_percentage,
+    aab: $path_to_release_aab,
+    version_name: version_name,
+    json_key: $json_key_file,
+    skip_upload_metadata: true,
+    skip_upload_images: true,
+    skip_upload_screenshots: true,
+    skip_upload_changelogs: true
+)
+end
+
+#[-------------------------------------------------------------------------------]#
+#[-------------------------- Get Version Name -----------------------------------]#
+#[-------------------------------------------------------------------------------]#
+lane :get_version_name do
+  version_name = gradle(
+    task: "printVersionName",
+    project_dir: ".",
+    flags: "-q"
+  ).lines.last.strip
+
+  UI.message "Got version name: #{version_name}"
+  version_name
+end
+
+#[-------------------------------------------------------------------------------]#
+#[----------------------------------- Build -------------------------------------]#
+#[-------------------------------------------------------------------------------]#
+lane :build do
+  begin
+    gradle(task: "bundleRelease test")
+  rescue => ex
+      UI.user_error!("Build failed with error: #{ex.message}")
+  end
+end

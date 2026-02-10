@@ -1,0 +1,2 @@
+json_key_file("fastlane/fastlane-auth.json")
+package_name("com.pnuema.bible.android")

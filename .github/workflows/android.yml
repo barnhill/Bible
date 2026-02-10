@@ -9,31 +9,48 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '17' ]
+        java: [ '21' ]
 
     environment: build
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL }}
+      REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
+      REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
+      bibleCertLocation: "/home/runner/work/Bible/Bible/app/bible.keystore.jks"
+      bibleKeystorePassword: ${{ secrets.BIBLE_KEYSTORE_PASSWORD }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: '0'
       - name: Setup JDK ${{ matrix.java }}
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
           check-latest: true
-      - name: Build with Gradle
-        env:
-          REMOTE_CACHE_URL: ${{ secrets.REMOTE_CACHE_URL }}
-          REMOTE_CACHE_USER: ${{ secrets.REMOTE_CACHE_USER }}
-          REMOTE_CACHE_PASS: ${{ secrets.REMOTE_CACHE_PASS }}
-        run: ./gradlew build bundleDebug
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.4'
+          bundler-cache: true
+      - name: Setup Signing Credentials
+        run: |
+          mkdir ~/.gradle
+          echo "${{ secrets.GRADLE_PROPERTIES_BASE64 }}" | base64 -d > ~/.gradle/gradle.properties
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /home/runner/work/Bible/Bible/app/bible.keystore.jks
+      - name: Fastlane Build
+        run: ./build.sh
       - uses: actions/upload-artifact@v4
         with:
           name: APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/release/app-release.apk
       - uses: actions/upload-artifact@v4
         with:
           name: Bundle
-          path: app/build/outputs/bundle/debug/app-debug.aab
+          path: app/build/outputs/bundle/release/app-release.aab
