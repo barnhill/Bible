@@ -42,8 +42,8 @@ jobs:
       - name: Setup Signing Credentials
         run: |
           mkdir ~/.gradle
-          echo ${{ secrets.GRADLE_PROPERTIES_BASE64 }} | base64 -d > ~/.gradle/gradle.properties
-          echo ${{ secrets.KEYSTORE_BASE64 }} | base64 -d > /home/runner/work/Bible/Bible/app/bible.keystore.jks
+          echo "${{ secrets.GRADLE_PROPERTIES_BASE64 }}" | base64 -d > ~/.gradle/gradle.properties
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /home/runner/work/Bible/Bible/app/bible.keystore.jks
       - name: Fastlane Build
         run: ./build.sh
       - uses: actions/upload-artifact@v4
