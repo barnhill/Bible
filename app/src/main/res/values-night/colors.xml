@@ -6,11 +6,8 @@
 
     <color name="primary_text_inverted">#FEFEFE</color>
 
-    <color name="background_light">#1e1e1e</color>
     <color name="background_light_selected">#efefef</color>
 
     <color name="controls_dark">#131619</color>
 
-    <!-- color codes only -->
-    <color name="lightgrey">#fcfefd</color>
 </resources>

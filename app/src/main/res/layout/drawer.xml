@@ -28,8 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:showDividers="middle"
-    style="@style/backgroundLight">
+    android:showDividers="middle">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

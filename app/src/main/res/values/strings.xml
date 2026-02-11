@@ -4,10 +4,7 @@
     <string name="book">Book</string>
     <string name="chapter">Chapter</string>
     <string name="verse">Verse</string>
-    <string name="about">About</string>
     <string name="settings">Settings</string>
-
-    <string name="license_screen_title">Licenses</string>
 
     <string name="book_chapter_version_picker_title">Make selection</string>
     <string name="pick_version_title">Select Bible Version</string>

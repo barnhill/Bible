@@ -17,8 +17,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="backgroundLight">
-        <item name="android:background">@color/background_light</item>
-    </style>
-
 </resources>

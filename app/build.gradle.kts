@@ -14,7 +14,6 @@ plugins {
     alias(libs.plugins.android.navsafe.args)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.gradle.cachefix)
-    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val gitVersionName: String by rootProject.extra
@@ -84,11 +83,6 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
     buildFeatures {
         compose = true
         buildConfig = true
@@ -96,17 +90,6 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
-    }
-
-    sourceSets {
-        getByName("test") {
-            kotlin.directories += "src/test/java"
-            kotlin.directories += "src/test/kotlin"
-        }
-        getByName("androidTest") {
-            kotlin.directories += "src/androidTest/java"
-            kotlin.directories += "src/androidTest/kotlin"
-        }
     }
 }
 
@@ -136,16 +119,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    ksp(libs.room.compiler)
     implementation(libs.datastore)
     implementation(libs.material)
-    implementation(libs.licenses)
     implementation(libs.kotlin.serialization)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.lifecycle)
     implementation(libs.androidx.compose.viewmodel.lifecycle)
 
@@ -160,6 +142,5 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    ksp(libs.room.compiler)
 }
-
-apply(plugin = "com.google.gms.google-services")

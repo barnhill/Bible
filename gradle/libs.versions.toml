@@ -11,11 +11,9 @@ ktx = "1.17.0"
 fragment-ktx = "1.8.9"
 lifecycle-viewmodel-ktx = "2.10.0"
 lifecycle-extensions = "2.2.0"
-ossLicensesPlugin = "0.10.10"
 room-version = "2.8.4"
 datastore-preferences = "1.2.0"
 material = "1.13.0"
-play-services-oss-licenses = "17.4.0"
 ksp-symbol-processing = "2.3.5"
 recyclerview = "1.4.0"
 constraintlayout = "2.2.1"
@@ -39,6 +37,7 @@ kotlin-serialization-plugin = "2.3.10"
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-viewmodel-lifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-ktx" }
 androidx-compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -53,18 +52,16 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "play-services-oss-licenses" }
 ksp-symbol-processing = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp-symbol-processing" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-crashlytics = { module ="com.google.firebase:firebase-crashlytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }

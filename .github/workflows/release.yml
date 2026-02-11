@@ -42,4 +42,4 @@ jobs:
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /home/runner/work/Bible/Bible/app/bible.keystore.jks
           echo "${{ secrets.FASTLANE_AUTH }}" | base64 -d > /home/runner/work/Bible/Bible/fastlane/fastlane-auth.json
       - name: Run Fastlane Release Script
-        run: ./release.sh
+        run: ./build.sh

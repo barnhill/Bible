@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -56,18 +55,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        val id = item.itemId
+        /*val id = item.itemId
 
         if (id == R.id.nav_settings) {
             //TODO add settings
-        } else if (id == R.id.nav_about) {
-            Intent(this, OssLicensesMenuActivity::class.java).apply {
-                putExtra("title", getString(R.string.license_screen_title))
-                startActivity(this)
-            }
-
-            return true
-        }
+        }*/
 
         return super.onOptionsItemSelected(item)
     }
