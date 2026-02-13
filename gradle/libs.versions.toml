@@ -4,8 +4,8 @@ targetSdk = "36"
 gradle = "9.3.1"
 
 #libs
-compose-bom = "2026.01.01"
-activityCompose = "1.12.3"
+compose-bom = "2026.02.00"
+activityCompose = "1.12.4"
 hiltAndroid = "2.59.1"
 ktx = "1.17.0"
 fragment-ktx = "1.8.9"
@@ -25,7 +25,7 @@ navigation = "2.9.7"
 
 #plugins
 kotlin= "2.3.10"
-gradlePlugins-agp = "9.0.0"
+gradlePlugins-agp = "9.0.1"
 googleServices = "4.4.4"
 gradleCacheFix = "3.0.3"
 firebasePerfPlugin = "2.0.2"
