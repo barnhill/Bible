@@ -6,7 +6,7 @@ gradle = "9.3.1"
 #libs
 compose-bom = "2026.02.00"
 activityCompose = "1.12.4"
-hiltAndroid = "2.59.1"
+hiltAndroid = "2.59.2"
 ktx = "1.17.0"
 fragment-ktx = "1.8.9"
 lifecycle-viewmodel-ktx = "2.10.0"
