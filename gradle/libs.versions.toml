@@ -1,7 +1,7 @@
 [versions]
 minSdk = "26"
 targetSdk = "37"
-gradle = "9.4.1"
+gradle = "9.5.1"
 
 #libs
 compose-bom = "2026.05.00"
