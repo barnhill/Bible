@@ -33,7 +33,7 @@ class VersionSelectionDialog : Fragment(), VersionSelectionListener {
     }
 
     override fun onVersionSelected(version: String) {
-        setFragmentResult(RESULT_KEY, bundleOf(RESULT_KEY to version))
+        setFragmentResult(RESULT_KEY, Bundle().apply { putString(RESULT_KEY, version) })
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
