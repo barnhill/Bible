@@ -31,9 +31,7 @@ fun VerseItem(
         }
     }
     Text(
-        modifier = Modifier.padding(
-            horizontal = 4.dp,
-        ),
+        modifier = Modifier.padding(horizontal = 4.dp),
         text = annotatedVerse,
         style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 30.sp),
         color = MaterialTheme.colorScheme.onBackground
