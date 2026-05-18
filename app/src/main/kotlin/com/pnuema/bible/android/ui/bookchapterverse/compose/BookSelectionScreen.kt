@@ -4,13 +4,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.BibleTheme
 import com.pnuema.bible.android.ui.bookchapterverse.state.BookViewState
 import com.pnuema.bible.android.ui.bookchapterverse.state.BooksUiState
-import kotlinx.coroutines.launch
 
 @Composable
 fun BookSelectionScreen(
@@ -19,7 +18,16 @@ fun BookSelectionScreen(
 ) {
     BibleTheme {
         val listState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
+
+        val selectedIndex = if (books is BooksUiState.BooksState) {
+            books.viewStates.indexOfFirst { it.id == CurrentSelected.book }
+        } else -1
+
+        LaunchedEffect(selectedIndex) {
+            if (selectedIndex in 0 until (if (books is BooksUiState.BooksState) books.viewStates.size else 0)) {
+                listState.animateScrollToItem(selectedIndex)
+            }
+        }
 
         LazyColumn(
             state = listState,
@@ -27,15 +35,12 @@ fun BookSelectionScreen(
                 when (books) {
                     is BooksUiState.BooksState -> {
                         items(books.viewStates) {
-                            BookItem(book = it, onClick = {
-                                onClick(it.id)
-                            })
-                        }
-
-                        val selectedIndex = books.viewStates.indexOfFirst { it.id == CurrentSelected.book }
-                        coroutineScope.launch {
-                            if (listState.isScrollInProgress) return@launch
-                            listState.animateScrollToItem(selectedIndex)
+                            BookItem(
+                                book = it,
+                                onClick = {
+                                    onClick(it.id)
+                                }
+                            )
                         }
                     }
 

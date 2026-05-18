@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +35,16 @@ fun ReadScreen(
     onVersionClicked: () -> Unit
 ) {
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+
+    val targetIndex = remember(verses.verses, verseToFocus) {
+        verses.verses.indexOfFirst { it.verseNumber == verseToFocus }
+    }
+
+    LaunchedEffect(targetIndex, verses.verses.size) {
+        if (targetIndex >= 0 && targetIndex < verses.verses.size) {
+            listState.animateScrollToItem(targetIndex)
+        }
+    }
 
     BibleTheme {
         Scaffold(
@@ -63,11 +74,6 @@ fun ReadScreen(
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                         }
-                    }
-
-                    coroutineScope.launch {
-                        if (listState.isScrollInProgress) return@launch
-                        listState.animateScrollToItem(verses.verses.indexOfFirst { it.verseNumber == verseToFocus })
                     }
                 }
             )
