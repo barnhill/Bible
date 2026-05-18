@@ -21,12 +21,26 @@ fun VerseItem(
     state: VerseViewState
 ) {
     val annotatedVerse = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = MaterialTheme.typography.titleSmall.fontSize, baselineShift = BaselineShift(0.15f))) {
+        // verse number
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                baselineShift = BaselineShift(0.15f)
+            )
+        ) {
             append("    ")
             append(state.verseNumber.toString())
             append("  ")
         }
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 18.sp)) {
+
+        // verse text
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 18.sp
+            )
+        ) {
             append(state.verseText.trimMargin("¶").trim())
         }
     }
