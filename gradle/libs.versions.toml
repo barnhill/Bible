@@ -4,7 +4,7 @@ targetSdk = "37"
 gradle = "9.5.1"
 
 #libs
-compose-bom = "2026.05.00"
+compose-bom = "2026.05.01"
 activityCompose = "1.13.0"
 hiltAndroid = "2.59.2"
 ktx = "1.18.0"
