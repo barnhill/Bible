@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.versionselection.ui.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -175,6 +176,7 @@ fun VersionDownloadDialog(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun VersionSelectionScreen_Preview() {
     BibleTheme {

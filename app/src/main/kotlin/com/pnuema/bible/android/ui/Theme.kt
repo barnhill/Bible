@@ -17,15 +17,15 @@ private val DarkColorPalette = darkColorScheme(
     onBackground = Color(0xFFDEDEDE),
     surfaceVariant = Color(0xFF43A047),
     tertiary = Color(0xFFA0A0A0),
-    error = Color(0xFFAA0000),
+    error = Color(0xFFEF5350),
 
     primaryContainer = Color(0xFF43A047),
     onPrimaryContainer = Color(0xFFE8F5E9),
 )
 
 private val LightColorPalette = lightColorScheme(
-    primary = Color(0xFF8BC34A),
-    onPrimary = Color(0xFFFEFEFE),
+    primary = Color(0xFF2E7D32),
+    onPrimary = Color(0xFFFFFFFF),
     secondary = Color(0xFF689F38),
     onSecondary = Color(0xFFE8F5E9),
     background = Color(0xFFFCFEFD),
@@ -34,8 +34,8 @@ private val LightColorPalette = lightColorScheme(
     tertiary = Color(0xFF797979),
     error = Color(0xFFCC0000),
 
-    primaryContainer = Color(0xFF689F38),
-    onPrimaryContainer = Color(0xFFFEFEFE),
+    primaryContainer = Color(0xFF43A047),
+    onPrimaryContainer = Color(0xFFE8F5E9),
 )
 
 private val Typography = Typography()

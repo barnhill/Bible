@@ -16,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.ui.BibleTheme
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun VersionDropdown(
@@ -47,7 +49,8 @@ fun VersionDropdown(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
-                text = versionAbbreviation.uppercase(Locale.getDefault()),
+                fontWeight = FontWeight.SemiBold,
+                text = versionAbbreviation.uppercase(LocalLocale.current.platformLocale),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )

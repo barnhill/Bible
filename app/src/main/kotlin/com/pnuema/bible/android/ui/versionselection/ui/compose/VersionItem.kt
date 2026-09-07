@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -45,7 +46,8 @@ fun VersionItem(
                         .weight(1f)
                         .align(alignment = Alignment.CenterVertically),
                     text = version.getDisplayText(),
-                    color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+                    fontWeight = if (isCurrentSelectedVersion) FontWeight.Bold else FontWeight.Normal,
+                    color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onBackground
                 )
 
                 Box(modifier = Modifier
@@ -111,6 +113,41 @@ private fun VersionItem_Preview() {
                 }
             },
             isCurrentSelectedVersion = true,
+            onVersionClicked = {},
+            onActionClicked = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun VersionItem_Unselected_Preview() {
+    BibleTheme {
+        VersionItem(
+            version = object : IVersion{
+                override val id: Int
+                    get() = 1
+                override val abbreviation: String
+                    get() = ""
+                override val copyright: String
+                    get() = ""
+
+                override fun getDisplayText(): String = "King James Version"
+                override fun convertToOfflineModel(): VersionOffline {
+                    return VersionOffline(
+                        abbreviation = "KJV",
+                        id = 1,
+                        version = "KJV",
+                        url = "",
+                        publisher = "",
+                        copyright = "",
+                        copyrightInfo = "",
+                        completeOffline = false
+                    )
+                }
+            },
+            isCurrentSelectedVersion = false,
             onVersionClicked = {},
             onActionClicked = {}
         )

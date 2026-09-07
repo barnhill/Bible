@@ -34,7 +34,7 @@ object FireflyAPI {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
         httpClient
-            .protocols(listOf(Protocol.HTTP_2, Protocol.HTTP_1_1))
+            .protocols(listOf(Protocol.HTTP_3, Protocol.HTTP_2, Protocol.HTTP_1_1))
             .callTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)

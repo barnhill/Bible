@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -48,6 +49,7 @@ fun BookChapterDropdown(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 8.dp),
                 text = "$book $chapter".capitalizeTitleCase(),
+                fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )

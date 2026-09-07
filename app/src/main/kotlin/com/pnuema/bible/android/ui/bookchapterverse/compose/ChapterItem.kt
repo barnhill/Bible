@@ -24,7 +24,7 @@ fun ChapterItem(
     onClick: () -> Unit,
 ) {
     val isSelected = chapterNumber == CurrentSelected.chapter
-    val backgroundColor = MaterialTheme.colorScheme.secondary
+    val backgroundColor = MaterialTheme.colorScheme.primary
     Box(
         modifier = modifier
             .fillMaxWidth()
