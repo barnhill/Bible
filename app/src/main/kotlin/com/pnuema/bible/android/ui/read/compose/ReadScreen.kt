@@ -73,7 +73,7 @@ fun ReadScreen(
                     start = 8.dp,
                     end = 8.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(7.dp),
             ) {
                 itemsIndexed(verses.verses) { index, item ->
                     VerseItem(state = item)

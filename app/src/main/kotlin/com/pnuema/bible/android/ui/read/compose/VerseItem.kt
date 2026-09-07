@@ -45,12 +45,12 @@ fun VerseItem(
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             )
         ) {
-            append(state.verseText.trimMargin("¶").trim())
+            append(state.verseText.trimMargin("¶").replace("¶", "").trim())
         }
     }
     Text(
         text = annotatedVerse,
-        style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 30.sp),
+        style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 26.sp),
         color = MaterialTheme.colorScheme.onBackground
     )
 }
