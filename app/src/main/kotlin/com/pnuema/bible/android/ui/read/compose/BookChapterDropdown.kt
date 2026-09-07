@@ -2,12 +2,17 @@ package com.pnuema.bible.android.ui.read.compose
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -28,37 +34,36 @@ fun BookChapterDropdown(
     modifier: Modifier = Modifier,
     book: String,
     chapter: String,
-    onClicked: () -> Unit,
+    onClicked: () -> Unit
 ) {
     Card(
         modifier = modifier
             .wrapContentWidth()
             .clip(MaterialTheme.shapes.extraLarge)
-            .clickable { onClicked() },
+            .clickable(onClick = onClicked),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+            contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
         Row(
-            modifier = Modifier.padding(all = 12.dp)
+            modifier = Modifier
+                .padding(all = 12.dp)
+                .padding(start = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically)
-                    .padding(end = 8.dp),
-                text = "$book $chapter".capitalizeTitleCase(),
-                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(end = 8.dp),
+                text = "$book $chapter",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
-            Image(
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically),
-                painter = painterResource(id = R.drawable.arrow_down_drop_circle_outline),
+            Icon(
+                modifier = Modifier.semantics { hideFromAccessibility() },
+                imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
     }

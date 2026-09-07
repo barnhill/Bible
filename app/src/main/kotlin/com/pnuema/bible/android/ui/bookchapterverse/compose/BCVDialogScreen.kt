@@ -12,14 +12,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
@@ -34,8 +33,6 @@ import com.pnuema.bible.android.ui.bookchapterverse.state.VerseCountViewState
 import com.pnuema.bible.android.ui.bookchapterverse.state.VersesUiState
 import com.pnuema.bible.android.ui.compose.BackTopBar
 import kotlinx.coroutines.launch
-import java.util.Locale
-import androidx.compose.ui.platform.LocalLocale
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +78,6 @@ fun BCVDialogScreen(
                                 .padding(vertical = 12.dp),
                             text = stringResource(R.string.book).uppercase(LocalLocale.current.platformLocale),
                             style = if (isBookPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
-                            fontWeight = if (isBookPageSelected) FontWeight.Bold else FontWeight.Normal,
                             color = if (isBookPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -100,7 +96,6 @@ fun BCVDialogScreen(
                                 .padding(vertical = 12.dp),
                             text = stringResource(R.string.chapter).uppercase(LocalLocale.current.platformLocale),
                             style = if (isChapterPageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
-                            fontWeight = if (isChapterPageSelected) FontWeight.Bold else FontWeight.Normal,
                             color = if (isChapterPageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -119,7 +114,6 @@ fun BCVDialogScreen(
                                 .padding(vertical = 12.dp),
                             text = stringResource(R.string.verse).uppercase(LocalLocale.current.platformLocale),
                             style = if (isVersePageSelected) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
-                            fontWeight = if (isVersePageSelected) FontWeight.Bold else FontWeight.Normal,
                             color = if (isVersePageSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                         )
                     }

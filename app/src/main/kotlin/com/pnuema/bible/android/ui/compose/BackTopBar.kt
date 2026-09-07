@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -21,10 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.ui.BibleTheme
 
@@ -40,8 +37,8 @@ fun BackTopBar(
         modifier = modifier
             .background(Color.Transparent)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-            .background(MaterialTheme.colorScheme.primary)
+            .clip(MaterialTheme.shapes.large.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp)))
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .padding(horizontal = 8.dp)
     ) {
         TopAppBar(
@@ -49,14 +46,13 @@ fun BackTopBar(
                 .padding(0.dp)
                 .wrapContentHeight(),
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             title = {
                 Text(
                     text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = TextUnit(18f, TextUnitType.Sp)
+                    style = MaterialTheme.typography.titleMedium
                 )
             },
             navigationIcon = {
@@ -66,7 +62,7 @@ fun BackTopBar(
                         imageVector = if (backArrowIcon) Icons.AutoMirrored.Filled.ArrowBack
                                       else Icons.Filled.Close,
                         contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onSecondary
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             },

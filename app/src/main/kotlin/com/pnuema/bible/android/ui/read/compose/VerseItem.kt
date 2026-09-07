@@ -1,5 +1,6 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import android.R.attr.fontStyle
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -24,8 +25,10 @@ fun VerseItem(
         // verse number
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontStyle = MaterialTheme.typography.titleSmall.fontStyle,
                 fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontWeight = MaterialTheme.typography.titleSmall.fontWeight,
                 baselineShift = BaselineShift(0.15f)
             )
         ) {
@@ -38,14 +41,14 @@ fun VerseItem(
         withStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 18.sp
+                fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             )
         ) {
             append(state.verseText.trimMargin("¶").trim())
         }
     }
     Text(
-        modifier = Modifier.padding(horizontal = 4.dp),
         text = annotatedVerse,
         style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 30.sp),
         color = MaterialTheme.colorScheme.onBackground

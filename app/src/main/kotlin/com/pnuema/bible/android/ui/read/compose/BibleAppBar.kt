@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
@@ -36,59 +36,64 @@ fun BibleAppBar(
         modifier = modifier
             .background(Color.Transparent)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-            .background(MaterialTheme.colorScheme.primary)
+            .clip(
+                MaterialTheme.shapes.large.copy(
+                    topStart = CornerSize(0.dp),
+                    topEnd = CornerSize(0.dp)
+                )
+            )
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
-    TopAppBar(
-        modifier = modifier
-            .padding(0.dp)
-            .background(MaterialTheme.colorScheme.primary),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        title = {
-            Row(
-                modifier = Modifier
-                    .layout { measurable, constraints ->
-                        val paddingCompensation = 16.dp.toPx().roundToInt()
-                        val adjustedConstraints = constraints.copy(
-                            // not a good idea inside horizontal scroll view,
-                            // but I guess we can assume that's not the case here
-                            maxWidth = constraints.maxWidth + paddingCompensation
-                        )
-                        val placeable = measurable.measure(adjustedConstraints)
-                        layout(placeable.width, placeable.height) {
-                            placeable.place(-paddingCompensation / 2, 0)
+        TopAppBar(
+            modifier = modifier
+                .padding(0.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
+            ),
+            title = {
+                Row(
+                    modifier = Modifier
+                        .layout { measurable, constraints ->
+                            val paddingCompensation = 16.dp.toPx().roundToInt()
+                            val adjustedConstraints = constraints.copy(
+                                // not a good idea inside horizontal scroll view,
+                                // but I guess we can assume that's not the case here
+                                maxWidth = constraints.maxWidth + paddingCompensation
+                            )
+                            val placeable = measurable.measure(adjustedConstraints)
+                            layout(placeable.width, placeable.height) {
+                                placeable.place(-paddingCompensation / 2, 0)
+                            }
                         }
-                    }
-                    .background(Color.Transparent)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = 12.dp)
-            ) {
-                BookChapterDropdown(
-                    modifier = Modifier
-                        .align(alignment = Alignment.CenterVertically),
-                    book = book,
-                    chapter = chapter,
-                    onClicked = onBookChapterClicked
-                )
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
+                        .background(Color.Transparent)
                         .fillMaxWidth()
-                )
-                VersionDropdown(
-                    modifier = Modifier
-                        .align(alignment = Alignment.CenterVertically),
-                    versionAbbreviation = versionAbbreviation,
-                    onClicked = onVersionClicked
-                )
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        .padding(horizontal = 12.dp)
+                ) {
+                    BookChapterDropdown(
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically),
+                        book = book,
+                        chapter = chapter,
+                        onClicked = onBookChapterClicked
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                    VersionDropdown(
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically),
+                        versionAbbreviation = versionAbbreviation,
+                        onClicked = onVersionClicked
+                    )
+                }
             }
-        }
-    )
-        }
+        )
+    }
 }
 
 @Preview(showBackground = true)

@@ -1,7 +1,11 @@
 package com.pnuema.bible.android.ui.read.compose
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +28,7 @@ import com.pnuema.bible.android.ui.read.state.VersionUiState
 import com.pnuema.bible.android.ui.read.state.VersionViewState
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ReadScreen(
     book: String,
@@ -48,6 +53,7 @@ fun ReadScreen(
 
     BibleTheme {
         Scaffold(
+            contentWindowInsets = WindowInsets(0),
             topBar = {
                 BibleAppBar(
                     book = book,
@@ -57,26 +63,30 @@ fun ReadScreen(
                     onVersionClicked = onVersionClicked
                 )
             },
-        ) { paddingValues ->
+        ) { _ ->
             LazyColumn(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 state = listState,
-                content = {
-                    itemsIndexed(verses.verses) { index, item ->
-                        VerseItem(state = item)
+                contentPadding = PaddingValues(
+                    top = 140.dp, // 56.dp TopAppBar + 16.dp breathing room
+                    bottom = 16.dp,
+                    start = 8.dp,
+                    end = 8.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                itemsIndexed(verses.verses) { index, item ->
+                    VerseItem(state = item)
 
-                        if (index == verses.verses.lastIndex) {
-                            if (version.version.copyright.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(16.dp))
-                                CopyrightItem(state = CopyrightViewState(version.version.copyright))
-                            }
+                    if (index == verses.verses.lastIndex) {
+                        if (version.version.copyright.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(16.dp))
+                            CopyrightItem(state = CopyrightViewState(version.version.copyright))
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
-            )
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.data.IVersion
 import com.pnuema.bible.android.database.VersionOffline
@@ -46,8 +47,8 @@ fun VersionItem(
                         .weight(1f)
                         .align(alignment = Alignment.CenterVertically),
                     text = version.getDisplayText(),
-                    fontWeight = if (isCurrentSelectedVersion) FontWeight.Bold else FontWeight.Normal,
-                    color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onBackground
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = if (isCurrentSelectedVersion) FontWeight.Bold else FontWeight.Normal, lineHeight = 20.sp),
+                    color = if (isCurrentSelectedVersion) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                 )
 
                 Box(modifier = Modifier
@@ -62,7 +63,7 @@ fun VersionItem(
                             if (downloadComplete)
                                 MaterialTheme.colorScheme.error
                             else
-                                MaterialTheme.colorScheme.secondary
+                                MaterialTheme.colorScheme.primary
                         ),
                         imageVector = ImageVector.vectorResource(
                             if (downloadComplete)

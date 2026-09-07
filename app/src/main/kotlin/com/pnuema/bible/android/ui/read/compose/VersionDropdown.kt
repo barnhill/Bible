@@ -15,14 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.R
 import com.pnuema.bible.android.ui.BibleTheme
-import java.util.Locale
-import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun VersionDropdown(
@@ -37,29 +35,26 @@ fun VersionDropdown(
             .clickable { onClicked() },
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+            contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
         Row(
-            modifier = Modifier
-                .padding(all = 12.dp)
+            modifier = Modifier.padding(all = 12.dp)
         ) {
             Text(
                 modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically)
                     .padding(end = 8.dp),
-                fontWeight = FontWeight.SemiBold,
                 text = versionAbbreviation.uppercase(LocalLocale.current.platformLocale),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
             Image(
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically),
+                modifier = Modifier.align(Alignment.CenterVertically),
                 painter = painterResource(id = R.drawable.book_open_page_variant),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
         }
     }

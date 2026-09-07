@@ -1,14 +1,19 @@
 package com.pnuema.bible.android.ui.bookchapterverse.compose
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.statics.CurrentSelected
@@ -21,24 +26,35 @@ fun BookItem(
     book: BookViewState,
     onClick: () -> Unit,
 ) {
+    val isSelected = book.id == CurrentSelected.book
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        Text(
+        Box(
             modifier = Modifier
-                .padding(all = 16.dp)
-                .fillMaxWidth(),
-            text = book.name,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = if (book.id == CurrentSelected.book) FontWeight.Bold else FontWeight.Normal,
-            color = if (book.id == CurrentSelected.book) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
-        )
+                .wrapContentWidth()
+                .clip(RoundedCornerShape(999.dp))
+                .background(
+                    if (isSelected) MaterialTheme.colorScheme.surfaceContainer
+                    else Color.Transparent
+                )
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                text = book.name,
+                style = if (isSelected) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyMedium,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BookItem_Preview() {
     BibleTheme {
@@ -54,6 +70,7 @@ private fun BookItem_Preview() {
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BookItem_Unselected_Preview() {
     BibleTheme {

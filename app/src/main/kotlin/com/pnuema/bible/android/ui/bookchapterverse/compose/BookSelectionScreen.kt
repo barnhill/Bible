@@ -1,11 +1,13 @@
 package com.pnuema.bible.android.ui.bookchapterverse.compose
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.pnuema.bible.android.statics.CurrentSelected
 import com.pnuema.bible.android.ui.BibleTheme
 import com.pnuema.bible.android.ui.bookchapterverse.state.BookViewState
@@ -31,6 +33,7 @@ fun BookSelectionScreen(
 
         LazyColumn(
             state = listState,
+            contentPadding = PaddingValues(vertical = 8.dp),
             content = {
                 when (books) {
                     is BooksUiState.BooksState -> {
